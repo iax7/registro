@@ -50,16 +50,16 @@ some of these are automatically created, just double check:
 
 ![DB Url](/github/vars.png)
 
-    * LANG is mandatory, this value is the only one available that is actually spanish (my bad).
-    * MAX_THREADS (optional)
-    * MIN_THREADS (optional)
-    * PORT (mandatory)
-    * RACK_ENV = production
-    * RAILS_ENV = production
-    * RAILS_SERVE_STATIC_FILES = enabled
-    * SMTP_PASS, SMTP_USER is required if you want mail functionality
-    * TZ use the time zone that you desire
-    * SECRET_GOOGLE_KEY (optional, for google maps api)
+* LANG is mandatory, this value is the only one available and is actually spanish (my bad).
+* MAX_THREADS = 1
+* MIN_THREADS = 1
+* PORT = 80
+* RACK_ENV = production
+* RAILS_ENV = production
+* RAILS_SERVE_STATIC_FILES = enabled
+* SMTP_PASS, SMTP_USER is required if you want mail functionality
+* TZ use the time zone that you desire
+* SECRET_GOOGLE_KEY (optional, for google maps api)
     
 ## Configuration
 You would want to modify the app configuration variables, these are located
@@ -96,3 +96,12 @@ the **reg_paycollectors** is an array of this *specific* hash:
 * The project has no tests at all. This is very dangerous as the project gets bigger.
 * The app UI is in spanish even when the language is set in en-US.
 * Several UI messages are in the html file, this needs to be decoupled in Rails language files.
+
+## Contribute
+
+You are welcome to contribute in this project, I found these [Instructions](https://gist.github.com/MarcDiethelm/7303312) 
+very helpful.
+
+## Licensing
+
+This app is licensed under the Apache License, Version 2.0. See LICENSE for full license text.
