@@ -23,7 +23,7 @@ docker run --name regdb -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres
 Then generate a development and test keys
 
 ```sh
-key=$(rake secret); sed -i "s/#secret_key_base/$key/g" secrets.yml
+key=$(rake secret); sed -i "s/#secret_key_base/$key/g" config/secrets.yml
 ``` 
 
 Then run the following commands:
