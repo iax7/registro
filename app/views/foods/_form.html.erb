@@ -1,0 +1,124 @@
+<%= form_for(@food, html: {class:'form-horizontal', role:'form'}) do |f| %>
+
+    <div class="well">
+      <strong>¡Cupo Limitado!</strong>
+      <p>Este servicio es opcional, sin embargo se recomienda usarlo para poder convivir
+      con los hermanos durante este tiempo.</p>
+      <p>Indica el número total de comidas que estarán comiendo en el campamento
+      (incluye en éste número el total de comidas entre tu y tus invitados).</p>
+
+      <p>Los costos de las comidas son:
+          <ul>
+            <li>Adultos (de 11 años en adelante): $50 pesos (MX) por comida.</li>
+            <li>Niños (de 5-10 años): $25 pesos por comida.</li>
+            <li>Infantes (de 0-4 años): gratis.</li>
+          </ul>
+      </p>
+    </div>
+    <!-- div class="form-group"><%# f.label :v1, class: 'control-label col-xs-2 col-md-1' %><div class='col-xs-2 col-md-1'><%# f.number_field :v1, min: 0, class: 'form-control input-sm' %></div></div-->
+    <!-- div class="form-group"><%# f.label :v2, class: 'control-label col-xs-2 col-md-1' %><div class='col-xs-2 col-md-1'><%# f.number_field :v2, min: 0, class: 'form-control input-sm' %></div></div-->
+    <!-- div class="form-group"><%# f.label :v3, class: 'control-label col-xs-2 col-md-1' %><div class='col-xs-2 col-md-1'><%# f.number_field :v3, min: 0, class: 'form-control input-sm' %></div></div-->
+    <div class="viernes-text"><h4>Viernes</h4> <%#--   VIERNES ---------------------------%>
+      <div class="row">
+        <div class="col-xs-offset-2 col-md-offset-2 col-xs-3 col-sm-2 col-md-1">Adultos</div>
+        <div class="col-xs-3 col-sm-2 col-md-1">Niños</div>
+      </div>
+      <%# div class="row">
+        <%= f.label :v1, class: 'control-label col-xs-2 col-md-2' >
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :v1, min: 0, class: 'form-control input-sm' ></div>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :v1c, min: 0, class: 'form-control input-sm' ></div>
+      </div>
+      <div class="row">
+        <%= f.label :v2, class: 'control-label col-xs-2 col-md-2' >
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :v2, min: 0, class: 'form-control input-sm' ></div>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :v2c, min: 0, class: 'form-control input-sm' ></div>
+      </div %>
+      <div class="row">
+        <%= f.label :v3, class: 'control-label col-xs-2 col-md-2' %>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :v3, min: 0, class: 'form-control input-sm' %></div>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :v3c, min: 0, class: 'form-control input-sm' %></div>
+      </div>
+    </div><div class="sabado-text"><h4>Sábado</h4><%#--   SABADO ---------------------------%>
+      <div class="row">
+        <div class="col-xs-offset-2 col-md-offset-2 col-xs-3 col-sm-2 col-md-1">Adultos</div>
+        <div class="col-xs-2 col-sm-2 col-md-1">Niños</div>
+      </div>
+      <div class="row">
+        <%= f.label :s1, class: 'control-label col-xs-2 col-md-2' %>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :s1, min: 0, class: 'form-control input-sm' %></div>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :s1c, min: 0, class: 'form-control input-sm' %></div>
+      </div>
+      <div class="row">
+        <%= f.label :s2, class: 'control-label col-xs-2 col-md-2' %>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :s2, min: 0, class: 'form-control input-sm' %></div>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :s2c, min: 0, class: 'form-control input-sm' %></div>
+      </div>
+      <div class="row">
+        <%= f.label :s3, class: 'control-label col-xs-2 col-md-2' %>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :s3, min: 0, class: 'form-control input-sm' %></div>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :s3c, min: 0, class: 'form-control input-sm' %></div>
+      </div>
+    </div><div class="domingo-text"><h4>Domingo</h4> <%#--   DOMINGO ---------------------------%>
+      <div class="row">
+        <div class="col-xs-offset-2 col-md-offset-2 col-xs-3 col-sm-2 col-md-1">Adultos</div>
+        <div class="col-xs-2 col-sm-2 col-md-1">Niños</div>
+      </div>
+      <div class="row">
+        <%= f.label :d1, class: 'control-label col-xs-2 col-md-2' %>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :d1, min: 0, class: 'form-control input-sm' %></div>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :d1c, min: 0, class: 'form-control input-sm' %></div>
+      </div>
+      <div class="row">
+        <%= f.label :d2, class: 'control-label col-xs-2 col-md-2' %>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :d2, min: 0, class: 'form-control input-sm' %></div>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :d2c, min: 0, class: 'form-control input-sm' %></div>
+      </div>
+      <div class="row">
+        <%= f.label :d3, class: 'control-label col-xs-2 col-md-2' %>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :d3, min: 0, class: 'form-control input-sm' %></div>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :d3c, min: 0, class: 'form-control input-sm' %></div>
+      </div>
+    </div><div class="lunes-text"><h4>Lunes</h4>  <%#--   LUNES ---------------------------%>
+      <div class="row">
+        <div class="col-xs-offset-2 col-md-offset-2 col-xs-3 col-sm-2 col-md-1">Adultos</div>
+        <div class="col-xs-2 col-sm-2 col-md-1">Niños</div>
+      </div>
+      <div class="row">
+        <%= f.label :l1, class: 'control-label col-xs-2 col-md-2' %>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :l1, min: 0, class: 'form-control input-sm' %></div>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :l1c, min: 0, class: 'form-control input-sm' %></div>
+      </div>
+      <%# div class="row">
+        <%= f.label :l2, class: 'control-label col-xs-2 col-md-2' >
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :l2, min: 0, class: 'form-control input-sm' ></div>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :l2c, min: 0, class: 'form-control input-sm' ></div>
+      </div>
+      <div class="row">
+        <%= f.label :l3, class: 'control-label col-xs-2 col-md-2' >
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :l3, min: 0, class: 'form-control input-sm' ></div>
+        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :l3c, min: 0, class: 'form-control input-sm' ></div>
+      </div %>
+    </div><br>
+
+  <% if @food.errors.any? %>
+    <div class="alert alert-danger fade in no-border">
+      <h2><%= pluralize(@food.errors.count, 'error impidió', 'errores impidieron') %> que se guardara el registro:</h2>
+
+      <ul>
+      <% @food.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+    <div class="form-group">
+      <div class="col-xs-offset-2 col-md-offset-2 col-xs-6">
+        <div id="actions">
+          <%= f.submit 'Aceptar', data: { disable_with: 'Procesando...' }, class: 'btn btn-sm btn-primary', id: 'submit_ajax' %>
+          <%= link_to 'Cancelar', get_start, { class: 'btn btn-sm btn-link' }  %>
+        </div>
+        <%= image_tag image_path('spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
+      </div>
+    </div>
+<% end %>

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  foodcost: 1
+  allocationcost: 1
+  fooddeadline: 2015-06-27 17:52:24
+  allocationdeadline: 2015-06-27 17:52:24
+
+two:
+  foodcost: 1
+  allocationcost: 1
+  fooddeadline: 2015-06-27 17:52:24
+  allocationdeadline: 2015-06-27 17:52:24

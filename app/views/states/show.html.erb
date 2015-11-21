@@ -1,0 +1,17 @@
+<p id="notice"><%= notice %></p>
+
+<div class="row">
+  <div class="col-sm-2"><strong><%= label :state, :key %>:</strong></div>
+  <div class='col-sm-10'><%= @state.key %></div>
+</div>
+<div class="row">
+  <div class="col-sm-2"><strong><%= label :state, :name %>:</strong></div>
+  <div class='col-sm-10'><%= @state.name %></div>
+</div>
+<div class="row">
+  <div class="col-sm-2"><strong><%= label :state, :short %>:</strong></div>
+  <div class='col-sm-10'><%= @state.short %></div>
+</div>
+
+<%= link_to 'Edit', edit_state_path(@state), { class: 'btn btn-xs btn-default' } %> |
+<%= link_to 'Back', states_path, { class: 'btn btn-xs btn-default' } %>

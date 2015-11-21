@@ -1,0 +1,27 @@
+<% if type == :new
+     btn_text = '<span class="glyphicon glyphicon-plus"></span> Nuevo'
+   else
+     btn_text = '<span class="glyphicon glyphicon-edit"></span> Editar'
+   end
+%>
+<% if not is_writable %>
+    <div class="panel panel-primary">
+      <div class="panel-heading"><strong>Modificación Desactivada</strong></div>
+      <% if messages.length > 0 %>
+          <div class="panel-body">
+            <ul>
+              <% messages.each do |msg| %>
+                  <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+      <% end %>
+    </div>
+<% end
+   if is_writable or is_admin %>
+    <div class="row text-right">
+      <%= link_to btn_text.html_safe,
+                  path,
+                  class: 'btn btn-default btn-sm' %>
+    </div>
+<% end %>

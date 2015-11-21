@@ -1,0 +1,76 @@
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title" id="myModalLabel"><i class="fa fa-credit-card"></i> <%= @person.full_name false %></h4>
+    </div>
+    <div class="modal-body">
+
+<%= form_for(@person, html: {class:'form-horizontal', role:'form'}) do |f| %>
+    <%= f.hidden_field :changed_by, value: session_id %>
+    <h5>
+      <div class="row">
+        <div class="col-xs-4 col-sm-3"><strong>Gran Total:</strong></div>
+        <div class="col-xs-6"><%= number_to_currency @person.total %></div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4 col-sm-3"><strong>Pagado:</strong></div>
+        <div class="col-xs-6"><%= paid_format_colors @person.amount_paid, @person.total %></div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4 col-sm-3"><strong>Diferencia:</strong></div>
+        <div class="col-xs-6"><%= number_to_currency @person.total - @person.amount_paid %></div>
+      </div>
+    </h5>
+
+    <div class="form-group">
+      <%= f.label :amount_paid, class: 'control-label col-sm-2' %>
+      <div class='col-sm-6'>
+        <%= f.number_field :amount_paid, class: 'form-control input-sm', min: 0 %>
+        <a href="#" id="link_total">Completar total a pagar</a>
+      </div>
+    </div>
+
+    <% if @person.errors.any? %>
+        <div class="alert alert-danger no-border">
+          <h3><%= pluralize(@person.errors.count, 'error impidió', 'errores impidieron') %> que se guardara el registro:</h3>
+
+          <ul>
+            <% @person.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-6">
+        <div id="actions">
+          <%= f.submit 'Aceptar', class: 'btn btn-sm btn-primary', id: 'submit_ajax' %>
+          <%= f.button 'Cancelar', class: 'btn btn-sm btn-link', data: { dismiss: 'modal' } %>
+        </div>
+        <%= image_tag image_path('spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
+      </div>
+    </div>
+<% end %>
+
+    </div>
+    <% if @person.isconfirmed? %>
+        <div class="modal-footer">
+          <h4 class="text-danger text-center">
+            <i class="fa fa-exclamation-triangle"></i> Ya está pagado, es recomendable no hacer mas cambios.
+          </h4>
+        </div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+    $('#submit_ajax').click(function(){
+        $('#spinner').show();
+        $('#actions').hide();
+    });
+    $('#link_total').click(function(){
+        $('#person_amount_paid').val('<%= @person.total %>')
+    });
+</script>

@@ -1,0 +1,21 @@
+<h1>Nuevo Registro</h1>
+<div class="well">
+  Este es el primer paso para tu registro, una vez que hayas creado tu cuenta en el sistema
+  podrás completar tu registro, incluyendo a tus invitados, comida, y hospedaje si requieres.
+</div>
+
+<%
+   def is_registable
+     is_allowed, @messages_reg = should_registration_active
+     is_allowed
+   end
+
+   if is_registable
+%>
+    <%= render 'form' %>
+<% else %>
+    <div class="panel panel-danger text-center">
+      <div class="panel-heading"><strong>Inscripciones Cerradas</strong></div>
+      <div class="panel-body"><%= @messages_reg[0] %></div>
+    </div>
+<% end %>

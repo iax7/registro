@@ -1,0 +1,90 @@
+%section#sumary
+  .row
+    .col-xs-6
+      %h4 Hospedaje Confirmado
+      %table.table.table-bordered.table-condensed
+        %thead.bg-primary
+          %tr
+            %th Sexo
+            %th Cantidad
+        %tbody
+          -@count_sex.each do |c|
+            %tr
+              %td= c['sex'] == 'male' ? 'Hombre' : 'Mujer'
+              %td.text-right= c['count']
+        %tfoot
+          %tr
+            %td.text-right Total
+            %td.text-right= @count_sex.inject(0) { |sum,x| sum + x['count'].to_i }
+    .col-xs-6
+      %h4 Confirmados
+      %table.table.table-bordered.table-condensed
+        %thead.bg-primary
+          %tr
+            %th Persona
+            %th Cantidad
+        %tbody
+          -@count_age.each do |c|
+            %tr
+              %td= c['age'] == 'a' ? 'Adultos' : 'Niños'
+              %td.text-right= c['count']
+        %tfoot
+          %tr
+            %td.text-right Total
+            %td.text-right= @count_age.inject(0) { |sum,x| sum + x['count'].to_i }
+
+%section#details
+  %h4 Lista
+  .row
+    .table-responsive
+      %table.table.table-bordered.table-condensed
+        %thead.bg-primary
+          %tr
+            %th Id
+            %th Nombre
+            %th Sexo
+            %th Edad
+            %th Parentesco
+            %th Iglesia
+            %th Ciudad
+            %th
+              %span{ :data => { toggle: 'tooltip', placement: 'top' },
+                     :title => "Confirmado" } C
+        %tbody
+          - @allocations.each do |a|
+            %tr
+              %td.text-right
+                %strong= a.person.id
+              %td= a.person.full_name
+              %td
+                = show_sex_symbol(a.person.ismale)
+                = a.person.gender
+              %td.text-right= a.person.age
+              %td
+              %td= a.person.church
+              %td= a.person.city
+              %td= render_bool a.person.isconfirmed
+              -#.visible-print= render_bool_text a.person.isconfirmed
+              -#.hidden-print= render_bool a.person.isconfirmed
+              - a.person.guests.each do |g|
+                %tr.bg-dim
+                  %td.text-right= g.id
+                  %td= g.name
+                  %td
+                    = show_sex_symbol g.ismale
+                    = g.gender
+                  %td.text-right= g.age
+                  %td= g.relation_locale
+                  %td.bg-dim= ''
+                  %td.bg-dim= ''
+                  %td
+    %h5= "Número de Titulares: #{@allocations.length}"
+:css
+  .bg-dim {
+    background-color: #c0c0c0;
+  }
+
+:javascript
+  $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+  })

@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="col-sm-6">
+      <h4>Campamento la Roca</h4>
+      <table class="table table-bordered table-condensed">
+        <thead>
+        <tr class="bg-primary">
+          <th class="text-center">Adultos</th>
+          <th class="text-center">Niños</th>
+          <th class="text-center">Infantes</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="text-right"><%= dimzeros allocation.n1 %></td>
+          <td class="text-right"><%= dimzeros allocation.n2 %></td>
+          <td class="text-right"><%= dimzeros allocation.n3 %></td>
+        </tr>
+        </tbody>
+      </table>
+  </div>
+  <div class="col-sm-6"></div>
+</div>
+<% if allocation.nil? %>
+    <em>No se encontró registro de Hospedaje</em>
+<% end %>
+<h5>
+  <div class="row">
+    <div class="col-xs-4 col-sm-2"><strong>Cantidad Total:</strong></div>
+    <div class="col-xs-6"><%= allocation.total_nights %></div>
+  </div>
+  <div class="row">
+    <div class="col-xs-4 col-sm-2"><strong>Costo total:</strong></div>
+    <div class="col-xs-6"><%= number_to_currency allocation.total_cost %></div>
+  </div>
+</h5>

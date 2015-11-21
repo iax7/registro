@@ -1,0 +1,105 @@
+<%
+def get_enum
+  [['No requiero', 0], ['Dormitorios del Campamento', 1], ['Hotel', 2]]
+end
+%>
+<%= form_for(@allocation, html: {class:'form-horizontal', role:'form'}) do |f| %>
+
+    <div class="form-group"><%= f.label :option, class: 'control-label col-sm-2' %>
+      <div class='col-sm-4'>
+        <%= f.select :option, get_enum, {}, { class: 'form-control input-sm' } %>
+        <%# select_tag 'allocation[option]',
+                       options_for_select(get_enum),
+                       class: 'form-control input-sm',
+                       data: {
+                               remote: true },
+                       :onchange => "this.form.submit();"
+        %>
+      </div>
+    </div>
+
+    <div id="hotels">
+        <%= render 'hotels/show_all' %>
+    </div>
+
+    <div id="campamento">
+      <div class="well">
+        <strong>Este servicio es opcional</strong>
+        <p>Si te vas a quedar en los dormitorios del campamento, llena los siguientes campos con tu información y la de tus invitados.</p>
+        <p>
+          Los costos de los dormitorios son:
+            <ul>
+              <li>Adultos (de 11 años en adelante): $100 pesos (MX) por persona.</li>
+              <li>Niños (de 5-10 años): $50 pesos por persona.</li>
+              <li>Infantes (de 0-4 años): gratis.</li>
+            </ul>
+        </p>
+        <p>
+          (este costo incluye las 3 noches: noche del viernes, noche del sábado y noche del domingo)
+        </p>
+        <p>
+          Ropa de cama de los domitorios: Usted que ha solicitado este servicio,  se les
+          informa que será necesario traer de manera
+          personal la ropa de cama, ya que sólo los domitorios cuentan con la base y el
+          colchón, entre los artículos que se requiere traer serán los siguientes: sabanas
+          para la colchoneta, almohada con funda, y sobre todo traer una cobija abrigadora
+          ya que en dicho lugar hacer demasiado frio por las noches y por las mañanas.
+        </p>
+      </div>
+      <div>
+        <h4>Número de Personas</h4>
+        <p>Si te vas a quedar en los dormitorios del campamento, contesta las siguientes preguntas; si no, déjalos en cero.</p>
+      </div>
+      <div class="form-group"><%= f.label :n1, class: 'control-label col-sm-2' %>(11 años en adelante)<div class='col-sm-2'><%= f.number_field :n1, min: 0, class: 'form-control input-sm' %></div></div>
+      <div class="form-group"><%= f.label :n2, class: 'control-label col-sm-2' %>(5-10 años)<div class='col-sm-2'><%= f.number_field :n2, min: 0, class: 'form-control input-sm' %></div></div>
+      <div class="form-group"><%= f.label :n3, class: 'control-label col-sm-2' %>(0-4 años)<div class='col-sm-2'><%= f.number_field :n3, min: 0, class: 'form-control input-sm' %></div></div>
+    </div>
+  <% if @allocation.errors.any? %>
+    <div class="alert alert-danger fade in no-border">
+      <h2><%= pluralize(@allocation.errors.count, 'error impidió', 'errores impidieron') %> que se guardará el registro:</h2>
+
+      <ul>
+      <% @allocation.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-6">
+        <div id="actions">
+          <%= f.submit 'Aceptar', data: { disable_with: 'Procesando...' }, class: 'btn btn-sm btn-primary', id: 'submit_ajax' %>
+          <%= link_to 'Cancelar', get_start, { class: 'btn btn-sm btn-link' }  %>
+        </div>
+        <%= image_tag image_path('spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
+      </div>
+    </div>
+<% end %>
+<script>
+  set_ui = function() {
+      var selected = $('#allocation_option').val();
+      var div_camp = $('#campamento');
+      var div_hotel = $('#hotels');
+      var inputs = $(':input[type="number"]');
+      switch(selected) {
+          case '0':
+              div_camp.slideUp();
+              div_hotel.slideUp();
+              inputs.val(0).prop('disabled', true);
+              break;
+          case '1':
+              div_camp.slideDown();
+              div_hotel.slideUp();
+              inputs.prop('disabled', false);
+              break;
+          case '2':
+              div_camp.slideUp();
+              div_hotel.slideDown();
+              inputs.val(0).prop('disabled', true);
+              break;
+      }
+  };
+  $(document).ready(set_ui);
+  $('#allocation_option').change(set_ui);
+</script>

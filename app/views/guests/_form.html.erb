@@ -1,0 +1,30 @@
+<%= form_for [@person, @guest], html: {class:'form-horizontal', role:'form'} do |f| %>
+
+    <div class="form-group"><%= f.label :name,     class: 'control-label col-sm-2' %><div class='col-sm-6'><%= f.text_field :name,     class: 'form-control input-sm' %></div></div>
+    <div class="form-group"><%= f.label :nickname, class: 'control-label col-sm-2' %><div class='col-sm-6'><%= f.text_field :nickname, class: 'form-control input-sm', placeholder: 'Aparecerá en el gafete impreso' %></div></div>
+    <div class="form-group"><%= f.label :relation, class: 'control-label col-sm-2' %><div class='col-sm-2'><%= f.select :relation, Guest.i18n_relations, {}, { class: 'form-control input-sm' } %></div></div>
+    <div class="form-group"><%= f.label :ismale,   class: 'control-label col-sm-2' %><div class='col-sm-2'><%= f.select :ismale, [['Hombre', true], ['Mujer', false]], {}, { class: 'form-control input-sm'} %></div></div>
+    <div class="form-group"><%= f.label :age,      class: 'control-label col-sm-2' %><div class='col-sm-2'><%= f.number_field :age,    class: 'form-control input-sm', min: 0 %></div></div>
+
+  <% if @guest.errors.any? %>
+    <div class="alert alert-danger fade in no-border">
+      <h2><%= pluralize(@guest.errors.count, 'error impidió', 'errores impidieron') %> que se guardara el invitado:</h2>
+
+      <ul>
+        <% @guest.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-6">
+        <div id="actions">
+          <%= f.submit 'Aceptar', data: { disable_with: 'Procesando...' }, class: 'btn btn-sm btn-primary', id: 'submit_ajax' %>
+          <%= link_to 'Cancelar', get_start, { class: 'btn btn-sm btn-link' }  %>
+        </div>
+        <%= image_tag image_path('spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
+      </div>
+    </div>
+<% end %>

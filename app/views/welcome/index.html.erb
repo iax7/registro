@@ -1,0 +1,306 @@
+<% content_for :top do %>
+<div class="jumbotron text-shadow"
+     style="background-image: url(<%= image_path 'universo.jpg' %>);
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+            background-size: cover;
+            background-color: black;
+            margin-top: -21px;">
+
+  <div class="container text-center" style="color: #ffffff">
+    <h1>Title</h1>
+    <h2>Subtitle</h2>
+    <p>| Some text|</p>
+    <br><h4>Information / Location</h4>
+  </div>
+</div>
+<% end %>
+<%# ---------------------------------------------------------------------------------------%>
+
+<% if @is_event_ended %>
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <h2>¡Gracias!</h2>
+        <p>
+          <h5>
+          La segunda conferencia ha concluido, te invitamos a seguir
+          nuestro ministerio para consultar nuevo material.
+          </h5>
+        </p>
+        <br>
+          <a href="http://www.cristianismobiblico.com/">
+            <%= image_tag 'cb.jpg' %>
+          </a>
+      </div>
+    </div>
+<% else %>
+<style>
+.special  h4 {
+      color: #149c82;
+  }
+</style>
+
+<% show_countdown = Rails.application.config.reg_registration_deadline_show
+   if show_countdown
+     dead = Rails.application.config.reg_registration_deadline
+     if dead > Time.now %>
+<script>
+  $(function() {
+    <%# 'December 31 2015 00:00:50 UTC+0200' %>
+    var deadline = '<%= dead.to_formatted_s(:iso8601) %>';
+    initializeClock('clockdiv', deadline);
+  });
+</script>
+
+<div class="row text-center">
+  <h2>
+    ¡Próximo cierre de inscripciones!
+  </h2>
+  <div id="clockdiv">
+    <div>
+      <span class="days"></span>
+      <div class="smalltext">Días</div>
+    </div>
+    <div>
+      <span class="hours"></span>
+      <div class="smalltext">Horas</div>
+    </div>
+    <div>
+      <span class="minutes"></span>
+      <div class="smalltext">Minutos</div>
+    </div>
+    <div>
+      <span class="seconds"></span>
+      <div class="smalltext">Segundos</div>
+    </div>
+  </div>
+</div>
+    <% else %>
+        <div class="row text-center">
+            <h2>
+              ¡Inscripciones cerradas, gracias!
+            </h2>
+        </div>
+    <% end %>
+<% end %>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class='panel panel-success'>
+      <div class="panel-heading text-center">
+         <span class="panel-title">
+           <strong>¡Bienvenido!</strong>
+         </span>
+      </div>
+      <div class="panel-body">
+        <p class="text-justify">
+          Bienvenidos al registro general de la segunda conferencia
+          anual Cristianismo Bíblico 2015. Le informamos que se ha mejorado el sistema de
+          registro con el fin de que sea más cómodo, ágil y sencillo. Dentro de las mejoras
+          encontrará los siguientes pasos a seguir para realizar su registro:</p>
+        <div class="media">
+          <div class="media-left">
+            <h1 class="media-object" style="margin-top: 0;">1</h1>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">Crear Cuenta</h4>
+            <p class="text-justify">
+            Crear su cuenta Personal en el Sistema (incluye  el registro de su
+            información personal, hospedaje, alimentación  y transportación que tendremos
+            disponible del punto de partida a las instalaciones donde se llevará a cabo
+            la conferencia en caso de requerirlo).
+            </p>
+          </div>
+        </div>
+        <div class="media">
+          <div class="media-left">
+            <h1 class="media-object" style="margin-top: 0;">2</h1>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">Completar Detalles</h4>
+            <p class="text-justify">
+            Continuar con el registro de sus acompañantes si así sea el caso (Incluye
+            datos, hospedaje y alimentación de sus acompañantes tales como: esposa, hijos,
+            familiares y amistades que vendrían con usted, en caso de requerirlo).</p>
+          </div>
+        </div>
+        <div class="media">
+          <div class="media-left">
+            <h1 class="media-object" style="margin-top: 0;">3</h1>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">Pago</h4>
+            <p class="text-justify">
+            Contactar y efectuar su pago al coordinador señalado para realizarlo.
+            (Al finalizar su registro encontrará el nombre y el contacto de los hermanos
+            encargados de efectuar el cobro  de las iglesias hermanas, usted tendrá que
+            contacta al hermano encargado más cercano a su localidad).</p>
+          </div>
+        </div>
+        <div class="media">
+          <div class="media-left">
+            <h1 class="media-object" style="margin-top: 0;">4</h1>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">Imprimir Gafete</h4>
+            <p class="text-justify">
+            Imprimir su gafete y el de sus acompañantes. (al finalizar su registro total
+            aparecerá el botón de impresión de su gafete, el cual,  tendrá un código de
+            barras que se escaneará el día del evento donde aparecerá toda su información
+            de registro. Dicho gafete  deberá  imprimirlo por su cuenta y tendrá que
+            presentarlo estrictamente el día del evento para llevar a cabo su acceso a la
+            conferencia.  Sólo deberá presentar su gafete impreso y en mano; el porta
+            gafete de plástico se le entregará en la entrada de la conferencia.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="row special">
+  <h2 class="text-center">Información general</h2>
+  <div class="col-md-4">
+    <h4>Inscripciones</h4>
+    <p><strong>¡Cupo Limitado!</strong><br>
+      La inscripción tendrá un costo de <strong>$50 pesos (MX)</strong> para personas de 12 años en adelante.<br>
+      Adicionalmente habrá una caja para ofrendas <strong>voluntarias</strong>.</p>
+    <br>
+    <h4>Ubicación</h4>
+    <p><strong>Campamento la Roca.</strong> Dirección postal: Camino a La Roca #1400, San Sebastian el Grande, Jal.,
+      45600 (a 20-30 minutos de la plaza Centro Sur en el Periférico Sur). </p>
+  </div>
+  <div class="col-md-4">
+    <h4>Comidas</h4>
+    <p><strong>¡Cupo Limitado!</strong><br>
+      <strong>En el campamento.</strong> Existe la opción de comer hasta 3 veces al día en el campamento
+      (desayuno, comida, cena). Pero es necesario confirmar las comidas que tú y tus invitados
+      consumirán antes de llegar. Serán alimentos calientes preparados por el campamento.</p>
+    <p>Los costos de las comidas son:
+      <ul>
+        <li>Adultos (de 11 años en adelante): $50 pesos (MX) por comida.</li>
+        <li>Niños (de 5-10 años): $25 pesos por comida.</li>
+        <li>Infantes (de 0-4 años): gratis.</li>
+      </ul>
+      Además, habrá una tiendita en el campamento para comprar botanas, nieves y refrescos. Café gratuito será servido
+      periódicamente durante la conferencia. Cerca del campamento hay Oxxo's, una Farmacia Guadalajara, y pequeños
+    puestos de restaurantes en la colonia.</p>
+  </div>
+  <div class="col-md-4">
+    <h4>Hospedaje</h4>
+    <p><strong>¡Cupo Limitado!</strong><br>
+      <strong>En el campamento.</strong> Cada uno de los que ya reservaron su lugar en los dormitorios del campamente
+      debe traer su propia ropa de cama (sleeping bags, cobijas, almohadas, etc.).</p>
+        <p>
+      Los costos de los dormitorios son:
+      <ul>
+        <li>Adultos (de 11 años en adelante): $100 pesos (MX) por persona</li>
+        <li>Niños (de 5-10 años): $50 pesos por persona.</li>
+        <li>Infantes (de 0-4 años): gratis.</li>
+      </ul>
+      Este precio por persona cubre las noches del viernes, sábado, y domingo (<strong>3 noches</strong>).
+      Es decir, este es el precio total por persona que cubre todas las noches de la conferencia.
+    </p>
+    <p>
+      <strong>En Hotel.</strong>
+      Se tiene convenio con ciertos hoteles estratégicos, puedes consultarlos a continuación y pedir
+      que se aplique el código de descuento.</p>
+        <h4>
+      <%= link_to '<i class="fa fa-file-pdf-o"></i> Lista de hoteles'.html_safe,
+                  'documents/2hoteles_conf.pdf' %>
+        </h4>
+
+  </div>
+</div>
+
+<div class="row special">
+  <div class="col-md-4">
+    <h4>Libros a la venta</h4>
+    <p>Serán títulos de sana doctrina, recomendados por Josef Urban. Tendremos una selección
+      de más de 100 libros que cubren muchos temas bíblicos, con libros de teología,
+      comentarios bíblicos, ayudas pastorales, etc.
+    </p>
+  </div>
+  <div class="col-md-4">
+    <h4>Transportación Local</h4>
+    <p>Habrá un servicio especial de transporte que saldrá del centro comercial Centro Sur con destino al campamento
+      la Roca.</p>
+    <h4>
+    <%= link_to '<i class="fa fa-file-pdf-o"></i> Mapa para llegar al lugar'.html_safe,
+                'documents/1mapa_rutas_conf.pdf' %>
+    </h4>
+  </div>
+  <div class="col-md-4">
+    <h4>Informes (oficina)</h4>
+    <p>
+      <span class="glyphicon glyphicon-earphone"></span> <%= number_to_phone(3315780853, area_code: true) %>
+      (Horarios: Lunes a viernes, 3pm-7pm)<br>
+      <span class="glyphicon glyphicon-envelope"></span> cbconferencia@gmail.com
+    </p>
+  </div>
+</div>
+
+<div class="row special">
+  <h2 class="text-center">Agenda</h2>
+  <div class="col-md-3">
+    <div><h4>Viernes, 13 noviembre</h4></div>
+
+    <strong>1:00-4:30pm</strong>: Registro<br>
+    <strong>5:00pm</strong>: Prédica - Josef Urban<br>
+    <strong>6:30pm</strong>: Prédica - Joe Owen<br>
+    <strong>8:00pm</strong>: Cena<br>
+  </div>
+  <div class="col-md-3">
+    <div><h4>Sábado, 14 noviembre</h4></div>
+
+    <strong>9:00am</strong>: Desayuno<br>
+    <strong>11:00am</strong>: Prédica - Dr. Terry Mortenson<br>
+    <strong>1:00pm</strong>: Prédica - Dr. Terry Mortenson<br>
+    <strong>2:30pm</strong>: Comida<br>
+    <strong>6:30pm</strong>: Prédica - Steve Ham<br>
+    <strong>8:00pm</strong>: Cena<br>
+  </div>
+  <div class="col-md-3">
+    <div><h4>Domingo, 15 noviembre</h4></div>
+
+    <strong>9:00am</strong>: Desayuno<br>
+    <strong>11:00am</strong>: Prédica - Josef Urban<br>
+    <strong>1:00pm</strong>: Prédica - Dr. Terry Mortenson<br>
+    <strong>2:30pm</strong>: Comida<br>
+    <strong>6:30pm</strong>: Prédica - Joe Owen<br>
+    <strong>8:00pm</strong>: Cena<br>
+  </div>
+  <div class="col-md-3">
+    <div><h4>Lunes, 16 noviembre</h4></div>
+
+    <strong>9:00am</strong>: Desayuno<br>
+    <strong>11:00am</strong>: Prédica - Steve Ham<br>
+    <strong>12:00pm</strong>: Conclusión<br>
+    <strong>1:00pm</strong>: Despedida<br>
+  </div>
+</div><br>
+
+<p class="text-center">
+<%
+  def is_registable
+    is_allowed, @messages_reg = should_registration_active
+    is_allowed
+  end
+
+  unless is_session_active
+%>
+  <% if is_registable %>
+      <%= link_to 'Inscribirse &raquo;'.html_safe,
+                  new_person_path,
+                  class: 'btn btn-default btn-lg' %>
+  <% else %>
+        <div class="panel panel-danger text-center">
+          <div class="panel-heading"><strong>Inscripciones Cerradas</strong></div>
+            <div class="panel-body"><%= @messages_reg[0] %></div>
+        </div>
+  <% end %>
+<% end %>
+</p>
+<% end %>
+<%# hidden_field_tag 'srv_time', Time.now %>

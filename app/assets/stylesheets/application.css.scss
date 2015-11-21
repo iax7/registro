@@ -1,0 +1,127 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ *= require bootstrap.min
+ *= require jquery-ui.min
+ *= require jquery-ui.theme
+ */
+
+@import "font-awesome-sprockets";
+@import "font-awesome";
+
+.female-color { color: fuchsia; }
+
+$viernes: #5cb85c;
+$sabado: #5bc0de;
+$domingo: #f0ad4e;
+$lunes: #d9534f;
+
+.viernes { background-color: $viernes; }
+.sabado { background-color: $sabado;}
+.domingo { background-color: $domingo;}
+.lunes { background-color: $lunes;}
+.viernes-text { color: $viernes; }
+.sabado-text { color: $sabado; }
+.domingo-text { color: $domingo; }
+.lunes-text { color: $lunes; }
+
+.custom-section {
+  height: 100%;
+  padding-top: 50px;
+}
+
+.links {
+  color: grey !important;
+}
+
+.btn-link {
+  @extend .btn-link;
+  color: black !important;
+}
+
+.text-shadow {
+  text-shadow: 3px 4px 5px #000;
+}
+
+.box-bottom-shadow {
+  box-shadow: 0px 3px 10px rgba(0,0,0,0.6);
+}
+
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by it's height */
+  margin: 0 auto -50px;
+}
+
+/* Set the fixed height of the footer here */
+#push {
+  height: 50px;
+}
+
+.footer {
+  height: 50px;
+  background-color: #f5f5f5;
+}
+
+.divider-inside-top {
+  padding-top: 15px;
+  position:relative;
+  overflow:hidden;
+  border-top:1px solid #ddd;
+}
+.divider-inside-top:before {
+  content: "";
+  position:absolute;
+  z-index: 1;
+  width:96%;
+  top: -10px;
+  height: 10px;
+  left: 2%;
+  border-radius: 100px / 5px;
+  box-shadow:0 0 18px rgba(0,0,0,0.6);
+}
+
+//Countdown Clock Styles
+#clockdiv {
+  font-family: sans-serif;
+  color: #fff;
+  display: inline-block;
+  font-weight: 100;
+  text-align: center;
+  font-size: 30px;
+  margin-bottom: 30px;
+}
+
+#clockdiv > div {
+  padding: 10px;
+  border-radius: 3px;
+  background: #00BF96;
+  display: inline-block;
+}
+
+#clockdiv div > span {
+  padding: 15px;
+  border-radius: 3px;
+  background: #00816A;
+  display: inline-block;
+}
+
+.smalltext {
+  padding-top: 5px;
+  font-size: 14px;
+}

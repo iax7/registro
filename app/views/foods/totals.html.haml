@@ -1,0 +1,31 @@
+%h3 Total de Comidas Pagadas
+= render 'food_table', food: @food_confirmed,
+                       food_money: @food_confirmed_money,
+                       food_total: @food_confirmed_total
+
+%br
+-# -----------------------------------------------------------------------------------------------
+%h3 Total de Comidas Solicitadas
+= render 'food_table', food: @food_all,
+                       food_money: @food_all_money,
+                       food_total: @food_all_total
+
+-# -----------------------------------------------------------------------------------------------
+%h3 Diferencia Solicitadas - Pagadas
+= render 'food_table', food: @food_diff,
+                       food_money: @food_diff_money,
+                       food_total: @food_diff_total
+
+%br
+-# -----------------------------------------------------------------------------------------------
+%h3= "Diferencia al #{@percent}0%"
+= render 'food_table', food: @food_percent,
+                       food_money: @food_percent_money,
+                       food_total: @food_percent_total
+
+%br
+-# -----------------------------------------------------------------------------------------------
+%h3 Consumo Real
+= render 'food_table', food: @food_real,
+                       food_money: @food_real_money,
+                       food_total: @food_real_total

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= content_for?(:title) ? yield(:title) : 'Title' %> - Cristianismo Bíblico</title>
+
+  <%= favicon_link_tag 'favicon.ico' %>
+
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+
+  <%= auto_discovery_link_tag :rss, posts_url(format: 'rss') %>
+
+  <%# Windows 8 Tiles %>
+  <meta name="application-name" content="Conferencia 2015"/>
+  <meta name="msapplication-TileColor" content="#ffffff"/>
+  <meta name="msapplication-square70x70logo" content="/assets/tiny.png"/>
+  <meta name="msapplication-square150x150logo" content="/assets/square.jpg"/>
+  <meta name="msapplication-wide310x150logo" content="/assets/wide.jpg"/>
+  <meta name="msapplication-square310x310logo" content="/assets/large.jpg"/>
+  <meta name="msapplication-notification" content="frequency=30;polling-uri=http://notifications.buildmypinnedsite.com/?feed=http://registro.cristianismobiblico.com/posts.rss&amp;id=1;polling-uri2=http://notifications.buildmypinnedsite.com/?feed=http://registro.cristianismobiblico.com/posts.rss&amp;id=2;polling-uri3=http://notifications.buildmypinnedsite.com/?feed=http://registro.cristianismobiblico.com/posts.rss&amp;id=3;polling-uri4=http://notifications.buildmypinnedsite.com/?feed=http://registro.cristianismobiblico.com/posts.rss&amp;id=4;polling-uri5=http://notifications.buildmypinnedsite.com/?feed=http://registro.cristianismobiblico.com/posts.rss&amp;id=5; cycle=1"/>
+
+  <%# iOS %>
+  <%= favicon_link_tag 'tiny.png', :rel => 'apple-touch-icon', :type => 'image/png' %>
+
+  <%# Facebook
+  https://developers.facebook.com/tools/debug/og/object?q=registro.cristianismobiblico.com %>
+  <meta property="og:site_name" content="Cristianismo Bíblico"/>
+  <meta property="og:title" content="Title 2015" />
+  <meta property="og:description" content="En este sitio podrá registrarse para asistir a la conferencia." />
+  <meta property="og:image" content="<%= asset_url 'large.jpg' %>"/>
+  <%#meta property="og:locale" content="es_MX" /%>
+  <meta property="og:url" content="http://registro.cristianismobiblico.com/"/>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="<%= content_for?(:description) ? yield(:description) : 'Cristianismo Bíblico' %>">
+</head>
+<body>
+  <div id="modal-holder"></div>
+  <div id="wrap">
+      <header>
+        <%= render 'layouts/navigation' %>
+        <% if Rails.application.config.test_version %>
+        <div style="height: 19px;
+                margin-top: -21px;
+                margin-bottom: 21px;
+                background-image: url(<%= image_path 'uc.png' %>)">
+          <div style="font-size: large;
+                  text-align: center;
+                  color: white;
+                  text-shadow: 2px 2px 4px #000;
+                  font-weight: bolder;">Versión de Prueba</div>
+        </div>
+        <% end %>
+
+      </header>
+      <%=  yield :top if content_for? :top %>
+      <main role="main" style="padding-bottom: 20px;">
+        <div class="container">
+          <%= render 'layouts/messages' %>
+          <%= yield %>
+        </div>
+      </main>
+      <div id="push"></div>
+  </div>
+  <footer class="footer divider-inside-top">
+    <div class="container">
+      <p class="text-muted text-center"><i class="fa fa-copyright"></i> Cristianismo Bíblico 2015</p>
+    </div>
+  </footer>
+</body>
+</html>

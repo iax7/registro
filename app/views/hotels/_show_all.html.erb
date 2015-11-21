@@ -1,0 +1,4 @@
+<% Hotel.all.each do |h| %>
+    <%= render h, locals: { hotel: h } %>
+    <hr>
+<% end %>

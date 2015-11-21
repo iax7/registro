@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-sm-2"><strong><%= label :config, :foodcost %>:</strong></div>
+  <div class='col-sm-10'><%= @config.foodcost %></div>
+</div>
+<div class="row">
+  <div class="col-sm-2"><strong><%= label :config, :allocationcost %>:</strong></div>
+  <div class='col-sm-10'><%= @config.allocationcost %></div>
+</div>
+<div class="row">
+  <div class="col-sm-2"><strong><%= label :config, :max_food %>:</strong></div>
+  <div class='col-sm-10'><%= @config.max_food %></div>
+</div>
+<div class="row">
+  <div class="col-sm-2"><strong><%= label :config, :max_allocation %>:</strong></div>
+  <div class='col-sm-10'><%= @config.max_allocation %></div>
+</div>
+<div class="row">
+  <div class="col-sm-2"><strong><%= label :config, :fooddeadline %>:</strong></div>
+  <div class='col-sm-10'><%= @config.fooddeadline %></div>
+</div>
+<div class="row">
+  <div class="col-sm-2"><strong><%= label :config, :allocationdeadline %>:</strong></div>
+  <div class='col-sm-10'><%= @config.allocationdeadline %></div>
+</div>
+
+<%= link_to 'Edit', edit_config_path(@config), { class: 'btn btn-xs btn-default' } %> |
+<%= link_to 'Back', configs_path, { class: 'btn btn-xs btn-default' } %>

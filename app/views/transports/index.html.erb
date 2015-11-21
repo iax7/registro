@@ -1,0 +1,50 @@
+<h2>Transporte</h2>
+
+<table class="table table-striped table-hover table-condensed">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th colspan="2" class="text-center viernes">Viernes</th>
+      <th colspan="2" class="text-center sabado" >Sábado</th>
+      <th colspan="2" class="text-center domingo">Domingo</th>
+      <th colspan="2" class="text-center lunes"  >Lunes</th>
+    </tr>
+    <tr>
+      <th>Id</th>
+      <th>Nombre</th>
+      <th>Pagado</th>
+      <th class="text-center viernes">Ida</th>
+      <th class="text-center viernes">Reg</th>
+      <th class="text-center sabado" >Ida</th>
+      <th class="text-center sabado" >Reg</th>
+      <th class="text-center domingo">Ida</th>
+      <th class="text-center domingo">Reg</th>
+      <th class="text-center lunes"  >Ida</th>
+      <th class="text-center lunes"  >Reg</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @transports.each do |transport| %>
+      <tr class="text-right">
+        <td><%= transport.person.id %></td>
+        <td class="text-left"><%= transport.person.full_name %></td>
+        <td class="text-left"><%= render_bool transport.person.isconfirmed %></td>
+        <td><%= dimzeros transport.v1 %></td>
+        <td><%= dimzeros transport.v2 %></td>
+        <td><%= dimzeros transport.s1 %></td>
+        <td><%= dimzeros transport.s2 %></td>
+        <td><%= dimzeros transport.d1 %></td>
+        <td><%= dimzeros transport.d2 %></td>
+        <td><%= dimzeros transport.l1 %></td>
+        <td><%= dimzeros transport.l2 %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% if @transports.size == 0 %>
+    <em>No se encontraron registros</em>
+<% end %>
+<br>

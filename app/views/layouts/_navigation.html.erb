@@ -1,0 +1,67 @@
+<%# navigation styled for Bootstrap 3.0 %>
+<nav class="navbar navbar-inverse navbar-static-top"
+     style="box-shadow: 0px 0px 20px 1px #000;">
+  <div class="container">
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <div class="navbar-header">
+      <a href="http://www.cristianismobiblico.com/">
+        <img alt="Marca" src="<%= image_path 'cbw.png' %>" style="margin-right: 10px;">
+      </a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li <%= set_active('index') %>><%= link_to 'Inicio', root_path %></li>
+        <% if is_session_active %>
+            <li <%= set_active('show') %>><%= link_to 'Mis Datos', view_person_url %></li>
+        <% if is_admin %><%# ADMIN ------------------------------------- %>
+            <li class="dropdown">
+              <%= link_to 'Admin <span class="caret"></span>'.html_safe,
+                          '#',
+                          class: 'dropdown-toggle',
+                          role: 'button',
+                          data: { :toggle => 'dropdown'},
+                          :'aria-haspopup' => true,
+                          :'aria-expanded' => true %>
+              <ul class="dropdown-menu">
+                <li class="dropdown-header">Operaciones</li>
+                <%#li><%= link_to 'Ayuda', 'http://screencast.com/t/FJC2N8GFT4Ej' ></li%>
+                <li><%= link_to 'Ayuda', helpadmin_path %></li>
+                <li><%= link_to 'Personas Registradas', people_path %></li>
+                <li><%= link_to 'Personas con Comentarios', comments_people_path %></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Reportes</li>
+                <li><%= link_to 'Totales Generales', totals_people_path %></li>
+                <li><%= link_to 'Total de Pagos', payments_people_path %></li>
+                <li><%= link_to 'Comidas', food_totals_path(9) %></li>
+                <li><%= link_to 'Hospedaje', allocations_path %></li>
+                <li><%= link_to 'Transporte', transports_path %></li>
+                <li><%= link_to 'Personas Registradas (OLD)', registros_path(format: 'pdf') %></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Catálogos</li>
+                <li><%= link_to 'Configuracion', configs_path %></li>
+                <li><%= link_to 'Hoteles', hotels_path %></li>
+                <li><%= link_to 'Paises', countries_path %></li>
+                <li><%= link_to 'Estados', states_path %></li>
+                <li><%= link_to 'Iglesias', churches_path %></li>
+                <li><%= link_to 'Novedades', posts_path %></li>
+              </ul>
+            </li>
+        <% end %>
+        <% end %>
+        <%#li < set_active('contact') ><a href="http://www.cristianismobiblico.com/nosotros/contactarnos/">Contacto</a></li%>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <% if is_session_active %>
+            <li><%= link_to 'Salir', logout_url %></li>
+        <% else %>
+            <li <%= set_active('login') %>><%= link_to 'Ingresar', login_url %></li>
+        <% end %>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>

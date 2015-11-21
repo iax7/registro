@@ -1,0 +1,26 @@
+<%= form_for(@church, html: {class:'form-horizontal', role:'form'}) do |f| %>
+    <div class="form-group">
+    <%= f.label :name, class: 'control-label col-sm-2' %>
+    <div class='col-sm-6'><%= f.text_field :name, class: 'form-control input-sm' %></div>
+  </div>
+    <% if @church.errors.any? %>
+  <div class="alert alert-danger no-border">
+    <h3><%= pluralize(@church.errors.count, 'error impidió', 'errores impidieron') %> que se guardara el registro:</h3>
+
+    <ul>
+      <% @church.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-6">
+      <div id="actions">
+        <%= f.submit 'Aceptar', data: { disable_with: 'Procesando...' }, class: 'btn btn-sm btn-primary', id: 'submit_ajax' %>
+        <%= link_to 'Cancelar', get_start, { class: 'btn btn-sm btn-link' }  %>
+      </div>
+      <%= image_tag image_path('spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
+    </div>
+  </div>
+<% end %>

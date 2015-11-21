@@ -1,0 +1,31 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  v1: 1
+  v2: 1
+  v3: 1
+  s1: 1
+  s2: 1
+  s3: 1
+  d1: 1
+  d2: 1
+  d3: 1
+  l1: 1
+  l2: 1
+  l3: 1
+  person_id: 
+
+two:
+  v1: 1
+  v2: 1
+  v3: 1
+  s1: 1
+  s2: 1
+  s3: 1
+  d1: 1
+  d2: 1
+  d3: 1
+  l1: 1
+  l2: 1
+  l3: 1
+  person_id: 

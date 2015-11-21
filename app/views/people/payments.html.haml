@@ -1,0 +1,25 @@
+%section#payments
+  %h3 Pagos
+  .row
+    .table-responsive
+      %table.table.table-bordered.table-condensed
+        %thead.bg-primary
+          %tr
+            %th Id
+            %th Persona
+            %th Ciudad
+            %th Cantidad
+        %tbody
+          - @people.each do |p|
+            %tr
+              %td.text-right= p['id']
+              %td= p['person']
+              %td= p['city']
+              %td.text-right= number_to_currency p['paid']
+        %tfoot
+          %tr.bg-primary
+            %td
+            %td
+            %td.text-right Total:
+            %td.text-right
+              %strong= number_to_currency @sum
