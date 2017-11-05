@@ -23,9 +23,9 @@ Rails.application.configure do
   #    :port => 3000
   #}
   config.action_mailer.smtp_settings = {
-      :address              => 'box1268.bluehost.com',
+      :address              => 'test.com',
       :port                 => 465,
-      :domain               => 'cristianismobiblico.com',
+      :domain               => 'foo.com',
       :user_name            => ENV['SMTP_USER'],
       :password             => ENV['SMTP_PASS'],
       :authentication       => :plain,

@@ -1,4 +1,15 @@
+class Option1Validator < ActiveModel::Validator
+  def validate(record)
+    if record.option == 1
+      if (record.n1 < 1) and (record.n2 < 1) and (record.n2 < 1)
+        record.errors[:option] << 'de hospedaje; No puedes dejar en ceros todos los campos cuando seleccionas hospedarte en el campamento.'
+      end
+    end
+  end
+end
+
 class Allocation < ActiveRecord::Base
+  include ActiveModel::Validations
   belongs_to :person
   after_initialize :init
   before_save :check_option
@@ -22,6 +33,8 @@ class Allocation < ActiveRecord::Base
             numericality: { only_integer: true,
                             greater_than_or_equal_to: 0 }
 
+  validates_with Option1Validator
+
   def total_nights
     self.n1 + self.n2 + self.n3
   end
@@ -36,6 +49,7 @@ class Allocation < ActiveRecord::Base
   end
 
   # Filters --------
+  # Lists all for index
   def self.has_allocation
     Allocation
         .includes(person: [:guests])

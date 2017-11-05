@@ -1,16 +1,24 @@
 class HotelsController < ApplicationController
-  before_action :require_admin
+  before_action :require_admin, only: [:edit, :update, :destroy]
   before_action :set_hotel, only: [:show, :edit, :update, :destroy]
+
 
   # GET /hotels
   # GET /hotels.json
   def index
-    @hotels = Hotel.all
+    unless require_admin
+      return false
+    end
+
+    @hotels = Hotel.all.order :name
   end
 
   # GET /hotels/1
   # GET /hotels/1.json
   def show
+  end
+
+  def show_all
   end
 
   # GET /hotels/new

@@ -17,7 +17,8 @@
   </div>
   <div class="form-group">
     <%= f.label :cost, class: 'control-label col-sm-2' %>
-    <div class='col-sm-6'><%= f.text_area :cost, class: 'form-control input-sm' %></div>
+    <div class='col-sm-6'><%= f.text_area :cost, class: 'form-control input-sm', cols: '30', rows: '5' %>
+      <p>Puedes usar Markdown, pero para una nueva linea usa '&lt;br&gt;'</p></div>
   </div>
   <div class="form-group">
     <%= f.label :url, class: 'control-label col-sm-2' %>
@@ -29,7 +30,9 @@
   </div>
   <div class="form-group">
     <%= f.label :comments, class: 'control-label col-sm-2' %>
-    <div class='col-sm-6'><%= f.text_area :comments, class: 'form-control input-sm' %></div>
+    <div class='col-sm-6'><%= f.text_area :comments, class: 'form-control input-sm', cols: '30', rows: '5' %>
+      <p>Puedes usar Markdown, pero para una nueva linea usa '&lt;br&gt;'</p>
+    </div>
   </div>
   <div class="form-group">
     <%= f.label :has_discount, class: 'control-label col-sm-2' %>
@@ -52,7 +55,7 @@
         <%= f.submit 'Aceptar', data: { disable_with: 'Procesando...' }, class: 'btn btn-sm btn-primary', id: 'submit_ajax' %>
         <%= link_to 'Cancelar', get_start, { class: 'btn btn-sm btn-link' }  %>
       </div>
-      <%= image_tag image_path('spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
+      <%= image_tag image_path('spinners/spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
     </div>
   </div>
 <% end %>

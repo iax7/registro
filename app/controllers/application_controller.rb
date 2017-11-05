@@ -14,13 +14,16 @@ class ApplicationController < ActionController::Base
                 :should_allocation_active,
                 :should_transport_active,
                 :person_edit_redirect,
-                :person_services_redirect
+                :person_services_redirect,
+                :local_date_string
 
   before_filter :configure_actionmailer
 
+  # DEPRECATED, use nav_li_link(text, link_path)
   def set_active(action)
     if action_name == action
-      #if request.original_url == link
+    #if request.original_url == link
+    #if request.env['PATH_INFO'] == action
       'class=active'
     end
   end
@@ -66,7 +69,7 @@ class ApplicationController < ActionController::Base
     end
     unless is_admin
       flash[:error] = 'Tienes que ser administrador para acceder la sección que solicitaste.'
-      redirect_to root_url
+      redirect_to view_person_url
       return false
     end
     true
@@ -74,11 +77,17 @@ class ApplicationController < ActionController::Base
 
   def should_registration_active
     messages = []
-    is_in_time = Time.now < Rails.application.config.reg_registration_deadline ? true : false
-    unless is_in_time
-      time_str = Rails.application.config.reg_food_deadline.strftime '%d/%m/%Y %H:%M %z'
-      messages.append "El tiempo límite para registrarse era hasta antes del día #{time_str}"
+    is_before = Time.now < Rails.application.config.reg_registration_starts
+    is_after  = Time.now > Rails.application.config.reg_registration_deadline
+    if is_before
+      time_str = local_date_string Rails.application.config.reg_registration_starts, :long
+      messages.append "El registro inicia en #{time_str}, ¡espéralo!"
     end
+    if is_after
+      time_str = local_date_string Rails.application.config.reg_registration_deadline, :long
+      messages.append "El tiempo límite para registrarse era hasta antes de #{time_str}"
+    end
+    is_in_time = !is_before && !is_after
     is_allowed = is_in_time
     return is_allowed, messages
   end
@@ -87,8 +96,8 @@ class ApplicationController < ActionController::Base
     messages = []
     is_in_time = Time.now < Rails.application.config.reg_food_deadline ? true : false
     unless is_in_time
-      time_str = Rails.application.config.reg_food_deadline.strftime '%d/%m/%Y %H:%M %z'
-      messages.append "El tiempo límite era hasta el día #{time_str}"
+      time_str = local_date_string Rails.application.config.reg_food_deadline, :long
+      messages.append "El tiempo límite era hasta #{time_str}"
     end
     is_allowed = is_in_time
     return is_allowed, messages
@@ -98,8 +107,8 @@ class ApplicationController < ActionController::Base
     messages = []
     is_in_time = Time.now < Rails.application.config.reg_allocation_deadline ? true : false
     unless is_in_time
-      time_str = Rails.application.config.reg_allocation_deadline.strftime '%d/%m/%Y %H:%M %z'
-      messages.append "El tiempo límite era hasta el día #{time_str}"
+      time_str = local_date_string Rails.application.config.reg_allocation_deadline, :long
+      messages.append "El tiempo límite era hasta #{time_str}"
     end
     is_allowed = is_in_time
     return is_allowed, messages
@@ -132,6 +141,36 @@ class ApplicationController < ActionController::Base
     else
       redirect_to view_person_url, notice: "#{service_name} #{action} con éxito."
     end
+  end
+
+  def local_date_string(date, format)
+    I18n.locale = 'es-MX'
+    I18n.localize date, format: format
+  end
+
+  # This function is to convert PG_DATA with the format:
+  #     date, count
+  # to JSON to be rendered using FLOT js script
+  def convert_to_JSON_series(label, pg_data, color = 3, is_date = true)
+    #JS uses timestamp in miliseconds
+    Hash[ label: label,
+          color: color,
+          data: pg_data.map { |x|
+            [ is_date ? DateTime.parse(x['date']).to_time.to_i * 1000 : x['date'],
+              x['count'].to_i ]
+          },
+    ]
+  end
+  def convert_to_JSON_series_categories(label, pg_data, color = 3)
+    Hash[ label: label,
+          color: color,
+          data: pg_data.map { |x|
+            [
+                x['count'].to_i,
+                x['cat'].to_s
+            ]
+          },
+    ]
   end
 
   private

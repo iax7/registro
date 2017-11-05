@@ -18,6 +18,22 @@
                   = person.total
                 %td.text-right= person.remaining
 
+%section#offerings
+  %h3 Ofrendas
+  .row
+    .col-md-5.col-sm-6.col-xs-10
+      .table-responsive
+        %table.table.table-bordered.table-condensed
+          %thead.bg-primary
+            %tr
+              %th
+              %th Total
+          %tbody
+            %tr
+              %td Ofrendas:
+              %td{ class: 'text-right' }
+                = number_to_currency @offerings
+
 %section#food
   %h3 Totales Comida
   .table-responsive
@@ -135,6 +151,7 @@
           %th{ colspan: 2, class: 'text-center sabado' } Sábado
           %th{ colspan: 2, class: 'text-center domingo' } Domingo
           %th{ colspan: 2, class: 'text-center lunes' } Lunes
+          %th{ rowspan: 2, class: 'text-center' } Total
         %tr
           %th.text-center.viernes Sal
           %th.text-center.viernes Reg
@@ -157,6 +174,7 @@
             %td.text-right= t.d2
             %td.text-right= t.l1
             %td.text-right= t.l2
+            %td.text-right= number_to_currency t.price
 
 :javascript
   $(function () {

@@ -1,5 +1,6 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
+  config.force_ssl = true
 
   config.test_version = false
 
@@ -71,9 +72,9 @@ Rails.application.configure do
   #    :port => 80
   #}
   config.action_mailer.smtp_settings = {
-      :address              => 'box1268.bluehost.com',
+      :address              => 'bluehost.com',
       :port                 => 465,
-      :domain               => 'cristianismobiblico.com',
+      :domain               => 'foo.com',
       :user_name            => ENV['SMTP_USER'],
       :password             => ENV['SMTP_PASS'],
       :authentication       => :plain,

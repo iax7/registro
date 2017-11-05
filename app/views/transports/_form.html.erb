@@ -1,94 +1,76 @@
 <%= form_for(@transport, html: {class:'form-horizontal', role:'form'}) do |f| %>
-    <div class="well">
+    <div class="well text-justify">
       <p>Este servicio es opcional</p>
       <p>
-        Contaremos con servicio de transporte (autobuses) para traslado hacia las
-        instalaciones donde se llevarán a cabo las conferencias, este servicio
-        gratuito  será realizará desde un punto de partida ubicado sobre periférico
+        Contaremos con servicio de transporte (vans) para traslado hacia las
+        instalaciones donde se llevarán a cabo las conferencias, desde un punto de partida
+        ubicado sobre periférico
         sur a un costado de la plaza comercial llamada “Centro sur” en la gasolinera
         contigua. Las corridas de los autobuses hacia las instalaciones de la
         conferencia solo serán las siguientes:</p>
-        <div class="row">
-          <div class="col-sm-3">
-            <h3 class="viernes-text">Viernes</h3>
-            Salida:<strong> 2 pm</strong><br>
-            Regreso:<strong> 8 pm</strong>
-          </div>
-          <div class="col-sm-3">
-            <h3 class="sabado-text">Sábado</h3>
-            Salida:<strong> 9 am</strong><br>
-            Regreso:<strong> 8 pm</strong>
-          </div>
-          <div class="col-sm-3">
-            <h3 class="domingo-text">Domingo</h3>
-            Salida:<strong> 9 am</strong><br>
-            Regreso:<strong> 8 pm</strong>
-          </div>
-          <div class="col-sm-3">
-            <h3 class="lunes-text">Lunes</h3>
-            Salida:<strong> 9 am</strong><br>
-            Regreso:<strong> 3 pm</strong>
-          </div>
-        </div>
+        <%= render 'transports/schedule' %>
         <br>
       <p>
         Dado a que el servicio de transporte será estrictamente apegado a los horarios
         anteriores, las personas que requieran de este servicio de traslado del punto
         de partida a las instalaciones y de regreso deberán estar puntuales para las
-        corridas de salida y de regreso en los autobuses; esto significa que los días
+        corridas de salida y de regreso del transporte; esto significa que <strong>los días
         sábado, domingo y lunes los que requieran el servicio de transporte no podrán
-        hacer la contratación del desayuno y la cena de estos días.
+        hacer la contratación del desayuno y la cena de estos días</strong>.
       </p>
       <p>Indica el número de personas (incluyéndote) que estarán usando el servicio de autobus para
          llegar al campamento.</p>
 
-      <p>Los costos del transporte es:
+      <p>El costo del transporte es:
       <ul>
-        <li>Adultos y Niños: $20 pesos (MX) por viaje.</li>
-        <li>Infantes (de 0-4 años): gratis.</li>
+        <li>Adultos y Niños: <strong><%= number_to_currency Rails.application.config.reg_transport_full_price %></strong> por viaje.</li>
+        <li>Infantes (de 0-4 años): <strong>gratis</strong></li>
       </ul>
       </p>
     </div>
 
-    <div class="viernes-text"><h4>Viernes</h4> <%#--   VIERNES ---------------------------%>
+    <% dummy_class_label        = 'control-label col-xs-2 col-sm-1'
+       headers_offsetclass_div  = 'col-xs-offset-2 col-sm-offset-1 '
+       common_class_input       = 'col-xs-3 col-sm-2 col-md-1' %>
+    <div class="viernes-text"><h4>Viernes</h4><%#-------------------------------   VIERNES ---------------------------%>
       <div class="row">
-        <div class="col-xs-offset-2 col-md-offset-2 col-xs-3 col-sm-2 col-md-1">Salida</div>
-        <div class="col-xs-3 col-sm-2 col-md-1">Regreso</div>
+        <div class="<%= headers_offsetclass_div + common_class_input %>">Salida</div>
+        <div class="<%= common_class_input %>">Regreso</div>
       </div>
       <div class="row">
-        <div class="control-label col-xs-2 col-md-2"></div>
-        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :v1, min: 0, class: 'form-control input-sm' %></div>
-        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :v2, min: 0, class: 'form-control input-sm' %></div>
+        <div class="<%= dummy_class_label %>"></div>
+        <div class="<%= common_class_input %>"><%= f.number_field :v1, min: 0, class: 'form-control input-sm' %></div>
+        <div class="<%= common_class_input %>"><%= f.number_field :v2, min: 0, class: 'form-control input-sm' %></div>
       </div>
-    </div><div class="sabado-text"><h4>Sábado</h4><%#--   SABADO ---------------------------%>
+    </div><div class="sabado-text"><h4>Sábado</h4><%#----------------------------   SABADO ---------------------------%>
       <div class="row">
-        <div class="col-xs-offset-2 col-md-offset-2 col-xs-3 col-sm-2 col-md-1">Salida</div>
-        <div class="col-xs-3 col-sm-2 col-md-1">Regreso</div>
-      </div>
-      <div class="row">
-        <div class="control-label col-xs-2 col-md-2"></div>
-        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :s1, min: 0, class: 'form-control input-sm' %></div>
-        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :s2, min: 0, class: 'form-control input-sm' %></div>
-      </div>
-    </div><div class="domingo-text"><h4>Domingo</h4> <%#--   DOMINGO ---------------------------%>
-      <div class="row">
-        <div class="col-xs-offset-2 col-md-offset-2 col-xs-3 col-sm-2 col-md-1">Salida</div>
-        <div class="col-xs-3 col-sm-2 col-md-1">Regreso</div>
+        <div class="<%= headers_offsetclass_div + common_class_input %>">Salida</div>
+        <div class="<%= common_class_input %>">Regreso</div>
       </div>
       <div class="row">
-        <div class="control-label col-xs-2 col-md-2"></div>
-        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :d1, min: 0, class: 'form-control input-sm' %></div>
-        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :d2, min: 0, class: 'form-control input-sm' %></div>
+        <div class="<%= dummy_class_label %>"></div>
+        <div class="<%= common_class_input %>"><%= f.number_field :s1, min: 0, class: 'form-control input-sm' %></div>
+        <div class="<%= common_class_input %>"><%= f.number_field :s2, min: 0, class: 'form-control input-sm' %></div>
       </div>
-    </div><div class="lunes-text"><h4>Lunes</h4>  <%#--   LUNES ---------------------------%>
+    </div><div class="domingo-text"><h4>Domingo</h4><%#-------------------------   DOMINGO ---------------------------%>
       <div class="row">
-        <div class="col-xs-offset-2 col-md-offset-2 col-xs-3 col-sm-2 col-md-1">Salida</div>
-        <div class="col-xs-3 col-sm-2 col-md-1">Regreso</div>
+        <div class="<%= headers_offsetclass_div + common_class_input %>">Salida</div>
+        <div class="<%= common_class_input %>">Regreso</div>
       </div>
       <div class="row">
-        <div class="control-label col-xs-2 col-md-2"></div>
-        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :l1, min: 0, class: 'form-control input-sm' %></div>
-        <div class="col-xs-3 col-sm-2 col-md-1"><%= f.number_field :l2, min: 0, class: 'form-control input-sm' %></div>
+        <div class="<%= dummy_class_label %>"></div>
+        <div class="<%= common_class_input %>"><%= f.number_field :d1, min: 0, class: 'form-control input-sm' %></div>
+        <div class="<%= common_class_input %>"><%= f.number_field :d2, min: 0, class: 'form-control input-sm' %></div>
+      </div>
+    </div><div class="lunes-text"><h4>Lunes</h4><%#-------------------------------   LUNES ---------------------------%>
+      <div class="row">
+        <div class="<%= headers_offsetclass_div + common_class_input %>">Salida</div>
+        <div class="<%= common_class_input %>">Regreso</div>
+      </div>
+      <div class="row">
+        <div class="<%= dummy_class_label %>"></div>
+        <div class="<%= common_class_input %>"><%= f.number_field :l1, min: 0, class: 'form-control input-sm' %></div>
+        <div class="<%= common_class_input %>"><%= f.number_field :l2, min: 0, class: 'form-control input-sm' %></div>
       </div>
     </div><br>
 
@@ -104,12 +86,12 @@
       </div>
   <% end %>
   <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-6">
+    <div class="col-xs-offset-2 col-sm-offset-1 col-xs-6 col-sm-10">
       <div id="actions">
         <%= f.submit 'Aceptar', data: { disable_with: 'Procesando...' }, class: 'btn btn-sm btn-primary', id: 'submit_ajax' %>
         <%= link_to 'Cancelar', get_start, { class: 'btn btn-sm btn-link' }  %>
       </div>
-      <%= image_tag image_path('spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
+      <%= image_tag image_path('spinners/spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
     </div>
   </div>
 <% end %>

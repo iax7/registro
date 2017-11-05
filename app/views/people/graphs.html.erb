@@ -1,0 +1,134 @@
+<div class="row">
+  <div id="gDOW"   style="width:640px;height:300px" data-tooltip="{x} => {y} inscripciones" data-formatfnc="format_dow"></div>
+  <div id="gWeeks" style="width:640px;height:300px" data-tooltip="Semana {x} => {y} inscripciones" data-formatfnc="format_week"></div>
+  <div id="gDates" style="width:640px;height:300px" data-tooltip="Día {x} => {y} inscripciones" data-formatfnc="format_date"></div>
+</div>
+<hr>
+<div class="row">
+  <div id="gCountries" style="width:640px;height:400px" data-tooltip="{y} inscripciones" data-formatfnc="format_city"></div>
+  <div id="gCities" style="width:780px;height:1000px" data-tooltip="{y} inscripciones" data-formatfnc="format_city"></div>
+</div>
+
+<pre id="debug" style="display: none;"></pre>
+
+<%# javascript_include_tag 'jquery.flot.min', 'data-turbolinks-track' => true %>
+<%# javascript_include_tag 'jquery.flot.time.min', 'data-turbolinks-track' => true %>
+<%# javascript_include_tag 'jquery.flot.categories.min', 'data-turbolinks-track' => true %>
+<%# javascript_include_tag 'jquery.flot.pie.min', 'data-turbolinks-track' => true %>
+<script>
+  function debug(obj) {
+    $('#debug').fadeIn(300);
+    $('#debug').text(JSON.stringify(obj,null,2));
+  }
+  $(document).on("turbolinks:load", function() {
+        var options = {
+          xaxis: {
+            mode: "time",
+            timeformat: "%d/%b",
+            monthNames: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
+            dayNames: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"]
+          },
+          grid: {
+            backgroundColor: "rgba(221, 221, 221, 1)",
+            hoverable: true,
+            clickable: true
+          },
+          series: {
+            lines: { show: true, fill: true, fillColor: "rgba(255, 255, 255, 0.8)" },
+            points: { show: true, fill: true, radius: 3, symbol: "circle" },
+            shadowSize: 5,
+            highlightColor: 1
+          }
+        };
+        var options_bar = {
+          series: {
+            bars: {
+              show: true,
+              barWidth: 0.6,
+              align: "center",
+              horizontal: true
+            }
+          },
+          grid: {
+            backgroundColor: "rgba(221, 221, 221, 1)",
+            hoverable: true,
+            clickable: true
+          },
+          yaxis: {
+            mode: "categories",
+            tickLength: 0
+          }
+        };
+
+        $("<div id='tooltip'></div>").css({
+          position: "absolute",
+          display: "none",
+          border: "1px solid #fdd",
+          padding: "2px",
+          "background-color": "#fee",
+          opacity: 0.80
+        }).appendTo("body");
+
+        $("[id^=g]").bind("plothover", function (event, pos, item) {
+            if (item) {
+
+
+              var fnc = $(this).data("formatfnc");
+              var tooltip_template = $(this).data("tooltip");
+              var text = window[fnc](item.datapoint[0],
+                                     item.datapoint[1],
+                                     tooltip_template );
+              //label = item.series.label;
+
+              $("#tooltip").html(text)
+                  .css({top: item.pageY-25, left: item.pageX+5})
+                  .fadeIn(200);
+            } else {
+              $("#tooltip").fadeOut(150);
+            }
+        });
+
+        //DATA
+        var data_by_dow  = [<%= @graph_by_dow.to_json.html_safe %>];
+        var data_by_week = [<%= @graph_by_week.to_json.html_safe %>];
+        var data_by_date = [<%= @graph_by_date.to_json.html_safe %>];
+        var data_by_country = [<%= @graph_by_country.to_json.html_safe %>];
+        var data_by_city = [<%= @graph_by_city.to_json.html_safe %>];
+
+        //PLOTS
+        var dow_options = $.extend(true,{}, options);
+        dow_options.xaxis.timeformat = "%a";
+        $.plot("#gDOW", data_by_dow, dow_options);
+
+        var week_options = $.extend(true,{}, options);
+        delete week_options.xaxis;
+        $.plot("#gWeeks", data_by_week, week_options);
+        $.plot("#gDates", data_by_date, options);
+
+        $.plot("#gCountries", data_by_country, options_bar);
+        $.plot("#gCities", data_by_city, options_bar);
+      }
+  );
+
+    function format_dow(x,y,str) {
+      var dayNames = ["domingos", "lunes", "martes", "miércoles", "jueves", "viernes", "sábados"];
+      var new_x = dayNames[new Date(x).getDate() -2];
+      var new_y = y.toFixed(0);
+      return str.replace("{x}", new_x).replace("{y}", new_y);
+    }
+    function format_week(x,y,str) {
+      var new_x = x;
+      var new_y = y.toFixed(0);
+      return str.replace("{x}", new_x).replace("{y}", new_y);
+    }
+    function format_date(x,y,str) {
+      var new_x = new Date(x).getDate();
+      var new_y = y.toFixed(0);
+      return str.replace("{x}", new_x).replace("{y}", new_y);
+    }
+    function format_city(x,y,str) {
+      var new_x = y;
+      var new_y = x.toFixed(0);
+      return str.replace("{x}", new_x).replace("{y}", new_y);
+    }
+</script>

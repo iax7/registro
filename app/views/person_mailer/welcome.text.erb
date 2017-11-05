@@ -1,6 +1,8 @@
-<%= @person.name %>, Bienvenido a la Segunda Conferencia Anual 2015
+Bienvenido a la <%= Rails.application.config.reg_event_name %> <%= Rails.application.config.reg_event_id %>
 
-  Te has suscrito exitosamente a la Segunda Conferencia Anual de Cristianismo Bíblico,
+<%= @person.name %>,
+
+  Te has suscrito exitosamente a la <%= Rails.application.config.reg_event_name %> de Cristianismo Bíblico,
   tu nombre de usuario es el correo con el que te registraste (<%= @person.email %>).
 
   Te invitamos (si no lo has hecho) a completar la información de tus invitados,

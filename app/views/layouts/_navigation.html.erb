@@ -1,67 +1,67 @@
 <%# navigation styled for Bootstrap 3.0 %>
-<nav class="navbar navbar-inverse navbar-static-top"
-     style="box-shadow: 0px 0px 20px 1px #000;">
+<nav id="navMain" class="navbar navbar-default navbar-static-top" style="box-shadow: 0px 0px 20px 1px #000;">
   <div class="container">
-    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
     <div class="navbar-header">
-      <a href="http://www.cristianismobiblico.com/">
-        <img alt="Marca" src="<%= image_path 'cbw.png' %>" style="margin-right: 10px;">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="<%= Rails.application.config.reg_site_home_url %>">
+        <img alt="Marca" src="<%= image_path 'nav_logo_w.png' %>" style="margin-right: 10px;">
       </a>
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li <%= set_active('index') %>><%= link_to 'Inicio', root_path %></li>
+        <%= nav_li_link 'Inicio', root_path %>
         <% if is_session_active %>
-            <li <%= set_active('show') %>><%= link_to 'Mis Datos', view_person_url %></li>
-        <% if is_admin %><%# ADMIN ------------------------------------- %>
-            <li class="dropdown">
-              <%= link_to 'Admin <span class="caret"></span>'.html_safe,
-                          '#',
-                          class: 'dropdown-toggle',
-                          role: 'button',
-                          data: { :toggle => 'dropdown'},
-                          :'aria-haspopup' => true,
-                          :'aria-expanded' => true %>
-              <ul class="dropdown-menu">
+            <%= nav_li_link 'Mis Datos', view_person_url %>
+        <% if is_admin %><%#---------------------------------------------------------------------- ADMIN ------------ %>
+            <li class="dropdown" id="mnuAdmin">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
                 <li class="dropdown-header">Operaciones</li>
-                <%#li><%= link_to 'Ayuda', 'http://screencast.com/t/FJC2N8GFT4Ej' ></li%>
-                <li><%= link_to 'Ayuda', helpadmin_path %></li>
-                <li><%= link_to 'Personas Registradas', people_path %></li>
-                <li><%= link_to 'Personas con Comentarios', comments_people_path %></li>
+                <%= nav_li_link fa_with_text('question', 'Ayuda'           ), helpadmin_path %>
+                <%= nav_li_link fa_with_text('user', 'Personas Registradas'), people_path %>
+                <%= nav_li_link fa_with_text('commenting', 'Personas con Comentarios'), comments_people_path %>
+                <%= nav_li_link fa_with_text('terminal', 'Cliente API'     ), apiclient_ui_url %>
                 <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Reportes</li>
-                <li><%= link_to 'Totales Generales', totals_people_path %></li>
-                <li><%= link_to 'Total de Pagos', payments_people_path %></li>
-                <li><%= link_to 'Comidas', food_totals_path(9) %></li>
-                <li><%= link_to 'Hospedaje', allocations_path %></li>
-                <li><%= link_to 'Transporte', transports_path %></li>
-                <li><%= link_to 'Personas Registradas (OLD)', registros_path(format: 'pdf') %></li>
+                <%= nav_li_link fa_with_text('list-ol'   , 'Totales Generales'), totals_people_path %>
+                <%= nav_li_link fa_with_text('usd'       , 'Total de Pagos'   ), payments_people_path %>
+                <%= nav_li_link fa_with_text('cutlery'   , 'Comidas'          ), food_totals_path(9) %>
+                <%= nav_li_link fa_with_text('suitcase'  , 'Hospedaje'        ), allocations_path %>
+                <%= nav_li_link fa_with_text('bus'       , 'Transporte'       ), transports_path %>
+                <%= nav_li_link fa_with_text('area-chart', 'Gráficas'         ), graphs_people_path %>
+                <%= nav_li_link fa_with_text('', 'Personas Registradas (OLD)'), registros_path(format: 'pdf') %>
                 <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Catálogos</li>
-                <li><%= link_to 'Configuracion', configs_path %></li>
-                <li><%= link_to 'Hoteles', hotels_path %></li>
-                <li><%= link_to 'Paises', countries_path %></li>
-                <li><%= link_to 'Estados', states_path %></li>
-                <li><%= link_to 'Iglesias', churches_path %></li>
-                <li><%= link_to 'Novedades', posts_path %></li>
+                <%= nav_li_link fa_with_text('cog', 'Configuracion'), configs_path %>
+                <%= nav_li_link fa_with_text('bed','Hoteles'       ), hotels_path %>
+                <%= nav_li_link fa_with_text('flag','Paises'       ), countries_path %>
+                <%= nav_li_link fa_with_text('', 'Estados'         ), states_path %>
+                <%= nav_li_link fa_with_text('', 'Iglesias'        ), churches_path %>
+                <%= nav_li_link fa_with_text('newspaper-o','Novedades'), posts_path %>
               </ul>
             </li>
         <% end %>
         <% end %>
-        <%#li < set_active('contact') ><a href="http://www.cristianismobiblico.com/nosotros/contactarnos/">Contacto</a></li%>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <% if is_session_active %>
-            <li><%= link_to 'Salir', logout_url %></li>
+            <li><%= link_to 'Salir <i class="fa fa-sign-out fa-fw" aria-hidden="true"></i>'.html_safe, logout_url %></li>
         <% else %>
-            <li <%= set_active('login') %>><%= link_to 'Ingresar', login_url %></li>
+            <%= nav_li_link '<i class="fa fa-sign-in fa-fw" aria-hidden="true"></i> Ingresar'.html_safe, login_url %>
         <% end %>
       </ul>
     </div><!--/.nav-collapse -->
   </div>
+  <script>
+    $(function() {
+        var active_li = $('#navMain li').find(".active");
+        if (active_li.parent().attr("class") == "dropdown-menu")
+          $('#mnuAdmin').addClass("active");
+      });
+  </script>
 </nav>

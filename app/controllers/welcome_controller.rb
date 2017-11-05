@@ -30,7 +30,7 @@ class WelcomeController < ApplicationController
           session[:is_admin] = person.isadmin?
           session[:user_name] = person.name
           flash[:error] = nil
-          redirect_to person_path person.id
+          redirect_to view_person_url  #person_path person.id
         else
           flash[:error] = 'Contraseña inválida'
         end
@@ -41,10 +41,11 @@ class WelcomeController < ApplicationController
   # GET
   def logout
     if is_session_active
-      reset_session
       #session.delete :user_id
-      redirect_to root_url
+      reset_session
     end
+    #Not always there will be a session, browser back button after a logout
+    redirect_to root_url
   end
 
   # GET/POST reset/:id/:verify
@@ -98,27 +99,32 @@ class WelcomeController < ApplicationController
 
   # GET ICS
   def schedule
-    # Testing this module
-    event = Event.new
-    event.dtstart = DateTime.new(2015, 11, 24, 17, 00, 00)
-    event.dtend = DateTime.new(2015, 11, 24, 23, 00, 00)
-    event.summary = 'Segunda Conferencia Anual 2015 - Cristianismo Bíblico'
-    event.description = 'Primer día de las conferencias'
-    event.location = "https://www.google.com.mx/maps/place/20%C2%B030'50.3%22N+103%C2%B025'36.1%22W/@20.5193828,-103.4157,14z/data=!4m2!3m1!1s0x842f53a1f3161963:0xfee4acbd2a5a215c"
-    event.created = DateTime.now
-    event.last_modified = DateTime.now
-    event.uid = 'uid'
-    #render :text => event.to_ical
-    send_data event.to_ical,
-              filename: "SegundaConferencia2015.ics",
-              type: 'application/ics',
-              disposition: 'attachment'
+    ## Testing this module
+    #event = Event.new
+    #event.dtstart = DateTime.new(2015, 11, 24, 17, 00, 00)
+    #event.dtend = DateTime.new(2015, 11, 24, 23, 00, 00)
+    #event.summary = "Cristianismo Bíblico - #{Rails.application.config.reg_event_name}"
+    #event.description = 'Primer día de las conferencias'
+    #event.location = "https://www.google.com.mx/maps/place/20%C2%B030'50.3%22N+103%C2%B025'36.1%22W/@20.5193828,-103.4157,14z/data=!4m2!3m1!1s0x842f53a1f3161963:0xfee4acbd2a5a215c"
+    #event.created = DateTime.now
+    #event.last_modified = DateTime.now
+    #event.uid = 'uid'
+    ##render :text => event.to_ical
+    #send_data event.to_ical,
+    #          filename: "Conferencia#{Rails.application.config.reg_event_id}.ics",
+    #          type: 'application/ics',
+    #          disposition: 'attachment'
   end
 
   def adminhelp
     unless is_admin
       redirect_to action: :show
     end
+  end
+
+  def letsencrypt
+    # use your code here, not mine
+    render text: Rails.application.secrets.lets_encrypt
   end
 
   private

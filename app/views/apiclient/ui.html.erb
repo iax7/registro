@@ -1,0 +1,545 @@
+<% content_for :title, 'API Client' %>
+<% content_for :top do %>
+    <nav id="navAPIClient" class="navbar navbar-inverse navbar-static-top">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <%= link_to view_person_url, class:'navbar-brand' do %>
+              <i class="fa fa-home" aria-hidden="true"></i>
+          <% end %>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#" data-remote="true" id="lnkAssistance">Asistencia</a></li>
+            <li class="dropdown" id="mnuFood">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Comidas <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-header">Viernes</li>
+                <li><a href="#" data-remote="true" id="lnkV3">Cena</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Sabado</li>
+                <li><a href="#" data-remote="true" id="lnkS1">Desayuno</a></li>
+                <li><a href="#" data-remote="true" id="lnkS2">Comida</a></li>
+                <li><a href="#" data-remote="true" id="lnkS3">Cena</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Domingo</li>
+                <li><a href="#" data-remote="true" id="lnkD1">Desayuno</a></li>
+                <li><a href="#" data-remote="true" id="lnkD2">Comida</a></li>
+                <li><a href="#" data-remote="true" id="lnkD3">Cena</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Lunes</li>
+                <li><a href="#" data-remote="true" id="lnkL1">Desayuno</a></li>
+              </ul>
+            </li>
+          </ul>
+          <div class="navbar-form navbar-left">
+            <div class="form-group">
+              <%= text_field_tag 'id', nil, placeholder: 'Id', autocomplete: false, class: 'form-control' %>
+            </div>
+            <%= button_tag 'Aceptar', id: 'btnSend', class: 'btn btn-default' %>
+          </div>
+          <p id="lblLastId" class="navbar-text"></p>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#" data-remote="true" id="lnkPing">Ping</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="top-banner">
+        <div class="col-xs-8">
+          <h1 style="margin-left: 10px;">Asistencia</h1>
+        </div>
+        <div class="col-xs-4">
+          <div class="spinner" id="spinner" style="display: none;">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+          </div>
+          <%# image_tag 'spinners/ring.gif', id: 'spinner', style: 'display: none;' %>
+        </div>
+    </div>
+<% end %>
+<%# ----------------------------------------------------------------------%>
+
+<div id="divError" style="display: none;" class="alert alert-danger top-margin" role="alert">
+  <h2>
+    <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Error<br><br>
+    <span class="col-xs-offset-1"></span>
+  </h2>
+  <a href="#" id="lnkPerson" style="visibility: hidden;">Ver registro...</a>
+</div>
+
+<div id="divMain" style="display: none;">
+  <div id="divAssistance" style="display: none;">
+    <div class="row" id="divPerson">
+      <div class="col-xs-12">
+        <h1 class="text-center fix-h2 text-info" id="lblName"></h1>
+        <h3 class="text-center fix-h2" id="lblChurchCity"></h3>
+      </div>
+    </div>
+    <hr>
+    <div class="row" id="divGuests">
+      <div class="col-xs-1"><h2><i class="fa fa-users"></i></h2></div>
+      <div class="col-xs-11 table-responsive">
+        <table class="table table-striped table-hover table-condensed" id="tblGuest">
+          <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Sobrenombre</th>
+            <th width="60">Edad</th>
+            <th>Relación</th>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row" id="divPersonFood">
+      <div class="col-xs-1"><h2><i class="fa fa-cutlery"></i></h2></div>
+      <div class="col-xs-11 table-responsive">
+        <table class="table table-bordered table-condensed table-striped">
+          <thead>
+          <tr>
+            <th rowspan="2"></th>
+            <th colspan="1" class="text-center viernes">Viernes</th>
+            <th colspan="3" class="text-center sabado">Sábado</th>
+            <th colspan="3" class="text-center domingo">Domingo</th>
+            <th colspan="1" class="text-center lunes">Lunes</th>
+          </tr>
+          <tr>
+            <th class="text-center viernes"><span data-toggle="tooltip" data-placement="top" title="Cena">Cen</span></th>
+            <th class="text-center sabado" ><span data-toggle="tooltip" data-placement="top" title="Desayuno">Des</span></th>
+            <th class="text-center sabado" ><span data-toggle="tooltip" data-placement="top" title="Comida">Com</span></th>
+            <th class="text-center sabado" ><span data-toggle="tooltip" data-placement="top" title="Cena">Cen</span></th>
+            <th class="text-center domingo"><span data-toggle="tooltip" data-placement="top" title="Desayuno">Des</span></th>
+            <th class="text-center domingo"><span data-toggle="tooltip" data-placement="top" title="Comida">Com</span></th>
+            <th class="text-center domingo"><span data-toggle="tooltip" data-placement="top" title="Cena">Cen</span></th>
+            <th class="text-center lunes"  ><span data-toggle="tooltip" data-placement="top" title="Desayuno">Des</span></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="text-right col-xs-1"><strong>Adultos</strong></td>
+            <td class="text-center" id="food_v3"></td>
+            <td class="text-center" id="food_s1"></td>
+            <td class="text-center" id="food_s2"></td>
+            <td class="text-center" id="food_s3"></td>
+            <td class="text-center" id="food_d1"></td>
+            <td class="text-center" id="food_d2"></td>
+            <td class="text-center" id="food_d3"></td>
+            <td class="text-center" id="food_l1"></td>
+          </tr>
+          <tr> <%# --------------------------------------------_%>
+            <td class="text-right col-xs-1"><strong>Niños</strong></td>
+            <td class="text-center" id="food_v3c"></td>
+            <td class="text-center" id="food_s1c"></td>
+            <td class="text-center" id="food_s2c"></td>
+            <td class="text-center" id="food_s3c"></td>
+            <td class="text-center" id="food_d1c"></td>
+            <td class="text-center" id="food_d2c"></td>
+            <td class="text-center" id="food_d3c"></td>
+            <td class="text-center" id="food_l1c"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row" id="divAllocation">
+      <div class="col-xs-1"><h2><i class="fa fa-suitcase"></i></h2></div>
+      <div class="col-xs-11 table-responsive">
+        <table class="table table-bordered table-condensed">
+          <thead>
+          <tr class="bg-primary">
+            <th class="text-center col-xs-1">Adultos</th>
+            <th class="text-center col-xs-1">Niños</th>
+            <th class="text-center col-xs-1">Infantes</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="text-center lead" id="allocation_n1"></td>
+            <td class="text-center lead" id="allocation_n2"></td>
+            <td class="text-center lead" id="allocation_n3"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row" id="divPay">
+      <div class="col-xs-1"><h2><i class="fa fa-credit-card"></i></h2></div>
+      <div class="col-xs-11">
+        <div class="row">
+          <div class="col-xs-6 text-right"><h4 class="fix-h2">Gran Total:</h4></div>
+          <div class="col-xs-3 text-right"><h4 class="fix-h2"id="lblPay1"></h4></div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6 text-right"><h4 class="fix-h2">Cantidad Pagada:</h4></div>
+          <div class="col-xs-3 text-right"><h4 class="fix-h2" id="lblPay2"></h4></div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6 text-right"><h4 class="fix-h2">Total a Pagar:</h4></div>
+          <div class="col-xs-3 text-right"><h4 class="fix-h2" id="lblPay3"></h4></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="divFood" style="display: none;">
+    <div class="row">
+      <div class="col-xs-4 text-right"><h2 id="lblFoodAction">lblFoodAction</h2></div>
+      <div class="col-xs-8"><h2><strong id="lblTotal"></strong></h2></div>
+    </div>
+    <div class="row">
+      <div class="col-xs-4 text-right"><h2>Usados: </h2></div>
+      <div class="col-xs-4"><h2><strong id="lblConsumed"></strong></h2></div>
+      <div class="col-xs-4"><h2><strong id="lblTipo"></strong></h2></div>
+    </div>
+    <div class="row">
+      <div class="col-xs-4 text-right"><h2>Nombre: </h2></div>
+      <div class="col-xs-8"><h2><strong id="lblNickname"></strong></h2></div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-xs-6 text-right"><h2>Personas en Comedor: </h2></div>
+      <div class="col-xs-6"><h2>
+        <strong id="lblNumIn"></strong>
+        <span class="glyphicons glyphicons-warning-sign text-danger" id="imgWarning" style="display: none;"></span></h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="data"></div>
+<%= audio_tag 'notify.mp3', autoplay: false, controls: false, id: 'mp3Notify' %>
+
+<style>
+  .top-margin {
+    margin-top: 15px;
+  }
+  .top-banner {
+    background: white;
+    margin-top: -21px;
+    height: 90px;
+    margin-bottom: 15px;
+  }
+  .fix-h2 {
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+  }
+</style>
+<script>
+  /**
+   * Number.prototype.format(n, x)
+   *
+   * @param integer n: length of decimal
+   * @param integer x: length of sections
+   */
+  Number.prototype.format = function(n, x) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+    return '$ ' + this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+  };
+
+  function hideAll() {
+    $('#spinner').hide();
+    $('#divError').hide();
+    $('#divMain').hide();
+    $('#divAssistance').hide();
+    $('#divFood').hide();
+  }
+
+  function play() {
+    var audio = $('#mp3Notify')[0];
+    audio.play();
+  }
+
+  function dimZero(value, zeroValue = '-') {
+    if (value == 0 ) {
+      return '<span class="text-muted">' + zeroValue + '</span>'
+    }
+    else {
+      return '<strong>' + value + '</strong>';
+    }
+  }
+
+  function showError(error) {
+    $('#divMain').hide();
+    $('#divError h2 span').text(error);
+    $('#divError').show();
+    $('body').addClass('api_client_error');
+
+    var id = $('#lblLastId').find('strong').text();
+    $('#lnkPerson').attr("href", location.protocol+'//'+location.host + "/people/" + id);
+  }
+
+  function toggleSpinner() {
+    $('#spinner').toggle();
+  }
+
+  function resetStyle() {
+    $('body').removeClass('api_client_error');
+        //.css({'background-color': ''});
+  }
+
+  function setLinkAction(lnkId) {
+    resetStyle();
+    var text;
+    var bg_color = '#FFFFFF';
+    var fri_color = '#5cb85c';
+    var sat_color = '#5bc0de';
+    var sun_color = '#f0ad4e';
+    var mon_color = '#d9534f';
+    switch(lnkId) {
+      case 'lnkAssistance':
+        setData('PUT', '/api/v1/assist', renderAssistance); text = 'Asistencia'; break;
+      case 'lnkV3':
+        bg_color = fri_color; setData('PUT', '/api/v1/food/v/3', renderFood); text = 'Cena Viernes'; break;
+      case 'lnkS1':
+        bg_color = sat_color; setData('PUT', '/api/v1/food/s/1', renderFood); text = 'Desayuno Sábado'; break;
+      case 'lnkS2':
+        bg_color = sat_color; setData('PUT', '/api/v1/food/s/2', renderFood); text = 'Comida Sábado'; break;
+      case 'lnkS3':
+        bg_color = sat_color; setData('PUT', '/api/v1/food/s/3', renderFood); text = 'Cena Sábado'; break;
+      case 'lnkD1':
+        bg_color = sun_color; setData('PUT', '/api/v1/food/d/1', renderFood); text = 'Desayuno Domingo'; break;
+      case 'lnkD2':
+        bg_color = sun_color; setData('PUT', '/api/v1/food/d/2', renderFood); text = 'Comida Domingo'; break;
+      case 'lnkD3':
+        bg_color = sun_color; setData('PUT', '/api/v1/food/d/3', renderFood); text = 'Cena Domingo'; break;
+      case 'lnkL1':
+        bg_color = mon_color; setData('PUT', '/api/v1/food/l/1', renderFood); text = 'Desayuno Lunes'; break;
+      case 'lnkPing':
+        setData('GET', '/api/v1/ping', renderPing); text = 'Ping'; break;
+    }
+    var top_banner = $('.top-banner');
+    top_banner.css('background-color', bg_color);
+    $('.top-banner h1').text(text);
+  }
+
+  function debug(obj) {
+    var div = $('#data');
+    try {
+      div.text( JSON.stringify(obj) );
+    } catch(err) {
+      div.text( 'Error: ' + err + '\n' + obj );
+    }
+  }
+
+  function setData(rest_action, url, fcn_handler) {
+    var data_div = $('#data')[0];
+    jQuery.data( data_div, "api", {
+      type: rest_action,
+      url: url,
+      handler: fcn_handler
+    });
+  }
+  function getData() {
+    var data_div = $('#data')[0];
+    return jQuery.data( data_div, "api");
+  }
+
+  function setLastId(id) {
+    $('#lblLastId').html('Id Leído: <strong>' + id + '</strong>');
+  }
+
+  function renderAssistance(person) {
+    // Clear Form
+    $('#lblName').text('');
+    $('#lblChurchCity').text('');
+    //Guest
+    $('#tblGuest tbody tr').remove();
+    //Food
+    $('#divPersonFood table tbody td').not('.col-xs-1').text('');
+    //Allocation
+    $('#divAllocation table tbody td').text('');
+    //Pay
+    $('#divPay table tbody td').not('.col-xs-1').text('');
+
+    //Render new Data
+    $('#divAssistance').show();
+    $('#lblName').text(       person.name + ' ' + person.lastname );
+    $('#lblChurchCity').text( person.church + ', ' + person.city );
+    //Guests
+    if (person.guests.length < 1) {
+      person.guests.push({name: '-', nickname: '-', age: '-', relation: '-'})
+    }
+    var table = $("#tblGuest tbody")[0];
+    for (index = 0; index < person.guests.length; index++) {
+      var row = table.insertRow(table.rows.length);
+      var age = person.guests[index].age;
+      if ( age <= <%= Rails.application.config.reg_adult_age %> ) {
+        row.className = "warning";
+      }
+      row.insertCell(0).innerHTML = person.guests[index].name;
+      row.insertCell(1).innerHTML = person.guests[index].nickname;
+      row.insertCell(2).innerHTML = age;
+      row.insertCell(3).innerHTML = person.guests[index].relation;
+    }
+
+    //Food
+    $('#food_v3').html ( dimZero(person.food.v3) );
+    $('#food_s1').html ( dimZero(person.food.s1) );
+    $('#food_s2').html ( dimZero(person.food.s2) );
+    $('#food_s3').html ( dimZero(person.food.s3) );
+    $('#food_d1').html ( dimZero(person.food.d1) );
+    $('#food_d2').html ( dimZero(person.food.d2) );
+    $('#food_d3').html ( dimZero(person.food.d3) );
+    $('#food_l1').html ( dimZero(person.food.l1) );
+    $('#food_v3c').html( dimZero(person.food.v3c) );
+    $('#food_s1c').html( dimZero(person.food.s1c) );
+    $('#food_s2c').html( dimZero(person.food.s2c) );
+    $('#food_s3c').html( dimZero(person.food.s3c) );
+    $('#food_d1c').html( dimZero(person.food.d1c) );
+    $('#food_d2c').html( dimZero(person.food.d2c) );
+    $('#food_d3c').html( dimZero(person.food.d3c) );
+    $('#food_l1c').html( dimZero(person.food.l1c) );
+
+    //Allocation
+    if ( person.allocation.option == 1 )
+      $('#divAllocation').show();
+    else
+      $('#divAllocation').hide();
+    $('#allocation_n1').html( dimZero(person.allocation.n1) );
+    $('#allocation_n2').html( dimZero(person.allocation.n2) );
+    $('#allocation_n3').html( dimZero(person.allocation.n3) );
+
+    //Pay
+    var remaining = person.total - person.amount_paid;
+    $('#lblPay1').text( person.total.format(2) );
+    $('#lblPay2').text( person.amount_paid.format(2) ).addClass('text-success');
+    $('#lblPay3').text( remaining.format(2) );
+  }
+  function renderFood(food) {
+    $('#divFood').show();
+    $('#lblFoodAction').text('Comprados:');
+    var lblTotal    = $('#divFood #lblTotal');
+    var lblConsumed = $('#divFood #lblConsumed');
+    var lblTipo     = $('#divFood #lblTipo');
+    var lblNumIn    = $('#divFood #lblNumIn');
+    var lblNickname = $('#divFood #lblNickname');
+    var imgWarning  = $('#divFood #imgWarning');
+
+    lblTotal.text(    food.bought + ' / ' + food.bought_child );
+    lblConsumed.text( food.used   + ' / ' + food.used_child );
+    lblNumIn.text(    food.count_real + ' / ' + food.max_people_time );
+    lblNickname.text( food.name );
+
+    if( food.foodtype == 'Niño' ) {
+      lblTipo.text(food.foodtype);
+    } else {
+      lblTipo.text('');
+    }
+
+    if( food.status == '' ) {
+      // No Errors, continue
+      if (food.count_real >= food.max_people_time && food.count_real < food.max_people_time + 10) {
+        //Number of people is greater than expected
+        imgWarning.show();
+        play(); //Play Sound
+      } else {
+        imgWarning.hide();
+      }
+    } else {
+      showError(food.status);
+      $('#lblFoodAction').text('Solicitados:');
+      $('#divMain').show();
+    }
+
+  }
+  function renderPing(ping) {
+    alert(ping.response);
+  }
+
+  $(
+      setLinkAction('lnkAssistance'),
+      $('#navAPIClient li a').not('.dropdown-toggle').click( function() {
+        hideAll();
+        $('.dropdown.open .dropdown-toggle').dropdown('toggle');
+        var elementId = $( this ).attr('id');
+        setLinkAction(elementId);
+        //Sets active link
+        $(".nav").find(".active").removeClass("active");
+        $(this).parent().addClass("active");
+        var count_mnu = $('#mnuFood [class="active"]').length;
+        if (count_mnu > 0) {
+          $('#mnuFood').addClass('active')
+        }
+
+        // prevents bootstrap link keep selected http://jsfiddle.net/Uqzqy/1/
+        $(this).blur();
+        return false;
+      }),
+      hideAll(),
+      $(document).keypress(function(e) {
+        // enter
+        if(e.which == 13) {
+          $('#btnSend').click();
+        }
+        // Numbers [0-9] and - sets focus
+        var is_number = (e.which >= 48 && e.which <= 57);
+        var is_minus = (e.which == 45);
+        if (is_number || is_minus) {
+          var has_focus = $('#id').is(":focus")
+          if ( !has_focus )
+            $('#id').focus();
+        }
+        //debug(e.which);
+      }),
+      $('#btnSend').click( function(e) {
+          toggleSpinner();
+          resetStyle();
+          var api_action = getData();
+          var final_url = api_action.url;
+
+          var is_id_req = (api_action.type != 'GET' );
+          var id = $('#id').val();
+          if( id == '' && is_id_req ){
+            showError('Escribe un ID primero.');
+            toggleSpinner();
+            return false;
+          }
+          if ( is_id_req) {
+            final_url += "/" + id;
+          }
+
+          $.ajax({
+            type: api_action.type,
+            url: final_url,
+            dataType: "json",
+            headers: {
+              "Authorization": "Basic <%= api_auth_base64 %>"
+            },
+            success: function (result) {
+              $('#divError').hide();
+              $('#divMain').show();
+
+              //debug(result);
+              api_action.handler(result);
+            },
+            error: function (request, status, error) {
+              var text = request.responseText;
+              if ( text == '' ) {
+                text = error;
+              }
+              setLastId(id);
+              showError(text);
+            },
+            complete: function(jqXHR, textStatus) {
+              setLastId(id);
+              txtId = $('#id');
+              txtId.val('');
+              toggleSpinner();
+              txtId.focus();
+            }
+          });
+      })
+  );
+</script>

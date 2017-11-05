@@ -10,10 +10,18 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
+//= require jquery.min
 //= require jquery_ujs
+//= require bootstrap-sprockets
 //= require turbolinks
-//= require bootstrap.min
 //= require jquery-ui.min
+//= require jquery.easing.min
+//= require countdown
+//= require scrolling-nav
 //= require autocomplete-rails
-//= require_tree .
+//= require init
+//= require jquery.flot.min
+//= require jquery.flot.time.min
+//= require jquery.flot.categories.min
+//= require jquery.flot.pie.min
+// require_tree .

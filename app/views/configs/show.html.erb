@@ -1,27 +1,21 @@
-<div class="row">
-  <div class="col-sm-2"><strong><%= label :config, :foodcost %>:</strong></div>
-  <div class='col-sm-10'><%= @config.foodcost %></div>
-</div>
-<div class="row">
-  <div class="col-sm-2"><strong><%= label :config, :allocationcost %>:</strong></div>
-  <div class='col-sm-10'><%= @config.allocationcost %></div>
-</div>
-<div class="row">
-  <div class="col-sm-2"><strong><%= label :config, :max_food %>:</strong></div>
-  <div class='col-sm-10'><%= @config.max_food %></div>
-</div>
-<div class="row">
-  <div class="col-sm-2"><strong><%= label :config, :max_allocation %>:</strong></div>
-  <div class='col-sm-10'><%= @config.max_allocation %></div>
-</div>
-<div class="row">
-  <div class="col-sm-2"><strong><%= label :config, :fooddeadline %>:</strong></div>
-  <div class='col-sm-10'><%= @config.fooddeadline %></div>
-</div>
-<div class="row">
-  <div class="col-sm-2"><strong><%= label :config, :allocationdeadline %>:</strong></div>
-  <div class='col-sm-10'><%= @config.allocationdeadline %></div>
-</div>
+<%
+  def render_complex(value)
+    if value.class == Array || value.class == Hash
+      %Q(<pre>#{value.to_yaml}</pre>).html_safe
+    else
+      if value.to_s.length > 45
+        %Q(<div class="pre-scrollable">#{value}</div>).html_safe
+      else
+        value.to_s.html_safe
+       end
+    end
+  end
 
-<%= link_to 'Edit', edit_config_path(@config), { class: 'btn btn-xs btn-default' } %> |
+  @data.each do |key, value| %>
+    <div class="row">
+      <div class="col-xs-12 col-sm-4"><strong><%= label_tag key %>:</strong></div>
+      <div class='col-xs-12 col-sm-8'><%= render_complex value %></div>
+    </div>
+<% end %>
+
 <%= link_to 'Back', configs_path, { class: 'btn btn-xs btn-default' } %>

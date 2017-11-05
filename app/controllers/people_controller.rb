@@ -17,8 +17,8 @@ class PeopleController < ApplicationController
   # GET /people
   # GET /people.json
   def index
-    unless is_admin
-      redirect_to action: :show
+    unless require_admin
+      return false
     end
 
     order = params[:order].nil? ? 'lastname' : params[:order]
@@ -35,6 +35,7 @@ class PeopleController < ApplicationController
                            :changed_by,
                            :is_admin,
                            :is_confirmed,
+                           :is_not_confirmed,
                            :is_cancelled)
 
     if filters.length > 0
@@ -78,6 +79,17 @@ class PeopleController < ApplicationController
                                 :allocation,
                                 :transport).find(id)
       @is_readonly = true
+
+      male_count = 0
+      female_count = 0
+
+      @person.guests.each {|x| x.ismale? ? male_count += 1 : female_count += 1}
+      @person.ismale? ? male_count += 1 : female_count += 1
+
+      count_sex = Person.count_by_allocation_sex.first 2
+
+      @female_row = { available: count_sex[0]['remaining'].to_i, requested: female_count }
+      @male_row =  { available: count_sex[1]['remaining'].to_i, requested: male_count }
     else
       set_person
     end
@@ -145,28 +157,35 @@ class PeopleController < ApplicationController
 
     require 'ostruct'
     @people = []
+    @offerings = ''
     @food = []
     @allo = []
     @trans = []
 
-    people = Person.num_registered
-    people.each do |p|
-      @people.append OpenStruct.new(p)
-    end
-    food = Food.available_totals
-    food.each do |f|
-      @food.append OpenStruct.new(f)
-    end
-    allo = Allocation.available_totals
-    allo.each do |a|
-      @allo.append OpenStruct.new(a)
-    end
+    Person.num_registered.each       { |x| @people.append OpenStruct.new(x) }
+    Person.offerings.each            { |x| @offerings = x['offerings'] }
+    Food.available_totals.each       { |x| @food.append OpenStruct.new(x) }
+    Allocation.available_totals.each { |x| @allo.append OpenStruct.new(x) }
     @allo_sex = Person.count_by_allocation_sex
     @allo_age = Person.count_by_age
-    trans = Transport.available_totals
-    trans.each do |t|
-      @trans.append OpenStruct.new(t)
+    Transport.available_totals.each  { |x| @trans.append OpenStruct.new(x) }
+
+    # Total Transport
+    trans_temp = @trans.dup
+    @trans.clear
+
+    transport_price = Rails.application.config.reg_transport_full_price
+    trans_temp.each do |row|
+      trans_num = row.v1.to_i + row.v2.to_i +
+                               row.s1.to_i + row.s2.to_i +
+                               row.d1.to_i + row.d2.to_i +
+                               row.l1.to_i + row.l2.to_i
+      trans_pri = trans_num * transport_price
+      row_temp = row.to_h
+      row_temp['price'] = trans_pri
+      @trans.append OpenStruct.new(row_temp)
     end
+
   end
 
   def payments
@@ -176,6 +195,20 @@ class PeopleController < ApplicationController
 
     @people = Person.payments
     @sum = @people.sum { |p| p['paid'].to_i }
+  end
+
+  def graphs
+    unless is_admin
+      redirect_to action: :show
+    end
+
+    @graph_by_dow  = convert_to_JSON_series 'Por día'   , Person.graph_by_dow , 2
+    @graph_by_week = convert_to_JSON_series 'Por semana', Person.graph_by_week, 4, false
+    @graph_by_date = convert_to_JSON_series 'Por fecha' , Person.graph_by_date
+
+
+    @graph_by_country = convert_to_JSON_series_categories 'Paises'  , Person.graph_by_country, 5
+    @graph_by_city    = convert_to_JSON_series_categories 'Ciudades', Person.graph_by_city, 6
   end
 
   private
@@ -224,7 +257,8 @@ class PeopleController < ApplicationController
                                      :assist_l,
                                      :age,
                                      :amount_paid,
-                                     :changed_by
+                                     :changed_by,
+                                     :offering
                                     )
     end
 end

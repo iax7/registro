@@ -6,28 +6,32 @@
     </div>
     <div class="modal-body">
 
-<%= form_for(@person, html: {class:'form-horizontal', role:'form'}) do |f| %>
-    <%= f.hidden_field :changed_by, value: session_id %>
     <h5>
       <div class="row">
-        <div class="col-xs-4 col-sm-3"><strong>Gran Total:</strong></div>
-        <div class="col-xs-6"><%= number_to_currency @person.total %></div>
+        <div class="col-xs-4 col-sm-3 text-right"><strong>Gran Total:</strong></div>
+        <div class="col-xs-3 text-right"><%= number_to_currency @person.total %></div>
       </div>
       <div class="row">
-        <div class="col-xs-4 col-sm-3"><strong>Pagado:</strong></div>
-        <div class="col-xs-6"><%= paid_format_colors @person.amount_paid, @person.total %></div>
-      </div>
+        <div class="col-xs-4 col-sm-3 text-right"><strong>Pagado:</strong></div>
+        <div class="col-xs-3 text-right"><%= paid_format_colors @person.amount_paid, @person.total %></div>
+      </div><br>
       <div class="row">
-        <div class="col-xs-4 col-sm-3"><strong>Diferencia:</strong></div>
-        <div class="col-xs-6"><%= number_to_currency @person.total - @person.amount_paid %></div>
+        <div class="col-xs-4 col-sm-3 text-right"><strong>Diferencia:</strong></div>
+        <% diff = @person.total - @person.amount_paid %>
+        <div class="col-xs-3 text-right">
+          <%= diff == 0 ? dimzeros(diff) : number_to_currency(diff) %></div>
       </div>
     </h5>
 
+<%= form_for(@person, html: {class:'form-horizontal', role:'form'}) do |f| %>
+    <%= f.hidden_field :changed_by, value: session_id %>
     <div class="form-group">
-      <%= f.label :amount_paid, class: 'control-label col-sm-2' %>
-      <div class='col-sm-6'>
-        <%= f.number_field :amount_paid, class: 'form-control input-sm', min: 0 %>
-        <a href="#" id="link_total">Completar total a pagar</a>
+      <%= f.label :amount_paid, class: 'control-label col-sm-3' %>
+      <div class='col-sm-4'>
+        <%= f.number_field :amount_paid,
+                           class: 'form-control input-sm',
+                           min: 0 %>
+        <a href="#" id="link_total">Completar con el total</a>
       </div>
     </div>
 
@@ -44,12 +48,12 @@
     <% end %>
 
     <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-6">
+      <div class="col-sm-offset-3 col-sm-6">
         <div id="actions">
           <%= f.submit 'Aceptar', class: 'btn btn-sm btn-primary', id: 'submit_ajax' %>
           <%= f.button 'Cancelar', class: 'btn btn-sm btn-link', data: { dismiss: 'modal' } %>
         </div>
-        <%= image_tag image_path('spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
+        <%= image_tag image_path('spinners/spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
       </div>
     </div>
 <% end %>
@@ -58,7 +62,7 @@
     <% if @person.isconfirmed? %>
         <div class="modal-footer">
           <h4 class="text-danger text-center">
-            <i class="fa fa-exclamation-triangle"></i> Ya está pagado, es recomendable no hacer mas cambios.
+            <i class="fa fa-exclamation-triangle"></i> Ya está pagado, es recomendable no hacer cambios.
           </h4>
         </div>
     <% end %>
@@ -72,5 +76,6 @@
     });
     $('#link_total').click(function(){
         $('#person_amount_paid').val('<%= @person.total %>')
+        return false; // prevents modal to close
     });
 </script>

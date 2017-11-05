@@ -247,8 +247,10 @@ class BaseApiController < ActionController::Base
 
     begin
       person = Person.lock(true).find id
-      if commit and (not person.isadmin)
-        person.isadmin = true
+      current = person.isadmin
+      #if commit and (not person.isadmin)
+      if commit
+        person.isadmin = (not current)
         person.save
       else
         commit = false
@@ -262,6 +264,7 @@ class BaseApiController < ActionController::Base
     response[:id] = id
     response[:name] = person.full_name
     response[:email] = person.email
+    response[:old_value] = current
     response[:isadmin] = person.isadmin
     response[:commited] = commit
     render json: response, status: :ok

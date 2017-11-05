@@ -32,6 +32,15 @@
      is_pending = is_pending @messages_tran
      is_allowed and is_writable and is_pending
    end
+   def is_writable_offerings
+     @messages_offer = []
+     is_pending = is_pending @messages_offer
+     is_writable and is_pending
+   end
+   def btn_class
+     color = is_me ? 'btn-default' : 'btn-danger'
+     "btn #{color} btn-md"
+   end
 %>
 
 <section id="start">
@@ -45,6 +54,30 @@
          </span>
        </div>
        <div class="panel-body text-center">
+
+
+           <table class="table-condensed">
+             <caption class="text-center">Estado Hospedaje</caption>
+             <tr>
+               <th></th>
+               <th>Disponible</th>
+               <th>Solicitado</th>
+               <th>Estado</th>
+             </tr>
+            <tr class="text-right">
+              <td>Mujeres</td>
+              <td><%= @female_row[:available] %></td>
+              <td><%= @female_row[:requested] %></td>
+              <td><%= render_bool (@female_row[:available] - @female_row[:requested]) >= 0 %></td>
+            </tr>
+             <tr class="text-right">
+               <td>Hombres</td>
+               <td><%= @male_row[:available] %></td>
+               <td><%= @male_row[:requested] %></td>
+               <td><%= render_bool (@male_row[:available] - @male_row[:requested]) >= 0 %></td>
+             </tr>
+           </table>
+
          <%= button_tag '<i class="fa fa-credit-card"></i> Registrar Pago'.html_safe,
                         type: 'button',
                         class: 'btn btn-primary btn-sm static-popup-link',
@@ -72,10 +105,10 @@
         <h3>¡Tu registro está cancelado!</h3>
       </div>
   <% end %>
-  <div class="row text-right">
-      <%= link_to '<span class="glyphicon glyphicon-edit"></span> Editar'.html_safe,
+  <div class="row text-center extra-space-bottom">
+      <%= link_to '<i class="fa fa-pencil" aria-hidden="true"></i> Editar'.html_safe,
                   edit_person_path(@person),
-                  class: 'btn btn-default btn-sm' if is_writable %>
+                  class: btn_class if is_writable %>
   </div>
   <%#div class="row">
      <div class="col-sm-2"><strong><%= label :person, :name ></strong></div>
@@ -90,108 +123,112 @@
     <div class='col-sm-10'><%= @person.nickname ></div>
   </div%>
   <div class="row">
-    <div class="col-sm-2"><strong><%= label :person, :id %></strong></div>
-    <div class='col-sm-10'><strong><%= @person.id %></strong></div>
-  </div>
-  <%#div class="row">
-    <div class="col-sm-2"><strong><%= label :person, :age ></strong></div>
-    <div class='col-sm-10'><%= @person.age ></div>
-  </div%>
-  <div class="row">
-    <div class="col-sm-2"><strong><%= label :person, :email %></strong></div>
-    <div class='col-sm-10'><%= @person.email %></div>
+    <div class="col-xs-4 col-sm-2 text-right"><strong><%= label :person, :id %>:</strong></div>
+    <div class='col-xs-8 col-sm-10'><strong><%= @person.id %></strong></div>
   </div>
   <div class="row">
-    <div class="col-sm-2"><strong><%= label :person, :phone %></strong></div>
-    <div class='col-sm-10'><%= number_to_phone(@person.phone, area_code: true) %></div>
+    <div class="col-xs-4 col-sm-2 text-right"><strong><%= label :person, :age %>:</strong></div>
+    <div class='col-xs-8 col-sm-10'><%= @person.age %></div>
   </div>
   <div class="row">
-    <div class="col-sm-2"><strong><%= label :person, :ismale %></strong></div>
-    <div class='col-sm-10'><%= @person.gender %></div>
+    <div class="col-xs-4 col-sm-2 text-right"><strong><%= label :person, :email %>:</strong></div>
+    <div class='col-xs-8 col-sm-10'><%= @person.email %></div>
   </div>
   <div class="row">
-    <div class="col-sm-2"><strong><%= label :person, :church %></strong></div>
-    <div class='col-sm-10'><%= @person.church %></div>
+    <div class="col-xs-4 col-sm-2 text-right"><strong><%= label :person, :phone %>:</strong></div>
+    <div class='col-xs-8 col-sm-10'><%= number_to_phone(@person.phone, area_code: true) %></div>
   </div>
   <div class="row">
-    <div class="col-sm-2"><strong><%= label :person, :country %></strong></div>
-    <div class='col-sm-10'><%= @person.country %></div>
+    <div class="col-xs-4 col-sm-2 text-right"><strong><%= label :person, :ismale %>:</strong></div>
+    <div class='col-xs-8 col-sm-10'><%= @person.gender %> <%= show_sex_symbol @person.ismale %></div>
   </div>
   <div class="row">
-    <div class="col-sm-2"><strong><%= label :person, :state %></strong></div>
-    <div class='col-sm-10'><%= @person.state %></div>
+    <div class="col-xs-4 col-sm-2 text-right"><strong><%= label :person, :church %>:</strong></div>
+    <div class='col-xs-8 col-sm-10'><%= @person.church %></div>
   </div>
   <div class="row">
-    <div class="col-sm-2"><strong><%= label :person, :city %></strong></div>
-    <div class='col-sm-10'><%= @person.city %></div>
+    <div class="col-xs-4 col-sm-2 text-right"><strong><%= label :person, :country %>:</strong></div>
+    <div class='col-xs-8 col-sm-10'><%= @person.country %></div>
   </div>
   <div class="row">
-    <div class="col-sm-2"><strong><%= label :person, :assist_v %></strong></div>
-    <div class='col-sm-10'><%= @person.assist_tostring.html_safe %></div>
+    <div class="col-xs-4 col-sm-2 text-right"><strong><%= label :person, :state %>:</strong></div>
+    <div class='col-xs-8 col-sm-10'><%= @person.state %></div>
   </div>
   <div class="row">
-    <div class="col-sm-2"><strong><%= label :person, :comments %></strong></div>
-    <div class='col-sm-10'><%= simple_format @person.comments %></div>
+    <div class="col-xs-4 col-sm-2 text-right"><strong><%= label :person, :city %>:</strong></div>
+    <div class='col-xs-8 col-sm-10'><%= @person.city %></div>
   </div>
+  <div class="row">
+    <div class="col-xs-4 col-sm-2 text-right"><strong><%= label :person, :assist_v %>:</strong></div>
+    <div class='col-xs-8 col-sm-10'><%= @person.assist_tostring.html_safe %></div>
+  </div>
+  <% if @person.comments != '' %>
+    <div class="row">
+      <div class="col-xs-4 col-sm-2 text-right"><strong><%= label :person, :comments %>:</strong></div>
+      <div class='col-xs-8 col-sm-10'><%= simple_format @person.comments %></div>
+    </div>
+  <% end %>
+  <br>
 
   <div class="well">
     <div class="media">
       <div class="media-left media-top">
-        <h1 class="media-object" style="margin-top: 0;">1</h1>
+        <h1 class="media-object media-object-top">1</h1>
       </div>
       <div class="media-body">
-        <h5 class="media-heading">Completa tu inscripción llenando las siguientes secciones:</h5>
-        <%= link_to '<i class="fa fa-users"></i> Invitados'.html_safe,
-                    '#guests',
-                    class: 'btn btn-default btn-xs btn-disabled page-scroll' %>
-        <%= link_to '<span class="glyphicon glyphicon-cutlery"></span> Comidas'.html_safe,
-                    '#foods',
-                    class: 'btn btn-default btn-xs btn-disabled page-scroll' %>
-        <%= link_to '<i class="fa fa-suitcase"></i> Hospedaje'.html_safe,
-                    '#allocation',
-                    class: 'btn btn-default btn-xs btn-disabled page-scroll' %>
-        <%= link_to '<i class="fa fa-bus"></i> Transporte'.html_safe,
-                    '#transport',
-                    class: 'btn btn-default btn-xs btn-disabled page-scroll' %>
+        <h5 class="media-heading" >Completa tu inscripción llenando las siguientes secciones:</h5>
+        <div class="btn-group btn-group-sm">
+          <%= link_to '<i class="fa fa-users"></i> Invitados'.html_safe,
+                      '#guests',
+                      class: 'btn btn-default page-scroll' %>
+          &nbsp;
+          <%= link_to '<i class="fa fa-cutlery"></i></span> Comidas'.html_safe,
+                      '#foods',
+                      class: 'btn btn-default page-scroll' %>
+          &nbsp;
+          <%= link_to '<i class="fa fa-suitcase"></i> Hospedaje'.html_safe,
+                      '#allocation',
+                      class: 'btn btn-default page-scroll' %>
+          &nbsp;
+          <%= link_to '<i class="fa fa-bus"></i> Transporte'.html_safe,
+                      '#transport',
+                      class: 'btn btn-default page-scroll' %>
+          <%= link_to '<i class="fa fa-pencil-square-o" aria-hidden="true"></i> Ofrenda'.html_safe,
+                      '#offering',
+                      class: 'btn btn-default page-scroll' %>
+        </div>
       </div>
     </div>
     <div class="media">
       <div class="media-left media-top">
-        <h1 class="media-object" style="margin-top: 0;">2</h1>
+        <h1 class="media-object media-object-top">2</h1>
       </div>
       <div class="media-body">
-        <h5 class="media-heading">Después de completar todas las secciones continúa con estos pasos:</h5>
-        <%= link_to '<i class="fa fa-credit-card"></i> Pagar'.html_safe,
-                    '#payment',
-                    class: 'btn btn-default btn-xs page-scroll' %>
-        <%= link_to '<span class="glyphicon glyphicon-print"></span> Gafete'.html_safe,
-                    gafete_path(format: 'pdf'),
-                    class: 'btn btn-default btn-xs' %>
-      </div>
-    </div>
-
-    <div class="media">
-      <div class="media-left media-top">
-        <h1 class="media-object" style="margin-top: 0;">3</h1>
-      </div>
-      <div class="media-body">
-        <h5 class="media-heading">Puedes consultar la ubicación del lugar en el mapa:</h5>
-        <%= link_to '<span class="glyphicon glyphicon-link"></span> La Roca'.html_safe,
-                    'https://www.google.com.mx/maps/place/20%C2%B030\'49.4%22N+103%C2%B025\'35.8%22W/@20.513707,-103.426596,17z/data=!3m1!4b1!4m2!3m1!1s0x0:0x0?hl=es-419',
-                    class: 'btn btn-default btn-xs',
-                    target: '_blank' %>
+        <h5 class="media-heading">
+          Después continúa con estos pasos:
+        </h5>
+        <div class="btn-group btn-group-sm">
+          <%= link_to '<i class="fa fa-credit-card"></i> Pagar'.html_safe,
+                      '#payment',
+                      class: 'btn btn-default page-scroll' %>
+          &nbsp;
+          <%= link_to '<i class="fa fa-print"></i></span> Gafete'.html_safe,
+                      gafete_path(format: 'pdf'),
+                      class: 'btn btn-default btn-xs' %>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<hr><%# -------------------------------------------------------------------------------------------%>
+<hr><%# -------------------------------------------------------------------------------------- Invitados -----%>
 <section id="guests" class="custom-section">
   <h2 class="text-center"><i class="fa fa-users"></i> Invitados</h2>
   <%= render 'btn_or_error', is_writable: is_writable_guests,
                              path: new_person_guest_path(@person),
                              messages: @messages_guests,
-                             type: :new %>
+                             type: :new,
+                             btn_class: btn_class %>
   <div class="table-responsive">
     <table class="table table-striped table-hover table-condensed">
       <thead>
@@ -213,10 +250,10 @@
           <td><%= show_sex_symbol g.ismale %> <%= g.gender %></td>
           <td><%= g.age %></td>
           <td><div class="btn-group">
-            <%= link_to '<span class="glyphicon glyphicon-edit"></span> Editar'.html_safe,
+            <%= link_to '<i class="fa fa-pencil" aria-hidden="true"></i> Editar'.html_safe,
                         edit_person_guest_path(@person, g),
                         class: 'btn btn-default btn-xs' if is_writable %>
-            <%= link_to '<span class="glyphicon glyphicon-remove"></span> Borrar'.html_safe,
+            <%= link_to '<i class="fa fa-times" aria-hidden="true"></i> Borrar'.html_safe,
                         person_guest_path(@person, g),
                         method: :delete,
                         data: { confirm: '¿estás seguro?' },
@@ -228,22 +265,22 @@
       <% end %>
       </tbody>
     </table>
+    <% if @person.guests.size == 0 %>
+        <div class="text-center"><em>sin invitados</em></div>
+    <% end %>
   </div>
-  <% if @person.guests.size == 0 %>
-      <em>No se encontraron invitados</em>
-  <% end %>
   <h5>
     <div class="row">
-      <div class="col-xs-4 col-sm-2"><strong>Personas <small>(con el titular)</small>:</strong></div>
-      <div class="col-xs-6"><%= @person.total_people %></div>
+      <div class="col-xs-6 col-sm-3 col-md-2 "><strong>Personas <small>(con el titular)</small>:</strong></div>
+      <div class="col-xs-6 col-sm-9 col-md-10"><%= @person.total_people %></div>
     </div>
     <div class="row">
-      <div class="col-xs-4 col-sm-2"><strong>Personas adultas:</strong></div>
-      <div class="col-xs-6"><%= @person.total_adults %></div>
+      <div class="col-xs-6 col-sm-3 col-md-2 "><strong>Personas adultas:</strong></div>
+      <div class="col-xs-6 col-sm-9 col-md-10"><%= @person.total_adults %></div>
     </div>
     <div class="row">
-      <div class="col-xs-4 col-sm-2"><strong>Costo total:</strong></div>
-      <div class="col-xs-6"><%= number_to_currency @person.total_people_cost %></div>
+      <div class="col-xs-6 col-sm-3 col-md-2 "><strong>Costo total:</strong></div>
+      <div class="col-xs-6 col-sm-9 col-md-10"><%= number_to_currency @person.total_people_cost %></div>
     </div>
   </h5>
   <div class="row text-right">
@@ -253,9 +290,9 @@
   </div>
 </section>
 
-<hr><%# -------------------------------------------------------------------------------------------%>
+<hr><%# --------------------------------------------------------------------------------------- Comidas ----%>
 <section id="foods" class="custom-section">
-  <h2 class="text-center"><span class="glyphicon glyphicon-cutlery"></span> Comidas</h2>
+  <h2 class="text-center"><i class="fa fa-cutlery"></i></span> Comidas</h2>
   <%= render 'btn_or_error', is_writable: is_writable_food,
                              path: edit_food_path(@person),
                              messages: @messages_food,
@@ -268,7 +305,7 @@
   </div>
 </section>
 
-<hr><%# -------------------------------------------------------------------------------------------%>
+<hr><%# --------------------------------------------------------------------------------------- Hospedaje ---%>
 <section id="allocation" class="custom-section">
   <h2 class="text-center"><i class="fa fa-suitcase"></i> Hospedaje</h2>
   <%= render 'btn_or_error', is_writable: is_writable_allocation,
@@ -282,7 +319,12 @@
     <%   when 1 %>
         <%= render @person.allocation, locals: { allocation: @person.allocation } %>
     <%   when 2 %>
-        <div class="well">Para ver lista de hoteles haz click en el botón editar.</div>
+        <div class="well">
+          <strong>Seleccionaste Hotel</strong><br>
+          Puedes revisar la lista de hoteles <%= link_to 'aquí',
+                                                       show_all_hotels_path,
+                                                       target: '_blank' %>.
+        </div>
     <% end %>
   <div class="row text-right">
     <%= link_to 'ir al inicio',
@@ -291,14 +333,20 @@
   </div>
 </section>
 
-<hr><%# -------------------------------------------------------------------------------------------%>
+<hr><%# ------------------------------------------------------------------------------------ Transporte -------%>
 <section id="transport" class="custom-section">
   <h2 class="text-center"><i class="fa fa-bus"></i> Transporte</h2>
   <%= render 'btn_or_error', is_writable: is_writable_transport,
                              path: edit_transport_path(@person),
                              messages: @messages_tran,
                              type: :edit %>
+
   <%= render @person.transport, locals: { transport: @person.transport } %>
+  <br>
+  <h4>Horarios:</h4>
+  <%= render 'transports/schedule' %>
+  <br>
+  <br>
   <div class="row text-right">
     <%= link_to 'ir al inicio',
                 '#start',
@@ -306,7 +354,35 @@
   </div>
 </section>
 
-<hr><%# -------------------------------------------------------------------------------------------%>
+<hr><%# ------------------------------------------------------------------------------------ Ofrenda -------%>
+<section id="offering" class="custom-section">
+  <h2 class="text-center"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Ofrenda</h2>
+  <%= render 'btn_or_error', is_writable: is_writable_offerings,
+             path: "#{edit_person_path(@person)}#conference",
+             messages: @messages_offer,
+             type: :edit %>
+
+  <p class="text-justify">El monto recaudado sería utilizado para apoyar a hermanos que no pueden cubrir sus gastos
+    de transporte, hospedaje y alimentación así como otros gastos derivados de la conferencia.
+    <strong>Esta aportación es completamente opcional.</strong></p>
+  <div class="row">
+    <div class="col-xs-offset-4 col-xs-4 col-sm-offset-5 col-sm-2 text-center well">
+    <% if (not @person.offering.nil?) and (@person.offering > 0) %>
+      <h4><strong><%= number_to_currency @person.offering, precision: 0 %></strong></h4>
+    <% else %>
+      <h4>Sin Ofrenda</h4>
+    <% end %>
+    </div>
+  </div>
+
+  <div class="row text-right">
+    <%= link_to 'ir al inicio',
+                '#start',
+                class: 'links page-scroll' %>
+  </div>
+</section>
+
+<hr><%# ----------------------------------------------------------------------------------------- Pago --%>
 <section id="payment" class="custom-section">
   <h2 class="text-center"><i class="fa fa-credit-card"></i> Pago</h2>
   <div class="well">
@@ -321,7 +397,7 @@
             haber efectuado el pago total de tu registro.
           </p>
         </div>
-        <p>
+        <p class="text-justify">
           Para pagar puedes acudir a la persona encargada mas cercana de los que se listan a continuación, ten a la mano
           tu número de identificación para proporcionárselo:
         </p>
@@ -337,15 +413,20 @@
         <% if put_new_div_row %>
         <div class="row">
         <% end %>
-          <div class="col-xs-3">
+          <div class="col-xs-6 col-sm-3">
               <address>
-                <strong><%= p.name %></strong><br>
+                <strong class="lead"><%= p.name %></strong><br>
                 <%= link_to '<i class="fa fa-phone"></i> '.html_safe + number_to_phone(p.phone, area_code: true),
-                            'tel:' + p.phone %><br>
+                            'tel:' + p.phone %> <%= p.phone_suffix %><br>
+                <% if defined? p.phone2 %>
+                    <%= link_to '<i class="fa fa-phone"></i> '.html_safe + number_to_phone(p.phone2, area_code: true),
+                                'tel:' + p.phone2 %> <%= p.phone2_suffix %><br>
+                <% end %>
                 <%= mail_to p.email,
-                            '<i class="fa fa-envelope"></i> Email'.html_safe  %><br>
+                            '<i class="fa fa-envelope"></i> Email'.html_safe,
+                            subject: 'Pago de conferencia' %><br>
                 <%= p.church %><br>
-                <%= p.location %>
+                <strong><%= p.location %></strong>
               </address>
           </div>
         <% if close_div_row %>
@@ -362,12 +443,12 @@
   </div>
   <h5>
     <div class="row">
-      <div class="col-xs-4 col-sm-2"><strong>Gran Total:</strong></div>
-      <div class="col-xs-6"><%= number_to_currency @person.total %></div>
+      <div class="col-xs-6 col-sm-3 col-md-2 "><strong>Gran Total:</strong></div>
+      <div class="col-xs-6 col-sm-9 col-md-10"><%= number_to_currency @person.total %></div>
     </div>
     <div class="row">
-      <div class="col-xs-4 col-sm-2"><strong>Cantidad Pagada:</strong></div>
-      <div class="col-xs-6"><%= paid_format_colors @person.amount_paid, @person.total %></div>
+      <div class="col-xs-6 col-sm-3 col-md-2 "><strong>Cantidad Pagada:</strong></div>
+      <div class="col-xs-6 col-sm-9 col-md-10"><%= paid_format_colors @person.amount_paid, @person.total %></div>
     </div>
   </h5>
 
@@ -380,9 +461,33 @@
          </span>
     </div>
     <div class="panel-body text-center">
-      <%= link_to '<span class="glyphicon glyphicon-print"></span> Gafete'.html_safe,
+      <%= link_to '<i class="fa fa-print" aria-hidden="true"></i> Gafete'.html_safe,
                   gafete_path(format: 'pdf'),
                   class: 'btn btn-primary btn-md' %>
+
+      <div class="media">
+        <div class="media-left media-top">
+          <h1 class="media-object media-object-top">*</h1>
+        </div>
+        <div class="media-body text-left">
+          <h5 class="media-heading">Debes revisar periodicamente el clima del lugar,
+            para preveer el tipo de ropa que debes llevar.
+          <%= link_to 'Puedes visualizarlo aquí', Rails.application.config.reg_weather_url, target: '_blank' %>
+          </h5>
+        </div>
+      </div>
+      <div class="media">
+        <div class="media-left media-top">
+          <h1 class="media-object media-object-top">*</h1>
+        </div>
+        <div class="media-body text-left">
+          <h5 class="media-heading">
+            <%= link_to '<i class="fa fa-file-pdf-o"></i> Recomendaciones para el campamento'.html_safe,
+                        '/documents/recomendacion_hospedaje.pdf',
+                        target: '_blank' %>
+          </h5>
+        </div>
+      </div>
     </div>
   </div>
 

@@ -3,19 +3,19 @@ class PersonMailer < ApplicationMailer
   def welcome(person)
     prepare_email person
     mail to: @email_with_name,
-         subject: 'Bienvenido a la Segunda Conferencia Anual'
+         subject: "Cristianismo Bíblico - Bienvenido a la #{Rails.application.config.reg_event_name}"
   end
 
   def reset(person)
     prepare_email person
     mail to: @email_with_name,
-         subject: 'Restablecer contraseña'
+         subject: 'Cristianismo Bíblico - Restablecer contraseña'
   end
 
   def cancel(person)
     prepare_email person
     mail to: @email_with_name,
-         subject: 'Importante! información sobre tu asistencia'
+         subject: 'Cristianismo Bíblico - Importante! información sobre tu asistencia'
   end
 
   private
@@ -24,8 +24,8 @@ class PersonMailer < ApplicationMailer
     @email_with_name = %("#{person.name}" <#{person.email}>)
     @root = 'http://registro.cristianismobiblico.com/' #url_for root_url
 
-    path = Rails.root.join('app', 'assets', 'images', 'cb.jpg')
-    attachments.inline['cb.jpg'] = File.read(path)
+    path = Rails.root.join('app', 'assets', 'images', 'email_logo.jpg')
+    attachments.inline['logo.jpg'] = File.read(path)
   end
 
 end

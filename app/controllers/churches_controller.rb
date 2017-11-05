@@ -5,7 +5,7 @@ class ChurchesController < ApplicationController
   # GET /churches
   # GET /churches.json
   def index
-    @churches = Church.all
+    @churches = Church.all.order :name
   end
 
   # GET /churches/1

@@ -1,7 +1,7 @@
 xml.instruct! :xml, :version => "1.0"
 xml.rss :version => "2.0" do
   xml.channel do
-    xml.title 'Segunda Conferencia Anual 2015'
+    xml.title "#{Rails.application.config.reg_event_name} #{Rails.application.config.reg_event_id}"
     xml.description 'Noticias sobre la conferencia de Cristianismo Bíblico'
     xml.link posts_url
 

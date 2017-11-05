@@ -20,7 +20,7 @@ module ApplicationHelper
   # To deprecate
   def paid(person)
     if person.is_paid
-      '<span class="glyphicon glyphicon-ok text-success"/>'.html_safe
+      '<i class="fa fa-check text-success"\></i>'.html_safe
     else
       amount = number_to_currency person.amount_paid
       "#{amount}".html_safe
@@ -29,18 +29,18 @@ module ApplicationHelper
 
   def show_sex_symbol(ismale)
     if ismale
-      '<i class="fa fa-male"></i>'.html_safe
+      '<i class="fa fa-male fa-fw"></i>'.html_safe
     else
-      '<i class="fa fa-female female-color"></i>'.html_safe
+      '<i class="fa fa-female female-color fa-fw"></i>'.html_safe
     end
   end
 
   def render_bool(is_true)
     if is_true
-      '<i class="glyphicon glyphicon-ok text-success" />'.html_safe
+      '<i class="fa fa-check text-success"></i>'.html_safe
     else
       #'<span class="glyphicon glyphicon-ban-circle text-danger" />'.html_safe
-      '<i class="glyphicon glyphicon-remove text-danger" />'.html_safe
+      '<i class="fa fa-times text-danger"></i>'.html_safe
     end
   end
 
@@ -83,4 +83,61 @@ module ApplicationHelper
         return 'Tod Restantes'
     end
   end
+
+  def markdown(textmd)
+    options = {
+        filter_html:     false,
+        xhtml:            true,
+    }
+
+    renderer = Redcarpet::Render::HTML.new(options)
+    markdown = Redcarpet::Markdown.new(renderer, extensions = {})
+
+    markdown.render(textmd).html_safe
+  end
+
+  def render_fa_image(string)
+    groups = /{(fa-\w+)}(.*)/.match(string)
+    if groups.nil?
+      string
+    else
+      "<i class='fa #{groups[1]}' aria-hidden='true'></i>#{groups[2]}".html_safe
+    end
+  end
+
+  def api_auth_base64
+    auth = "#{Rails.application.config.api_user}:#{Rails.application.config.api_pass}"
+    Base64.strict_encode64 auth
+  end
+
+  def fa_with_text(icon_name, text, icon_back = nil)
+    # %r() is another way to write a regular expression.
+    # %q() is another way to write a single-quoted string (and can be multi-line, which is useful)
+    # %Q() gives a double-quoted string and escapes double quotes
+    # %() or %[] or %{} is like %Q
+    # %x() is a shell command
+    # %i() gives an array of symbols (Ruby >= 2.0.0)
+    # %s() turns foo into a symbol (:foo)
+    if icon_back.nil?
+      if icon_name == ''
+        %Q(<i class="fa fa-square fa-fw" style="visibility: hidden;" aria-hidden="true"></i>&nbsp;#{text}).html_safe
+      else
+        %Q(<i class="fa fa-#{icon_name} fa-fw" aria-hidden="true"></i>&nbsp;#{text}).html_safe
+      end
+    else
+      %Q(<span class="fa-stack fa-lg">
+           <i class="fa fa-#{icon_back} fa-stack-2x"></i>
+           <i class="fa fa-#{icon_name} fa-stack-1x fa-inverse"></i>
+         </span>&nbsp;#{text}).html_safe
+    end
+  end
+
+  def nav_li_link(text, link_path)
+    active_class = current_page?(link_path) ? 'active' : ''
+
+    content_tag(:li, :class => active_class) do
+      link_to text, link_path
+    end
+  end
+
 end

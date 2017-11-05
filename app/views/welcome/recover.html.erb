@@ -1,11 +1,12 @@
 <% content_for :title do %>Recuperar<% end %>
-<div class="container" style="width: 300px">
+<div class="container" style="width: 320px">
   <form class="form-horizontal" action="/recover" method="post">
     <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-    <h2>Restablecer</h2>
+    <h2 class="text-center">Restablecer</h2>
 
-    <div class="form-group">
-      <%= email_field_tag :email, '', placeholder: 'Email', class: 'form-control input-sm col-sm-4', required: true %>
+    <div class="input-group">
+      <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+      <%= email_field_tag :email, '', placeholder: 'Email', class: 'form-control', required: true %>
     </div>
 
     <br>

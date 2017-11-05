@@ -1,6 +1,6 @@
 <%
 def get_enum
-  [['No requiero', 0], ['Dormitorios del Campamento', 1], ['Hotel', 2]]
+  [['Sin hospedaje', 0], ['Dormitorios del Campamento', 1], ['Hotel', 2]]
 end
 %>
 <%= form_for(@allocation, html: {class:'form-horizontal', role:'form'}) do |f| %>
@@ -19,11 +19,24 @@ end
     </div>
 
     <div id="hotels">
-        <%= render 'hotels/show_all' %>
+      <div class="well">
+        <strong>Hoteles</strong>
+        <p>
+          <strong>
+          <i class="fa fa-exclamation-triangle text-warning" aria-hidden="true"></i> No se te olvide hacer click en Aceptar si optas por esta opcion.
+          </strong>
+        </p>
+        <p>
+        Tenemos convenio con diversos hoteles. Puedes revisar la lista de ellos <%= link_to 'aquí',
+                                                                                            show_all_hotels_path,
+                                                                                            target: '_blank' %>
+          (También disponibles desde la página inicial)
+        </p>
+      </div>
     </div>
 
     <div id="campamento">
-      <div class="well">
+      <div class="well text-justify">
         <strong>Este servicio es opcional</strong>
         <p>Si te vas a quedar en los dormitorios del campamento, llena los siguientes campos con tu información y la de tus invitados.</p>
         <p>
@@ -72,7 +85,7 @@ end
           <%= f.submit 'Aceptar', data: { disable_with: 'Procesando...' }, class: 'btn btn-sm btn-primary', id: 'submit_ajax' %>
           <%= link_to 'Cancelar', get_start, { class: 'btn btn-sm btn-link' }  %>
         </div>
-        <%= image_tag image_path('spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
+        <%= image_tag image_path('spinners/spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
       </div>
     </div>
 <% end %>

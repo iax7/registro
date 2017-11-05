@@ -53,6 +53,11 @@ class Person < ActiveRecord::Base
             numericality: { only_integer: true,
                             greater_than_or_equal_to: 0 }
 
+  validates :offering,
+            numericality: { only_integer: true,
+                            greater_than_or_equal_to: 0,
+                            allow_nil: true }
+
   def set_password(text)
     pass_str = "#{self.salt}$#{text}"
     self.password = Digest::SHA1.hexdigest(pass_str)
@@ -71,6 +76,7 @@ class Person < ActiveRecord::Base
 
   def total
     total = 0
+    total += self.offering unless self.offering.nil?
     total += total_people_cost
     unless self.food.nil?
       total += self.food.total_cost
@@ -149,8 +155,8 @@ class Person < ActiveRecord::Base
     count
   end
 
-  def total_people_cost(fee = 50)
-    self.total_adults * fee
+  def total_people_cost
+    self.total_adults * Rails.application.config.reg_event_full_price
   end
 
   def is_paid
@@ -164,10 +170,11 @@ class Person < ActiveRecord::Base
   scope :city,       -> (text) { where 'lower(city) LIKE ?', "%#{text.downcase}%" }
   scope :state,      -> (text) { where 'lower(state) LIKE ?', "%#{text.downcase}%" }
   scope :changed_by, -> (text) { where changed_by: text }
-  scope :is_admin,     -> (bool) { where isadmin: bool }
-  scope :is_confirmed, -> (bool) { where isconfirmed: bool }
-  scope :confirmed,    -> { where isconfirmed: true }
-  scope :is_cancelled, -> (bool) { where iscancelled: bool }
+  scope :is_admin,         -> (bool) { where isadmin: bool }
+  scope :is_confirmed,     -> (bool) { where isconfirmed: bool }
+  scope :is_not_confirmed, -> (bool) { where isconfirmed: !bool }
+  scope :confirmed,        -> { where isconfirmed: true }
+  scope :is_cancelled,     -> (bool) { where iscancelled: bool }
   scope :find_by_email_hashed, -> (hash) { where 'md5(email) = ?', hash }
 
   scope :adults, -> { where('age >= ?', Rails.application.config.reg_adult_age) }
@@ -354,6 +361,74 @@ SELECT changed_by AS id
     SQL
     self.connection.execute(qry)
   end
+
+  def self.offerings
+    qry = <<-SQL
+SELECT --name,
+       SUM(offering) AS Offerings
+  FROM people
+ WHERE changed_by IS NOT NULL
+   AND offering IS NOT NULL
+   AND amount_paid >= offering
+   AND isconfirmed
+--  group by name
+    SQL
+    self.connection.execute(qry)
+  end
+
+  # GRAPH Reports //////////////////////////////////////////////////////////////////////////////////////////////////////
+  def self.graph_by_date
+    qry = <<-SQL
+  SELECT date(created_at) as date,
+         count(1) as count
+    FROM people
+GROUP BY date(created_at)
+ORDER BY date(created_at)
+      SQL
+    self.connection.execute(qry)
+  end
+  def self.graph_by_dow
+    qry = <<-SQL
+  SELECT date('2016-07-03') + cast(EXTRACT(DOW FROM created_at) as int) as date,
+         --EXTRACT(DOW FROM created_at) as date,
+         count(1) as count
+    FROM people
+GROUP BY EXTRACT(DOW FROM created_at)
+ORDER BY EXTRACT(DOW FROM created_at)
+    SQL
+    self.connection.execute(qry)
+  end
+  def self.graph_by_week
+    qry = <<-SQL
+  SELECT CAST(EXTRACT(WEEK FROM created_at) as int) as date,
+         count(1) as count
+    FROM people
+GROUP BY EXTRACT(WEEK FROM created_at)
+ORDER BY EXTRACT(WEEK FROM created_at)
+    SQL
+    self.connection.execute(qry)
+  end
+  def self.graph_by_country
+    qry = <<-SQL
+  SELECT country as cat,
+         count(1) as count
+    FROM people
+GROUP BY country
+ORDER BY country
+    SQL
+    self.connection.execute(qry)
+  end
+  def self.graph_by_city
+    qry = <<-SQL
+  SELECT city as cat,
+         count(1) as count
+    FROM people
+GROUP BY city
+ORDER BY city
+    SQL
+    self.connection.execute(qry)
+  end
+
 
   private
     def init

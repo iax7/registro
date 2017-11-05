@@ -1,56 +1,75 @@
 <h2>Configs</h2>
 <div class="row">
-  <div class="col-sm-10"></div>
-  <div class="col-sm-2">
-    <a class="btn btn-xs btn-primary" aria-label="Left Align" href="<%= url_for new_config_path %>">
-      <span class="glyphicon glyphicon-plus"></span> Nuevo</a>
+  <%= link_to '<i class="fa fa-calendar"></i> CB Schedule'.html_safe,
+              schedule_path, :format => :ics %><br>
+  <%= link_to '<i class="fa fa-download"></i> Descargar Desktop App'.html_safe,
+              Rails.application.config.dektop_app_url %><br>
+  <%= link_to '<i class="fa fa-file-pdf-o"></i> Generar todos los gafetes'.html_safe,
+              gafete_bulk_path(format: 'pdf') %>
+</div>
+
+<br>
+
+<div class="row text-right">
+  <div class="btn-group">
+    <a class="btn btn-default btn-xs" href="<%= url_for config_path(1) %>">
+      <i class="fa fa-eye" aria-hidden="true"></i> Mostrar</a>
+    <a class="btn btn-default btn-xs" href="<%= url_for edit_config_path(1) %>">
+      <i class="fa fa-pencil" aria-hidden="true"></i> Editar</a>
   </div>
 </div>
-<%= link_to '<i class="fa fa-calendar"></i> CB Schedule'.html_safe,
-            schedule_path, :format => :ics %><br>
-<%= link_to '<i class="fa fa-download"></i> Descargar Desktop App'.html_safe,
-            Rails.application.config.dektop_app_url %>
-
-<h3>Esta forma ya no se usa para cambiar la configuración general</h3>
-
-<div class="table-responsive">
-    <table class="table table-striped table-hover table-condensed">
-      <thead>
-        <tr>
-          <th><%= label :config, :foodcost %></th>
-          <th><%= label :config, :allocationcost %></th>
-          <th><%= label :config, :max_food %></th>
-          <th><%= label :config, :max_allocation %></th>
-          <th><%= label :config, :fooddeadline %></th>
-          <th><%= label :config, :allocationdeadline %></th>
-          <th></th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <% @configs.each do |config| %>
-          <tr>
-            <td><%= config.foodcost %></td>
-            <td><%= config.allocationcost %></td>
-            <td><%= config.max_food %></td>
-            <td><%= config.max_allocation %></td>
-            <td><%= config.fooddeadline %></td>
-            <td><%= config.allocationdeadline %></td>
-            <td><div class="btn-group">
-                  <a class="btn btn-default btn-xs" href="<%= url_for config %>">
-                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Mostrar</a>
-                  <a class="btn btn-default btn-xs" href="<%= url_for edit_config_path(config) %>">
-                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Editar</a>
-                  <a class="btn btn-danger btn-xs" href="<%= url_for config %>" data-method="delete" data-confirm="¿Estás seguro?">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Borrar</a>
-                </div>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-</div>
-<% if @configs.size == 0 %>
-    <em>No se encontraron registros</em>
-<% end %>
 <br>
+<div>
+  <%= hidden_field_tag :current, session_id %>
+  <%= text_field_tag 'id', params[:id], placeholder: '...', class: 'form-control input-sm' %>
+  <%= button_tag 'Aceptar', id: 'btnSend', class: 'btn btn-default' %>
+  <pre id="status"></pre>
+</div>
+
+<script>
+  $(
+      $('#btnSend').click( function(e) {
+        var id = $('#id').val();
+        var session = $('#current').val();
+        if (id == '' )
+          return false;
+
+        var last = id.slice(-1);
+        var commit;
+        if( last == '!' ) {
+          commit = '/true'; //commit
+          id = id.substr(0, id.length -1 );
+        }
+        else
+          commit = '';
+
+        if (session == id || isNaN(id) )
+          return false;
+
+        var url = '/api/v1/make_admin/' + id + commit;
+
+        $.ajax({
+          type: 'GET',
+          url: url,
+          dataType: "json",
+          headers: {
+            "Authorization": "Basic <%= api_auth_base64 %>"
+          },
+          success: function (result) {
+            $('#status').text(JSON.stringify(result,null,2));
+          },
+          error: function (request, status, error) {
+            var text = request.responseText;
+            if (text == '') {
+              text = error;
+            }
+            alert(text);
+          },
+          complete: function (jqXHR, textStatus) {
+            txtId = $('#id');
+            txtId.val('');
+          }
+        });
+      })
+  );
+</script>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151106015609) do
+ActiveRecord::Schema.define(version: 20160930022218) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,10 +20,10 @@ ActiveRecord::Schema.define(version: 20151106015609) do
     t.integer  "n1"
     t.integer  "n2"
     t.integer  "n3"
-    t.integer  "option"
     t.integer  "person_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "option"
   end
 
   add_index "allocations", ["person_id"], name: "index_allocations_on_person_id", using: :btree
@@ -39,10 +39,10 @@ ActiveRecord::Schema.define(version: 20151106015609) do
     t.integer  "allocationcost"
     t.datetime "fooddeadline"
     t.datetime "allocationdeadline"
-    t.integer  "max_food"
-    t.integer  "max_allocation"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.integer  "max_food"
+    t.integer  "max_allocation"
   end
 
   create_table "countries", force: :cascade do |t|
@@ -97,6 +97,9 @@ ActiveRecord::Schema.define(version: 20151106015609) do
     t.integer  "l1"
     t.integer  "l2"
     t.integer  "l3"
+    t.integer  "person_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer  "v1c"
     t.integer  "v2c"
     t.integer  "v3c"
@@ -109,9 +112,6 @@ ActiveRecord::Schema.define(version: 20151106015609) do
     t.integer  "l1c"
     t.integer  "l2c"
     t.integer  "l3c"
-    t.integer  "person_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   add_index "foods", ["person_id"], name: "index_foods_on_person_id", using: :btree
@@ -120,11 +120,11 @@ ActiveRecord::Schema.define(version: 20151106015609) do
     t.string   "name"
     t.string   "nickname"
     t.integer  "age"
-    t.boolean  "ismale"
-    t.integer  "relation"
-    t.integer  "person_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "person_id"
+    t.boolean  "ismale"
+    t.integer  "relation"
   end
 
   add_index "guests", ["person_id"], name: "index_guests_on_person_id", using: :btree
@@ -149,28 +149,29 @@ ActiveRecord::Schema.define(version: 20151106015609) do
     t.string   "nickname"
     t.string   "email"
     t.string   "phone"
-    t.string   "church"
     t.string   "country"
     t.string   "state"
     t.string   "city"
-    t.integer  "age"
     t.string   "comments"
-    t.boolean  "ismale"
     t.boolean  "isconfirmed"
     t.boolean  "ispresent"
     t.boolean  "isnotified"
-    t.boolean  "iscancelled"
-    t.boolean  "isadmin"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.string   "password"
     t.string   "salt"
-    t.integer  "amount_paid"
-    t.integer  "changed_by"
+    t.boolean  "ismale"
+    t.string   "church"
+    t.boolean  "isadmin"
     t.boolean  "assist_v"
     t.boolean  "assist_s"
     t.boolean  "assist_d"
     t.boolean  "assist_l"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer  "amount_paid"
+    t.integer  "age"
+    t.integer  "changed_by"
+    t.boolean  "iscancelled"
+    t.integer  "offering"
   end
 
   create_table "posts", force: :cascade do |t|

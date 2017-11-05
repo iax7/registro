@@ -3,7 +3,15 @@
     <div class="form-group"><%= f.label :name,     class: 'control-label col-sm-2' %><div class='col-sm-6'><%= f.text_field :name,     class: 'form-control input-sm' %></div></div>
     <div class="form-group"><%= f.label :nickname, class: 'control-label col-sm-2' %><div class='col-sm-6'><%= f.text_field :nickname, class: 'form-control input-sm', placeholder: 'Aparecerá en el gafete impreso' %></div></div>
     <div class="form-group"><%= f.label :relation, class: 'control-label col-sm-2' %><div class='col-sm-2'><%= f.select :relation, Guest.i18n_relations, {}, { class: 'form-control input-sm' } %></div></div>
-    <div class="form-group"><%= f.label :ismale,   class: 'control-label col-sm-2' %><div class='col-sm-2'><%= f.select :ismale, [['Hombre', true], ['Mujer', false]], {}, { class: 'form-control input-sm'} %></div></div>
+    <div class="form-group"><%= f.label :ismale,   class: 'control-label col-sm-2' %>
+      <div class='col-sm-4'>
+        <div class="btn-group btn-group-md" data-toggle="buttons">
+          <label class="btn btn-default <%= 'active' if @guest.ismale %>"><%= f.radio_button :ismale, true  %><%= show_sex_symbol true %> Hombre</label>
+          <label class="btn btn-default <%= 'active' unless @guest.ismale %>"><%= f.radio_button :ismale, false %><%= show_sex_symbol false %> Mujer</label>
+        </div>
+        <%#div class='col-sm-2'><%= f.select :ismale, [['Hombre', true], ['Mujer', false]], {}, { class: 'form-control input-sm'} %>
+      </div>
+    </div>
     <div class="form-group"><%= f.label :age,      class: 'control-label col-sm-2' %><div class='col-sm-2'><%= f.number_field :age,    class: 'form-control input-sm', min: 0 %></div></div>
 
   <% if @guest.errors.any? %>
@@ -24,7 +32,7 @@
           <%= f.submit 'Aceptar', data: { disable_with: 'Procesando...' }, class: 'btn btn-sm btn-primary', id: 'submit_ajax' %>
           <%= link_to 'Cancelar', get_start, { class: 'btn btn-sm btn-link' }  %>
         </div>
-        <%= image_tag image_path('spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
+        <%= image_tag image_path('spinners/spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
       </div>
     </div>
 <% end %>

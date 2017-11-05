@@ -1,10 +1,15 @@
+<%
+  err_msg = 'Error interno del servidor'
+  err_code = '500'
+%>
+<br>
+<br>
 <div class="row text-center">
-  <div><img src="<%= image_path 'error.png' %>" style="height: 128px;width: 128px;"></div>
-  <div class="row text-center text-danger">
-    <div><h1>Error 500</h1></div>
-  </div>
+  <img src="<%= image_path 'error.png' %>" style="height: 128px;width: 128px;">
+  <h1 class="text-danger">Error <%= err_code %></h1>
 </div>
 <div class="row text-center">
-  <h4>Error interno del servidor</h4>
+  <h4><%= err_msg %></h4>
+  <br>
+  <%= link_to '&laquo; regresar'.html_safe, root_url, { class: 'btn btn-sm btn-link' } %>
 </div>
-

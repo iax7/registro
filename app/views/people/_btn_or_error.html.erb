@@ -1,7 +1,7 @@
 <% if type == :new
-     btn_text = '<span class="glyphicon glyphicon-plus"></span> Nuevo'
+     btn_text = '<i class="fa fa-plus" aria-hidden="true"></i> Nuevo'
    else
-     btn_text = '<span class="glyphicon glyphicon-edit"></span> Editar'
+     btn_text = '<i class="fa fa-pencil" aria-hidden="true"></i> Editar'
    end
 %>
 <% if not is_writable %>
@@ -19,9 +19,9 @@
     </div>
 <% end
    if is_writable or is_admin %>
-    <div class="row text-right">
+    <div class="row text-center extra-space-bottom">
       <%= link_to btn_text.html_safe,
                   path,
-                  class: 'btn btn-default btn-sm' %>
+                  class: btn_class %>
     </div>
 <% end %>

@@ -13,14 +13,14 @@
       <!--th></th-->
       <%# th class="text-center viernes">Des</th>
       <th class="text-center viernes">Com</th> %>
-      <th class="text-center viernes"><abbr title="Cena">Cen</abbr></th>
-      <th class="text-center sabado" ><abbr title="Desayuno">Des</abbr></th>
-      <th class="text-center sabado" ><abbr title="Comida">Com</abbr></th>
-      <th class="text-center sabado" ><abbr title="Cena">Cen</abbr></th>
-      <th class="text-center domingo"><abbr title="Desayuno">Des</abbr></th>
-      <th class="text-center domingo"><abbr title="Comida">Com</abbr></th>
-      <th class="text-center domingo"><abbr title="Cena">Cen</abbr></th>
-      <th class="text-center lunes"  ><abbr title="Desayuno">Des</abbr></th>
+      <th class="text-center viernes"><span data-toggle="tooltip" data-placement="top" title="Cena">Cen</span></th>
+      <th class="text-center sabado" ><span data-toggle="tooltip" data-placement="top" title="Desayuno">Des</span></th>
+      <th class="text-center sabado" ><span data-toggle="tooltip" data-placement="top" title="Comida">Com</span></th>
+      <th class="text-center sabado" ><span data-toggle="tooltip" data-placement="top" title="Cena">Cen</span></th>
+      <th class="text-center domingo"><span data-toggle="tooltip" data-placement="top" title="Desayuno">Des</span></th>
+      <th class="text-center domingo"><span data-toggle="tooltip" data-placement="top" title="Comida">Com</span></th>
+      <th class="text-center domingo"><span data-toggle="tooltip" data-placement="top" title="Cena">Cen</span></th>
+      <th class="text-center lunes"  ><span data-toggle="tooltip" data-placement="top" title="Desayuno">Des</span></th>
       <%# th class="text-center lunes">Com</th>
       <th class="text-center lunes">Cen</th%>
     </tr>
@@ -67,11 +67,11 @@
 
 <h5>
   <div class="row">
-    <div class="col-xs-4 col-sm-2"><strong>Cantidad Total:</strong></div>
-    <div class="col-xs-6"><%= food.total_meals %></div>
+    <div class="col-xs-6 col-sm-3 col-md-2 "><strong>Cantidad Total:</strong></div>
+    <div class="col-xs-6 col-sm-9 col-md-10"><%= food.total_meals %></div>
   </div>
   <div class="row">
-    <div class="col-xs-4 col-sm-2"><strong>Costo total:</strong></div>
-    <div class="col-xs-6"><%= number_to_currency food.total_cost %></div>
+    <div class="col-xs-6 col-sm-3 col-md-2 "><strong>Costo total:</strong></div>
+    <div class="col-xs-6 col-sm-9 col-md-10"><%= number_to_currency food.total_cost %></div>
   </div>
 </h5>

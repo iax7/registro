@@ -1,0 +1,23 @@
+- content_for :title do
+  Ingresar
+
+.container{style: 'width: 320px'}
+  %form.form-horizontal{action: '/login', method: 'post'}
+    = hidden_field_tag :authenticity_token, form_authenticity_token
+
+    %h2.text-center Ingresar
+
+    .input-group
+      %span.input-group-addon
+        %i.fa.fa-envelope{'aria-hidden': 'true'}
+      = email_field_tag :email, params[:email], placeholder: 'Email', class: 'form-control', autofocus: true, required: true
+    .input-group
+      %span.input-group-addon
+        %i.fa.fa-key{'aria-hidden': 'true'}
+      = password_field_tag :password, nil, class: 'form-control', placeholder: 'Contraseña', required: true
+
+    = link_to 'Recuperar contraseña', recover_url, style: 'color: #777;'
+
+    .form-group
+      .col-md-offset-6.col-md-6
+        = submit_tag 'Aceptar', data: { disable_with: 'Procesando...' }, class: 'btn btn-sm btn-primary btn-block'

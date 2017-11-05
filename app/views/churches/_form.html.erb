@@ -20,7 +20,7 @@
         <%= f.submit 'Aceptar', data: { disable_with: 'Procesando...' }, class: 'btn btn-sm btn-primary', id: 'submit_ajax' %>
         <%= link_to 'Cancelar', get_start, { class: 'btn btn-sm btn-link' }  %>
       </div>
-      <%= image_tag image_path('spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
+      <%= image_tag image_path('spinners/spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
     </div>
   </div>
 <% end %>

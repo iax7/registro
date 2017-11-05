@@ -5,6 +5,10 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
+    unless require_admin
+      return false
+    end
+
     @posts = Post.all
 
     respond_to do |format|

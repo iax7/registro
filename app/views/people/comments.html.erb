@@ -18,7 +18,7 @@
       <td><%= p.id %></td>
       <td><%= p.full_name false %></td>
       <td><%= p.city %></td>
-      <td><%= mail_to p.email, '<span class="glyphicon glyphicon-envelope" />'.html_safe %></td>
+      <td><%= mail_to p.email, '<i class="fa fa-envelope-o" aria-hidden="true"></i>'.html_safe %></td>
       <td><%= p.guests.length %></td>
       <td><%= simple_format p.comments %></td>
     </tr>

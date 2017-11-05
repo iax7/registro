@@ -40,6 +40,9 @@
       %table.table.table-bordered.table-condensed
         %thead.bg-primary
           %tr
+            %th
+              %span{ :data => { toggle: 'tooltip', placement: 'top' },
+                     :title => "Consecutivo" } #
             %th Id
             %th Nombre
             %th Sexo
@@ -51,8 +54,11 @@
               %span{ :data => { toggle: 'tooltip', placement: 'top' },
                      :title => "Confirmado" } C
         %tbody
+          - index = 0
           - @allocations.each do |a|
+            - index = index + 1
             %tr
+              %td.text-right= index
               %td.text-right
                 %strong= a.person.id
               %td= a.person.full_name
@@ -67,7 +73,9 @@
               -#.visible-print= render_bool_text a.person.isconfirmed
               -#.hidden-print= render_bool a.person.isconfirmed
               - a.person.guests.each do |g|
+                - index = index + 1
                 %tr.bg-dim
+                  %td.text-right= index
                   %td.text-right= g.id
                   %td= g.name
                   %td
@@ -79,6 +87,7 @@
                   %td.bg-dim= ''
                   %td
     %h5= "Número de Titulares: #{@allocations.length}"
+    %h5= "Número de Invitados: #{index - @allocations.length}"
 :css
   .bg-dim {
     background-color: #c0c0c0;

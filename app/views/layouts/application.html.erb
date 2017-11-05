@@ -1,7 +1,19 @@
 <!DOCTYPE html>
+<%
+  locale = 'es_MX'
+  app_name = "CB Conferencia #{Rails.application.config.reg_event_id}"
+  event_name = Rails.application.config.reg_event_name
+  title = "Registro a la #{event_name}"
+  type = 'website'
+  url = 'https://registro.cristianismobiblico.com'
+  description = 'En este sitio podrá crear su cuenta para asistir a la conferencia.'
+  author = Rails.application.config.reg_site_author
+  twitter_creator = '@C_Biblico'
+  fb_id = '297759137246012'
+%>
 <html>
 <head>
-  <title><%= content_for?(:title) ? yield(:title) : 'Title' %> - Cristianismo Bíblico</title>
+  <title><%= content_for?(:title) ? yield(:title) : event_name %> - <%= author %></title>
 
   <%= favicon_link_tag 'favicon.ico' %>
 
@@ -12,29 +24,44 @@
   <%= auto_discovery_link_tag :rss, posts_url(format: 'rss') %>
 
   <%# Windows 8 Tiles %>
-  <meta name="application-name" content="Conferencia 2015"/>
+  <meta name="application-name" content="<%= app_name %>"/>
   <meta name="msapplication-TileColor" content="#ffffff"/>
-  <meta name="msapplication-square70x70logo" content="/assets/tiny.png"/>
-  <meta name="msapplication-square150x150logo" content="/assets/square.jpg"/>
-  <meta name="msapplication-wide310x150logo" content="/assets/wide.jpg"/>
-  <meta name="msapplication-square310x310logo" content="/assets/large.jpg"/>
-  <meta name="msapplication-notification" content="frequency=30;polling-uri=http://notifications.buildmypinnedsite.com/?feed=http://registro.cristianismobiblico.com/posts.rss&amp;id=1;polling-uri2=http://notifications.buildmypinnedsite.com/?feed=http://registro.cristianismobiblico.com/posts.rss&amp;id=2;polling-uri3=http://notifications.buildmypinnedsite.com/?feed=http://registro.cristianismobiblico.com/posts.rss&amp;id=3;polling-uri4=http://notifications.buildmypinnedsite.com/?feed=http://registro.cristianismobiblico.com/posts.rss&amp;id=4;polling-uri5=http://notifications.buildmypinnedsite.com/?feed=http://registro.cristianismobiblico.com/posts.rss&amp;id=5; cycle=1"/>
+  <meta name="msapplication-square150x150logo" content="<%= asset_url 'icon_square.jpg' %>"/>
+  <meta name="msapplication-square310x310logo" content="<%= asset_url 'icon_large.jpg' %>"/>
+  <meta name="msapplication-square70x70logo" content="<%= asset_url 'icon_tiny.png' %>"/>
+  <meta name="msapplication-wide310x150logo" content="<%= asset_url 'icon_wide.jpg' %>"/>
+  <meta name="msapplication-notification"
+        content="frequency=60;polling-uri=<%= posts_url(format: 'rss') %>;"/>
 
   <%# iOS %>
-  <%= favicon_link_tag 'tiny.png', :rel => 'apple-touch-icon', :type => 'image/png' %>
+  <%= favicon_link_tag 'icon_tiny.png', :rel => 'apple-touch-icon', :type => 'image/png' %>
 
-  <%# Facebook
-  https://developers.facebook.com/tools/debug/og/object?q=registro.cristianismobiblico.com %>
-  <meta property="og:site_name" content="Cristianismo Bíblico"/>
-  <meta property="og:title" content="Title 2015" />
-  <meta property="og:description" content="En este sitio podrá registrarse para asistir a la conferencia." />
-  <meta property="og:image" content="<%= asset_url 'large.jpg' %>"/>
-  <%#meta property="og:locale" content="es_MX" /%>
-  <meta property="og:url" content="http://registro.cristianismobiblico.com/"/>
+  <!-- Twitter Card data -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="<%= twitter_creator %>" />
+  <meta name="twitter:title" content="<%= title %>" />
+  <meta name="twitter:description" content="<%= description %>" />
+  <meta name="twitter:creator" content="<%= twitter_creator %>" />
+  <%# Twitter Summary card images must be at least 200x200px %>
+  <meta name="twitter:image" content="<%= asset_url 'icon_wide.jpg' %>"/>
+
+  <!-- Open Graph data - Facebook -->
+  <%# https://developers.facebook.com/tools/debug/og/object?q=registro.cristianismobiblico.com %>
+  <%# recomm  1200 x 630px %>
+  <%# minimum  600 x 315 %>
+  <%# Ratio: 1.91:1 %>
+  <meta property="fb:app_id" content="<%= fb_id %>" />
+  <meta property="og:locale" content="<%= locale %>" />
+  <meta property="og:title" content="<%= title %>" />
+  <meta property="og:type" content="<%= type %>"/>
+  <meta property="og:url" content="<%= url %>"/>
+  <meta property="og:image" content="<%= asset_url 'icon_wide.jpg' %>"/>
+  <meta property="og:description" content="<%= description %>" />
+  <meta property="og:site_name" content="<%= author %>"/>
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="<%= content_for?(:description) ? yield(:description) : 'Cristianismo Bíblico' %>">
+  <meta name="description" content="<%= content_for?(:description) ? yield(:description) : author %>">
 </head>
 <body>
   <div id="modal-holder"></div>
@@ -45,7 +72,7 @@
         <div style="height: 19px;
                 margin-top: -21px;
                 margin-bottom: 21px;
-                background-image: url(<%= image_path 'uc.png' %>)">
+                background-image: url(<%= image_path 'nav_uc.png' %>)">
           <div style="font-size: large;
                   text-align: center;
                   color: white;
@@ -66,7 +93,7 @@
   </div>
   <footer class="footer divider-inside-top">
     <div class="container">
-      <p class="text-muted text-center"><i class="fa fa-copyright"></i> Cristianismo Bíblico 2015</p>
+      <p class="text-muted text-center"><i class="fa fa-copyright"></i> <%= author %> 2015-2017</p>
     </div>
   </footer>
 </body>

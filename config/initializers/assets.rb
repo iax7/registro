@@ -9,3 +9,8 @@ Rails.application.config.assets.version = '1.0'
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
+Rails.application.config.assets.precompile += %w( jquery.easing.min.js )
+Rails.application.config.assets.precompile += %w( jquery.flot.min.js )
+Rails.application.config.assets.precompile += %w( jquery.flot.time.min.js )
+Rails.application.config.assets.precompile += %w( jquery.flot.categories.min.js )
+Rails.application.config.assets.precompile += %w( jquery.flot.pie.min.js )
