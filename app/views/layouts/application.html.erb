@@ -1,100 +1,61 @@
 <!DOCTYPE html>
-<%
-  locale = 'es_MX'
-  app_name = "CB Conferencia #{Rails.application.config.reg_event_id}"
-  event_name = Rails.application.config.reg_event_name
-  title = "Registro a la #{event_name}"
-  type = 'website'
-  url = 'https://registro.cristianismobiblico.com'
-  description = 'En este sitio podrá crear su cuenta para asistir a la conferencia.'
-  author = Rails.application.config.reg_site_author
-  twitter_creator = '@C_Biblico'
-  fb_id = '297759137246012'
-%>
-<html>
+<html lang="es">
 <head>
-  <title><%= content_for?(:title) ? yield(:title) : event_name %> - <%= author %></title>
-
-  <%= favicon_link_tag 'favicon.ico' %>
-
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= csrf_meta_tags %>
-
-  <%= auto_discovery_link_tag :rss, posts_url(format: 'rss') %>
-
-  <%# Windows 8 Tiles %>
-  <meta name="application-name" content="<%= app_name %>"/>
-  <meta name="msapplication-TileColor" content="#ffffff"/>
-  <meta name="msapplication-square150x150logo" content="<%= asset_url 'icon_square.jpg' %>"/>
-  <meta name="msapplication-square310x310logo" content="<%= asset_url 'icon_large.jpg' %>"/>
-  <meta name="msapplication-square70x70logo" content="<%= asset_url 'icon_tiny.png' %>"/>
-  <meta name="msapplication-wide310x150logo" content="<%= asset_url 'icon_wide.jpg' %>"/>
-  <meta name="msapplication-notification"
-        content="frequency=60;polling-uri=<%= posts_url(format: 'rss') %>;"/>
-
-  <%# iOS %>
-  <%= favicon_link_tag 'icon_tiny.png', :rel => 'apple-touch-icon', :type => 'image/png' %>
-
-  <!-- Twitter Card data -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="<%= twitter_creator %>" />
-  <meta name="twitter:title" content="<%= title %>" />
-  <meta name="twitter:description" content="<%= description %>" />
-  <meta name="twitter:creator" content="<%= twitter_creator %>" />
-  <%# Twitter Summary card images must be at least 200x200px %>
-  <meta name="twitter:image" content="<%= asset_url 'icon_wide.jpg' %>"/>
-
-  <!-- Open Graph data - Facebook -->
-  <%# https://developers.facebook.com/tools/debug/og/object?q=registro.cristianismobiblico.com %>
-  <%# recomm  1200 x 630px %>
-  <%# minimum  600 x 315 %>
-  <%# Ratio: 1.91:1 %>
-  <meta property="fb:app_id" content="<%= fb_id %>" />
-  <meta property="og:locale" content="<%= locale %>" />
-  <meta property="og:title" content="<%= title %>" />
-  <meta property="og:type" content="<%= type %>"/>
-  <meta property="og:url" content="<%= url %>"/>
-  <meta property="og:image" content="<%= asset_url 'icon_wide.jpg' %>"/>
-  <meta property="og:description" content="<%= description %>" />
-  <meta property="og:site_name" content="<%= author %>"/>
 
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="<%= content_for?(:description) ? yield(:description) : author %>">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <%# favicon_link_tag 'favicon.ico' %>
+
+  <%= render 'layouts/meta' %>
+
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+  <%# FontAwesome 5 %>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+  <%= csrf_meta_tags %>
 </head>
+
 <body>
   <div id="modal-holder"></div>
-  <div id="wrap">
-      <header>
-        <%= render 'layouts/navigation' %>
-        <% if Rails.application.config.test_version %>
+  <div id="wrap"> <%# Footer_bottom wrapper %>
+    <%#--- Header ---%>
+    <header>
+      <%= render 'layouts/navigation' %>
+      <% if !Rails.env.production? %>
         <div style="height: 19px;
-                margin-top: -21px;
-                margin-bottom: 21px;
-                background-image: url(<%= image_path 'nav_uc.png' %>)">
+            margin-top: 0px;
+            margin-bottom: 19px;
+            background-image: url(<%= image_path 'nav_uc.png' %>)">
           <div style="font-size: large;
-                  text-align: center;
-                  color: white;
-                  text-shadow: 2px 2px 4px #000;
-                  font-weight: bolder;">Versión de Prueba</div>
+              text-align: center;
+              color: white;
+              text-shadow: 2px 2px 4px #000;
+              font-weight: bolder;">Test Version</div>
         </div>
-        <% end %>
+      <% end %>
+    </header>
 
-      </header>
-      <%=  yield :top if content_for? :top %>
-      <main role="main" style="padding-bottom: 20px;">
-        <div class="container">
-          <%= render 'layouts/messages' %>
-          <%= yield %>
-        </div>
-      </main>
-      <div id="push"></div>
+    <%=  yield :top if content_for? :top %>
+    <main role="main" style="margin-top: 16px;">
+      <div class="container mw-85">
+        <%= render 'layouts/messages' %>
+        <%= yield %>
+      </div>
+    </main>
+    <div id="push"></div>
   </div>
+
+  <%#--- Footer ---%>
   <footer class="footer divider-inside-top">
     <div class="container">
-      <p class="text-muted text-center"><i class="fa fa-copyright"></i> <%= author %> 2015-2017</p>
+      <p class="text-muted text-center">
+        <%= fa_text :copyright %> <%= Rails.configuration.app[:author] %> 2015-2018
+      </p>
     </div>
   </footer>
+  <%#--- /Footer ---%>
 </body>
+
 </html>

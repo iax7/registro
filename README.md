@@ -1,107 +1,115 @@
-# registro
+# README
 
-## Introduction
-WebApp to manage people registration to an event, that includes food consumption, 
-transportation services, donations and payments.
+This webapp was developed using the following tools, those are not required but
+can be a good baseline to start working in this project
 
-![welcome_page](/github/welcome_page.png) 
+* OS: `Fedora 28`
+* Ruby `2.5.1p57`
+* Postgres Docker Image `postgres:10.4`
 
-This is my first rails app, there is a lot room for improvement, 
-but I share it as a starting point for someone that has the same needs.
-
-## Installation
-
-### Local
-
-To run locally you need to have a postgres database available. You can use docker
-to have one really quick, you just need to run
-
+## Run Locally
+### Ubuntu 18.04 LTS Prerequisites
 ```bash
-docker run --name regdb -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres
+sudo apt-get install -y ruby build-essential patch ruby-dev zlib1g-dev liblzma-dev
+sudo apt-get install -y libpq-dev #PostgreSQL
+```
+### Fedora 28 Prerequisites
+```bash
+sudo dnf install -y gcc ruby ruby-devel zlib-devel rpm-build libpq-devel
+sudo dnf group install -y "C Development Tools and Libraries"
 ```
 
-Generate a development and test keys
+* Ensure you have **Ruby** and **NodeJS** installed.
+* Install bundler gem: `sudo gem install bundler`
+* Install all gem dependencies: `bundle install`
+* Edit the secrets variables 
+  * If you are starting over, create a configuration file
+    using `rails credentials:edit` and add the following content
+    (fill the `x`'s with your values):
+    ```yaml
+    secret_key_base: xxxxxxxx
+    google_key: xxxxxxxx
+    db_url: postgres://xxxxxxxx
+    api_user: xxxxxxxx
+    api_pass: xxxxxxxx
 
-```bash
-key=$(rake secret); sed -i "s/#secret_key_base/$key/g" config/secrets.yml
-``` 
+    smtp:
+      address: xxxxxx.xx.com
+      domain: xxxxxxxxxx.com
+      user_name: xxxx@xxxxxxxx.com
+      password: xxxxxxxx
+    ```
+  * If you have already a key create it in `/config´ folder
+    ```bash
+    echo '12345678900987654321' > config/master.key
+    ```
+* Start **postgresql** DB (with docker)
+    ```bash
+    docker run --name regdb -p 5432:5432 \
+           -e POSTGRES_PASSWORD=123 -e POSTGRES_USER=reg -e POSTGRES_DB=reg \
+           -v ~/data/regdb:/var/lib/postgresql/data -d postgres:10.4
+    ```
+* Intialize the db:
+    ```bash
+    rails db:migrate
+    rails db:seed
+    ```
+* If you want to generate random data run: `rails db:populate`
+* Run the project using `rails server`
+* You can login using admin account that was previously seed:
+    > admin@domain.com / changeme
 
-Run the following commands:
+### Create Test Database
+```
+docker run -it --rm -e PGPASSWORD=123 \
+           --link regdb:postgres postgres:10.4 \
+           createdb -h regdb -U reg --owner=postgres reg_test
+rails db:migrate RAILS_ENV=test
+```
+Run tests using: `rails test`
+
+## Run in Heroku
+For more information please visit the official [heroku page](https://devcenter.heroku.com/articles/getting-started-with-rails5#rake)
+* Set environmental Variables (for PROD):
+    ```bash
+    heroku config:set MAX_THREADS=1
+    heroku config:set MIN_THREADS=1
+    heroku config:set RACK_ENV=production
+    heroku config:set RAILS_ENV=production
+    heroku config:set RAILS_MASTER_KEY=xxxxxxxx
+    ```
+* Create the DB
+    ```bash
+    heroku rake db:schema:load
+    heroku rake db:seed
+    ```
+* You will have an administrator account already configured.
+  Login using the following credentials: `admin@domain.com:changeme`
+
+### Issues
+If the following error ocurrs while pushing your changes:
+```
+remote:        Downloading nokogiri-1.6.8.1 revealed dependencies not in the API or the
+remote:        lockfile (mini_portile2 (~> 2.1.0)).
+remote:        Either installing with `--full-index` or running `bundle update nokogiri` should
+remote:        fix the problem.
+```
+
+Just run:
 ```bash
+gem install nokogiri
 bundle install
-rails server
+bundle update
 ```
 
-### Heroku
-This app is heroku ready, you just need to clone this repository and run
-the following commands:
-
+### Maintenance
+Update Gems
 ```bash
-heroku apps:create app_name
-heroku buildpacks:set heroku/ruby
-heroku addons:create heroku-postgresql
-git push heroku master
-heroku run rake db:schema:load RAILS_ENV=production
-heroku run rake db:seed RAILS_ENV=production
+bundle update
+bundle install
 ```
 
-You will need to create environment variables in your heroku account,
-some of these are automatically created, just double check:
+## Documentation
 
-![DB Url](/github/vars.png)
-
-* `LANG` is mandatory, this value is the only one available and is actually spanish (my bad).
-* `MAX_THREADS` = 1
-* `MIN_THREADS` = 1
-* `PORT` = 80
-* `RACK_ENV` = production
-* `RAILS_ENV` = production
-* `RAILS_SERVE_STATIC_FILES` = enabled
-* `SMTP_PASS`, `SMTP_USER` is required if you want mail functionality
-* `TZ` use the time zone that you desire
-* `SECRET_GOOGLE_KEY` (optional, for google maps api)
-    
-## Configuration
-You would want to modify the app configuration variables, these are located
-in **config/app_config.yml**, the most important to start are the date variables.
-These triggers validations that hides or disables functionality, the best is to set
-them some time in the future.
-```yaml
-registration_starts:   '2017-08-20 00:00:00' #(String) Date when the "register" button is enabled
-registration_deadline: '2017-11-10 00:00:00' #(String) Allows new registrations until this
-food_deadline:         '2017-11-10 00:00:00' #(String) Allows food changes until this
-allocation_deadline:   '2017-11-10 00:00:00' #(String) Allows lodging changes until this
-transport_deadline:    '2017-11-10 00:00:00' #(String) Allows transportation changes until this
-event_ends:            '2017-11-20 14:00:00' #(String) Allows full app functionality until this
-adult_age:             11     #(integer) Age to charge full price
-event_full_price:      100    #(integer) Inscription fee
-food_full_price:       60     #(integer) Amount money to charge for food
-food_half_price:       30
-allocation_full_price: 100    #(integer) Amount money to charge for lodging
-allocation_half_price: 50
-transport_full_price:  10     #(integer) Amount money to charge for transportation
-max_allocation_men:    125    #(integer) Max amount of Men capacity to allocate
-max_allocation_women:  125    #(integer) Max amount of Women capacity to allocate
-max_food:              500    #(integer) Max people capacity to serve food
-max_people:            1200   #(integer) Max people capacity to attend the event
-api_user:              'user' #(string) API user name
-api_pass:              'pass' #(string) API password
-paycollectors: []  # (Array) People information that are allowed to charge the amount to paid
-```
-
-## Quick References
-### Restore a Backup
-```bash
-pg_restore --verbose --clean --no-acl --no-owner -h localhost -U 'postgres' -d 'postgres' backup.dump
-```
-
-## To Do
-
-* The project has no tests at all. This is very dangerous as the project gets bigger.
-* The app UI is in spanish even when the language is set in en-US.
-* Several UI messages are in the html file, this needs to be decoupled in Rails language files.
-
-## Contribute
-
-You are welcome to contribute in this project, I found these [Instructions](https://gist.github.com/MarcDiethelm/7303312) 
-very helpful.
+* [Database](docs/db.md)
+* [Security Map](docs/security.md)

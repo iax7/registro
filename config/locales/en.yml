@@ -16,84 +16,18 @@
 #
 # This would use the information in config/locales/es.yml.
 #
+# The following keys must be escaped otherwise they will not be retrieved by
+# the default I18n backend:
+#
+# true, false, on, off, yes, no
+#
+# Instead, surround them with single quotes.
+#
+# en:
+#   'true': 'foo'
+#
 # To learn more, please read the Rails Internationalization guide
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  activerecord:
-    models:
-      country: Country
-      person: Person
-      guest: Guest
-    attributes:
-      country:
-        name: Name
-        iso: ISO
-      church:
-        name: Name
-      state:
-        key: Key
-        name: Name
-        short: Short
-      config:
-        foodcost: '$ * Food'
-        allocationcost: '$ * Person * Night'
-        max_food: Max ammount food
-        max_allocation: Max ammount Allocation
-        fooddeadline: Food Deadline
-        allocationdeadline: Allocation Deadline
-      hotel:
-        name: Name
-        address: Address
-        phone: Phone
-        email: Email
-        cost: Cost
-        url: Web
-        has_discount: Discount
-        gmaps: Maps
-        comments: Comments
-      person:
-        name: Name(s)
-        lastname: LastName
-        nickname: Nickname
-        email: Email
-        phone: Phone
-        country: Country
-        state: State
-        city: City
-        comments: Comments
-        ismale: Gender
-        church: Church
-        age: Age
-        password: Password
-        password_confirmation: Confirm Password
-        assist_v: Assist
-        amount_paid: Amount Paid
-      guest:
-        name: Name
-        nickname: Nickname
-        relation: Relationship
-        relations:
-          family: Relative
-          friend: Friend
-          other: Other
-        ismale: Gender
-        age: Age
-      food:
-        v1: Breakfast
-        v2: Lunch
-        v3: Dinner
-        s1: Breakfast
-        s2: Lunch
-        s3: Dinner
-        d1: Breakfast
-        d2: Lunch
-        d3: Dinner
-        l1: Breakfast
-        l2: Lunch
-        l3: Dinner
-      allocation:
-        option: Option
-        n1: Adult
-        n2: Child
-        n3: Infant
+  hello: "Hello world"

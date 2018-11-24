@@ -1,0 +1,43 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: Administrator
+  lastname: Account
+  nick: Admin
+  is_male: true
+  dob: 1/1/1980
+  email: admin@domain.com
+  phone: 1234567890
+  is_admin: true
+  password_digest: <%= BCrypt::Password.create('changeme') %>
+  country: México
+  state: Jalisco
+  city: Guadalajara
+
+two:
+  name: Esteban
+  lastname: Granados
+  nick: dido
+  is_male: true
+  dob: 12/12/1981
+  email: esteban@gmail.com
+  phone: 33123456
+  is_admin: false
+  password_digest: <%= BCrypt::Password.create('secret') %>
+  country: España
+  state: Valencia
+  city: Madrid
+
+three:
+  name: Alejandra
+  lastname: Carranco
+  nick: ale
+  is_male: false
+  dob: 12/12/1990
+  email: alejandra@outlook.com
+  phone: 33123456
+  is_admin: false
+  password_digest: <%= BCrypt::Password.create('secret') %>
+  country: Argentina
+  state: Patagonia
+  city: Buenos Aires

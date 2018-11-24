@@ -1,0 +1,20 @@
+---
+default: &default
+  author:      'Cristianismo Bíblico'
+  author_home: 'http://www.cristianismobiblico.com/'
+  twitter_id:  '@C_Biblico'
+  facebk_id:   '297759137246012'
+  site_url:    'registro.cristianismobiblico.com'
+
+  default_url: 'https://registro.cristianismobiblico.com'
+  mailer_from_addr: 'Registro Cristianismo Biblico <registro@cristianismobiblico.com>'
+  letsencrypt: none
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default

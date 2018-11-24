@@ -1,0 +1,21 @@
+$('#registryForm').remove();
+$("#regComments").text( '<%= j @registry.comments %>');
+$("#regOffering").text( '<%= j number_to_currency(@registry.amount_offering, precision: 0) %>');
+$("#registryDiv").show();
+
+$("#lbl_grand_total").text( '<%= j dim_zeros_currency @registry.grand_total, decimals: 0 %>');
+$("#lbl_paid").text( '<%= j dim_zeros_currency @registry.amount_paid, decimals: 0 %>');
+$("#lbl_remaining").text( '<%= j dim_zeros_currency @registry.amount_remaining, decimals: 0 %>');
+
+//Amount Paid
+$("#mainModal").on('hidden.bs.modal', function() {
+    //this.remove();
+    //window.location.replace("<%= registries_path %>");
+    Turbolinks.visit(location.toString());
+    setTimeout(function() {
+        $("#row_<%= @registry.id %>").addClass('table-warning').fadeOut(function () {
+            $(this).removeClass("table-warning").addClass('table-default').fadeIn('fast');
+        });
+    }, 150);
+});
+$("#mainModal").modal('hide');

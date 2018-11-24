@@ -1,1 +1,3 @@
-json.extract! @guest, :id, :created_at, :updated_at
+# frozen_string_literal: true
+
+json.partial! 'guests/guest', guest: @guest

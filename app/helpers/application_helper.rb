@@ -1,54 +1,82 @@
+# frozen_string_literal: true
+
+# Default rails helper
 module ApplicationHelper
-  def dimzeros(num, custom_char_zero = '0')
-    if num == 0
-      "<span class=\"text-muted\">#{custom_char_zero}</span>".html_safe
-    else
-      num
+  def set_session_vars(user_id, is_admin, reg_id = nil)
+    session[:user_id] = user_id
+    session[:is_admin] = is_admin
+    session[:reg_id] = reg_id
+  end
+
+  def session_active?
+    session[:user_id].present?
+  end
+
+  def session_id
+    session_active? ? session[:user_id] : nil
+  end
+
+  def session_reg
+    session_active? ? session[:reg_id] : nil
+  end
+
+  def admin?
+    session[:is_admin]
+  end
+
+  def my_reg?(reg_id)
+    session_reg == reg_id
+  end
+
+  def fa_text(icon_name, text = nil, class_name: nil, style: nil)
+    name = icon_name.is_a?(Symbol) ? icon_name.to_s.tr('_', '-') : icon_name
+    text = "&nbsp;#{text}" unless text.nil?
+    # Named Args
+    style_text = %( style="#{style}") unless style.nil?
+    fa_icon = name.gsub(/fa-/, '')
+
+    %(<i class="fas fa-#{fa_icon} fa-fw #{class_name}"#{style_text} aria-hidden="true"></i>#{text}).html_safe
+  end
+
+  # NAV -----------------------------------------------------------
+  def nav_li_link(text, link_path)
+    active_class = current_page?(link_path) ? 'active' : ''
+
+    content_tag(:li, class: "nav-item #{active_class}") do
+      link_to text, link_path, class: 'nav-link'
     end
   end
 
-  def paid_format_colors(paid, to_paid)
-    format = case
-                 when paid == to_paid then 'text-success'
-                 when paid < to_paid  then 'text-danger'
-                 when paid > to_paid  then 'text-warning'
-                 when paid == 0       then 'text-muted'
-             end
-    "<span class=\"#{format}\">#{number_to_currency paid}</span>".html_safe
+  def nav_dropdown_link(text, link_path)
+    active_class = current_page?(link_path) ? 'active' : ''
+    link_to text, link_path, class: "dropdown-item #{active_class}"
   end
 
-  # To deprecate
-  def paid(person)
-    if person.is_paid
-      '<i class="fa fa-check text-success"\></i>'.html_safe
+  def show_sex_symbol(is_male, show_text: false, short: false)
+    text = show_text ? sex_text(is_male, short: short) : ''
+    if is_male
+      %(<i class="fas fa-male"></i>#{text}).html_safe
     else
-      amount = number_to_currency person.amount_paid
-      "#{amount}".html_safe
+      %(<i class="fas fa-female female-color"></i>#{text}).html_safe
     end
   end
 
-  def show_sex_symbol(ismale)
-    if ismale
-      '<i class="fa fa-male fa-fw"></i>'.html_safe
-    else
-      '<i class="fa fa-female female-color fa-fw"></i>'.html_safe
-    end
+  def sex_text(is_male, short: false)
+    text = '&nbsp;'
+    text + if short
+             is_male ? t('common.male_short') : t('common.female_short')
+           else
+             is_male ? t('common.male') : t('common.female')
+           end
   end
 
-  def render_bool(is_true)
-    if is_true
-      '<i class="fa fa-check text-success"></i>'.html_safe
+  def render_bool(value, render_false = true, options = {})
+    if value
+      color = options.key?(:colorless) ? '' : 'text-success'
+      %(<i class="fas fa-check #{color}"></i>).html_safe
     else
-      #'<span class="glyphicon glyphicon-ban-circle text-danger" />'.html_safe
-      '<i class="fa fa-times text-danger"></i>'.html_safe
-    end
-  end
-
-  def render_bool_text(is_true)
-    if is_true
-      'Sí'
-    else
-      'No'
+      color = options.key?(:colorless) ? '' : 'text-danger'
+      %(<i class="fas fa-times #{color}"></i>).html_safe if render_false
     end
   end
 
@@ -60,84 +88,55 @@ module ApplicationHelper
     end
   end
 
-  def get_gravatar_src(email, size = 60)
-    require 'digest/md5'
-    email_address = email.downcase
-    hash = Digest::MD5.hexdigest(email_address)
-    "http://www.gravatar.com/avatar/#{hash}?s=#{size}"
+  def dim_zeros(number, custom_char_zero = '0')
+    return number unless number.zero?
+
+    %(<span class="text-muted">#{custom_char_zero}</span>).html_safe
   end
 
-  def expand_totals_label(text)
-    case text
-      when 'C'
-        return 'Confirmados'
-      when 'A'
-        return 'Todos'
-      when 'N'
-        return 'Cancelados'
-      when 'P'
-        return 'Asistieron'
-      when 'CR'
-        return 'Con Restantes'
-      when 'AR'
-        return 'Tod Restantes'
-    end
+  def dim_zeros_currency(number, decimals: 0)
+    return number_to_currency(number, precision: decimals).html_safe unless number.zero?
+
+    %(<span class="text-muted">#{number_to_currency 0, precision: decimals}</span>).html_safe
   end
 
-  def markdown(textmd)
-    options = {
-        filter_html:     false,
-        xhtml:            true,
-    }
+  def paid_format_colors(paid, to_pay, decimals: 0)
+    amount  = paid.nil? ? 0 : paid
+    pending = to_pay.nil? ? 0 : to_pay
+    class_name = case amount <=> pending
+                 when 0 then 'text-success'
+                 when -1 then 'text-danger'
+                 when 1 then 'text-warning'
+                 end
+    # class_name = 'text-muted' if amount.zero?
 
-    renderer = Redcarpet::Render::HTML.new(options)
-    markdown = Redcarpet::Markdown.new(renderer, extensions = {})
-
-    markdown.render(textmd).html_safe
+    %(<span class="#{class_name}">#{number_to_currency paid, precision: decimals}</span>).html_safe
   end
 
-  def render_fa_image(string)
-    groups = /{(fa-\w+)}(.*)/.match(string)
-    if groups.nil?
-      string
-    else
-      "<i class='fa #{groups[1]}' aria-hidden='true'></i>#{groups[2]}".html_safe
-    end
+  def make_bold(text, make_it = true)
+    return text.html_safe unless make_it
+
+    %(<strong>#{text}</strong>).html_safe
+  end
+
+  def icon_cost_render(bool, text)
+    return unless bool
+
+    check_box_html = %(<span class="fas fa-check text-success bool"></span>)
+    %(#{check_box_html}<span class="text-muted cost" style="display: none;">#{dim_zeros text, '-'}</span>).html_safe
+  end
+
+  def hash_to_dots(hash)
+    json_str = hash.to_json
+    JSON.parse(json_str, object_class: OpenStruct)
   end
 
   def api_auth_base64
-    auth = "#{Rails.application.config.api_user}:#{Rails.application.config.api_pass}"
+    auth = "#{Rails.application.credentials.api_user}:#{Rails.application.credentials.api_pass}"
     Base64.strict_encode64 auth
   end
 
-  def fa_with_text(icon_name, text, icon_back = nil)
-    # %r() is another way to write a regular expression.
-    # %q() is another way to write a single-quoted string (and can be multi-line, which is useful)
-    # %Q() gives a double-quoted string and escapes double quotes
-    # %() or %[] or %{} is like %Q
-    # %x() is a shell command
-    # %i() gives an array of symbols (Ruby >= 2.0.0)
-    # %s() turns foo into a symbol (:foo)
-    if icon_back.nil?
-      if icon_name == ''
-        %Q(<i class="fa fa-square fa-fw" style="visibility: hidden;" aria-hidden="true"></i>&nbsp;#{text}).html_safe
-      else
-        %Q(<i class="fa fa-#{icon_name} fa-fw" aria-hidden="true"></i>&nbsp;#{text}).html_safe
-      end
-    else
-      %Q(<span class="fa-stack fa-lg">
-           <i class="fa fa-#{icon_back} fa-stack-2x"></i>
-           <i class="fa fa-#{icon_name} fa-stack-1x fa-inverse"></i>
-         </span>&nbsp;#{text}).html_safe
-    end
+  def badge_class(bool)
+    bool ? 'info' : 'danger'
   end
-
-  def nav_li_link(text, link_path)
-    active_class = current_page?(link_path) ? 'active' : ''
-
-    content_tag(:li, :class => active_class) do
-      link_to text, link_path
-    end
-  end
-
 end

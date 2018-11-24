@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,212 +10,149 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160930022218) do
+ActiveRecord::Schema.define(version: 2018_10_03_215020) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "citext"
   enable_extension "plpgsql"
+  enable_extension "unaccent"
 
-  create_table "allocations", force: :cascade do |t|
-    t.integer  "n1"
-    t.integer  "n2"
-    t.integer  "n3"
-    t.integer  "person_id"
+  create_table "events", force: :cascade do |t|
+    t.string "name"
+    t.integer "f_v1"
+    t.integer "f_v2"
+    t.integer "f_v3"
+    t.integer "f_s1"
+    t.integer "f_s2"
+    t.integer "f_s3"
+    t.integer "f_d1"
+    t.integer "f_d2"
+    t.integer "f_d3"
+    t.integer "f_l1"
+    t.integer "f_l2"
+    t.integer "f_l3"
+    t.integer "t_v1", default: 0
+    t.integer "t_v2", default: 0
+    t.integer "t_s1", default: 0
+    t.integer "t_s2", default: 0
+    t.integer "t_d1", default: 0
+    t.integer "t_d2", default: 0
+    t.integer "t_l1", default: 0
+    t.integer "t_l2", default: 0
+    t.integer "l_v"
+    t.integer "l_s"
+    t.integer "l_d"
+    t.integer "l_l"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "option"
+    t.jsonb "settings", default: {}, null: false
+    t.index ["settings"], name: "index_events_on_settings", using: :gin
   end
-
-  add_index "allocations", ["person_id"], name: "index_allocations_on_person_id", using: :btree
-
-  create_table "churches", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "configs", force: :cascade do |t|
-    t.integer  "foodcost"
-    t.integer  "allocationcost"
-    t.datetime "fooddeadline"
-    t.datetime "allocationdeadline"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-    t.integer  "max_food"
-    t.integer  "max_allocation"
-  end
-
-  create_table "countries", force: :cascade do |t|
-    t.string   "name"
-    t.string   "iso"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "foodreals", force: :cascade do |t|
-    t.integer  "v1",         default: 0
-    t.integer  "v2",         default: 0
-    t.integer  "v3",         default: 0
-    t.integer  "s1",         default: 0
-    t.integer  "s2",         default: 0
-    t.integer  "s3",         default: 0
-    t.integer  "d1",         default: 0
-    t.integer  "d2",         default: 0
-    t.integer  "d3",         default: 0
-    t.integer  "l1",         default: 0
-    t.integer  "l2",         default: 0
-    t.integer  "l3",         default: 0
-    t.integer  "v1c",        default: 0
-    t.integer  "v2c",        default: 0
-    t.integer  "v3c",        default: 0
-    t.integer  "s1c",        default: 0
-    t.integer  "s2c",        default: 0
-    t.integer  "s3c",        default: 0
-    t.integer  "d1c",        default: 0
-    t.integer  "d2c",        default: 0
-    t.integer  "d3c",        default: 0
-    t.integer  "l1c",        default: 0
-    t.integer  "l2c",        default: 0
-    t.integer  "l3c",        default: 0
-    t.integer  "person_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-  end
-
-  add_index "foodreals", ["person_id"], name: "index_foodreals_on_person_id", using: :btree
-
-  create_table "foods", force: :cascade do |t|
-    t.integer  "v1"
-    t.integer  "v2"
-    t.integer  "v3"
-    t.integer  "s1"
-    t.integer  "s2"
-    t.integer  "s3"
-    t.integer  "d1"
-    t.integer  "d2"
-    t.integer  "d3"
-    t.integer  "l1"
-    t.integer  "l2"
-    t.integer  "l3"
-    t.integer  "person_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer  "v1c"
-    t.integer  "v2c"
-    t.integer  "v3c"
-    t.integer  "s1c"
-    t.integer  "s2c"
-    t.integer  "s3c"
-    t.integer  "d1c"
-    t.integer  "d2c"
-    t.integer  "d3c"
-    t.integer  "l1c"
-    t.integer  "l2c"
-    t.integer  "l3c"
-  end
-
-  add_index "foods", ["person_id"], name: "index_foods_on_person_id", using: :btree
 
   create_table "guests", force: :cascade do |t|
-    t.string   "name"
-    t.string   "nickname"
-    t.integer  "age"
+    t.bigint "registry_id"
+    t.string "name", null: false
+    t.string "lastname", null: false
+    t.string "nick", null: false
+    t.boolean "is_male", null: false
+    t.integer "age", null: false
+    t.integer "relation"
+    t.boolean "is_pregnant", default: false, null: false
+    t.boolean "is_medicated", default: false, null: false
+    t.boolean "f_v1", default: false, null: false
+    t.boolean "f_v2", default: false, null: false
+    t.boolean "f_v3", default: false, null: false
+    t.boolean "f_s1", default: false, null: false
+    t.boolean "f_s2", default: false, null: false
+    t.boolean "f_s3", default: false, null: false
+    t.boolean "f_d1", default: false, null: false
+    t.boolean "f_d2", default: false, null: false
+    t.boolean "f_d3", default: false, null: false
+    t.boolean "f_l1", default: false, null: false
+    t.boolean "f_l2", default: false, null: false
+    t.boolean "f_l3", default: false, null: false
+    t.boolean "t_v1", default: false, null: false
+    t.boolean "t_v2", default: false, null: false
+    t.boolean "t_s1", default: false, null: false
+    t.boolean "t_s2", default: false, null: false
+    t.boolean "t_d1", default: false, null: false
+    t.boolean "t_d2", default: false, null: false
+    t.boolean "t_l1", default: false, null: false
+    t.boolean "t_l2", default: false, null: false
+    t.boolean "l_v", default: false, null: false
+    t.boolean "l_s", default: false, null: false
+    t.boolean "l_d", default: false, null: false
+    t.boolean "l_l", default: false, null: false
+    t.string "l_room"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "person_id"
-    t.boolean  "ismale"
-    t.integer  "relation"
+    t.integer "fu_v1", default: 0, null: false
+    t.integer "fu_v2", default: 0, null: false
+    t.integer "fu_v3", default: 0, null: false
+    t.integer "fu_s1", default: 0, null: false
+    t.integer "fu_s2", default: 0, null: false
+    t.integer "fu_s3", default: 0, null: false
+    t.integer "fu_d1", default: 0, null: false
+    t.integer "fu_d2", default: 0, null: false
+    t.integer "fu_d3", default: 0, null: false
+    t.integer "fu_l1", default: 0, null: false
+    t.integer "fu_l2", default: 0, null: false
+    t.integer "fu_l3", default: 0, null: false
+    t.integer "tu_v1", default: 0, null: false
+    t.integer "tu_v2", default: 0, null: false
+    t.integer "tu_s1", default: 0, null: false
+    t.integer "tu_s2", default: 0, null: false
+    t.integer "tu_d1", default: 0, null: false
+    t.integer "tu_d2", default: 0, null: false
+    t.integer "tu_l1", default: 0, null: false
+    t.integer "tu_l2", default: 0, null: false
+    t.integer "lu_v", default: 0, null: false
+    t.integer "lu_s", default: 0, null: false
+    t.integer "lu_d", default: 0, null: false
+    t.integer "lu_l", default: 0, null: false
+    t.index ["registry_id"], name: "index_guests_on_registry_id"
   end
 
-  add_index "guests", ["person_id"], name: "index_guests_on_person_id", using: :btree
-
-  create_table "hotels", force: :cascade do |t|
-    t.string   "name"
-    t.string   "address"
-    t.string   "phone"
-    t.string   "email"
-    t.string   "cost"
-    t.string   "url"
-    t.string   "gmaps"
-    t.string   "comments"
-    t.boolean  "has_discount"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-  end
-
-  create_table "people", force: :cascade do |t|
-    t.string   "name"
-    t.string   "lastname"
-    t.string   "nickname"
-    t.string   "email"
-    t.string   "phone"
-    t.string   "country"
-    t.string   "state"
-    t.string   "city"
-    t.string   "comments"
-    t.boolean  "isconfirmed"
-    t.boolean  "ispresent"
-    t.boolean  "isnotified"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.string   "password"
-    t.string   "salt"
-    t.boolean  "ismale"
-    t.string   "church"
-    t.boolean  "isadmin"
-    t.boolean  "assist_v"
-    t.boolean  "assist_s"
-    t.boolean  "assist_d"
-    t.boolean  "assist_l"
-    t.integer  "amount_paid"
-    t.integer  "age"
-    t.integer  "changed_by"
-    t.boolean  "iscancelled"
-    t.integer  "offering"
-  end
-
-  create_table "posts", force: :cascade do |t|
-    t.string   "author"
-    t.string   "title"
-    t.string   "content"
+  create_table "registries", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "event_id"
+    t.text "comments"
+    t.boolean "is_confirmed"
+    t.boolean "is_present"
+    t.boolean "is_notified"
+    t.integer "amount_debt"
+    t.integer "amount_paid"
+    t.integer "amount_offering"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "paid_by"
+    t.index ["event_id"], name: "index_registries_on_event_id"
+    t.index ["user_id"], name: "index_registries_on_user_id"
   end
 
-  create_table "states", force: :cascade do |t|
-    t.string   "key"
-    t.string   "name"
-    t.string   "short"
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.string "lastname"
+    t.string "nick"
+    t.boolean "is_male", default: true, null: false
+    t.date "dob"
+    t.string "email", null: false
+    t.string "phone"
+    t.boolean "is_admin", default: false
+    t.string "password_digest"
+    t.string "password_reset_token"
+    t.datetime "password_reset_sent_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "country"
+    t.string "state"
+    t.string "city"
+    t.index ["email"], name: "index_users_on_email"
+    t.index ["lastname"], name: "index_users_on_lastname"
+    t.index ["name"], name: "index_users_on_name"
   end
 
-  create_table "towns", force: :cascade do |t|
-    t.string   "key"
-    t.string   "name"
-    t.string   "short"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "transports", force: :cascade do |t|
-    t.integer  "v1",         default: 0
-    t.integer  "v2",         default: 0
-    t.integer  "s1",         default: 0
-    t.integer  "s2",         default: 0
-    t.integer  "d1",         default: 0
-    t.integer  "d2",         default: 0
-    t.integer  "l1",         default: 0
-    t.integer  "l2",         default: 0
-    t.integer  "person_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-  end
-
-  add_index "transports", ["person_id"], name: "index_transports_on_person_id", using: :btree
-
-  add_foreign_key "allocations", "people"
-  add_foreign_key "foodreals", "people"
-  add_foreign_key "foods", "people"
-  add_foreign_key "guests", "people"
-  add_foreign_key "transports", "people"
+  add_foreign_key "guests", "registries"
+  add_foreign_key "registries", "events"
+  add_foreign_key "registries", "users"
 end

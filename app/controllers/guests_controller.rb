@@ -1,40 +1,41 @@
+# frozen_string_literal: true
+
+# Handles Guest Model
 class GuestsController < ApplicationController
+  before_action :confirm_logged_in
+  before_action :require_admin, only: [:index]
   before_action :set_guest, only: [:show, :edit, :update, :destroy]
 
   # GET /guests
   # GET /guests.json
   def index
-    redirect_to_session
+    @guests = Guest.all
   end
 
   # GET /guests/1
   # GET /guests/1.json
-  def show
-  end
+  def show; end
 
   # GET /guests/new
   def new
-    set_person
-    # if is not admin can't modify another guests
-    redirect_to_session unless is_admin
-    @guest = @person.guests.new
+    @guest = Guest.new
   end
 
   # GET /guests/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /guests
   # POST /guests.json
   def create
-    set_person
-    @guest = @person.guests.new(guest_params)
+    @guest = Guest.new(guest_params)
 
+    puts @guest.inspect
     respond_to do |format|
       if @guest.save
-        format.html { person_services_redirect @guest.person_id, 'Invitado', 'creado' }
+        format.html { redirect_to define_redirection_create_update, notice: t('.notice') }
         format.json { render :show, status: :created, location: @guest }
       else
+        flash.alert = t 'common.error_create'
         format.html { render :new }
         format.json { render json: @guest.errors, status: :unprocessable_entity }
       end
@@ -46,9 +47,10 @@ class GuestsController < ApplicationController
   def update
     respond_to do |format|
       if @guest.update(guest_params)
-        format.html { person_services_redirect @guest.person_id, 'Invitado', 'actualizado' }
+        format.html { redirect_to define_redirection_create_update, notice: t('.notice') }
         format.json { render :show, status: :ok, location: @guest }
       else
+        flash.alert = t 'common.error_update'
         format.html { render :edit }
         format.json { render json: @guest.errors, status: :unprocessable_entity }
       end
@@ -60,36 +62,64 @@ class GuestsController < ApplicationController
   def destroy
     @guest.destroy
     respond_to do |format|
-      format.html { person_services_redirect @guest.person_id, 'Invitado', 'eliminado' }
+      format.html { redirect_to start_path, notice: t('.notice') }
       format.json { head :no_content }
     end
   end
 
   private
-    def redirect_to_session
-      id = session_id
-      return if id == 'redirected'
-      if @person.id != id
-        redirect_to person_path(session_id)
-      end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_guest
+    @guest = Guest.find params[:id]
+    puts @guest.inspect
+  end
+
+  def define_redirection_create_update
+    is_same_registry = @guest.registry_id == session[:reg_id]
+    if helpers.admin?
+      start_path if is_same_registry
+      registry_path @guest.registry_id
+    else
+      start_path
+    end
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def guest_params
+    is_new = params[:guest][:registry_id].empty?
+    params[:guest][:relation] = params[:guest][:relation].to_i
+
+    if helpers.admin?
+      params[:guest][:registry_id] = params[:registry_id] if is_new
+    else
+      params[:guest][:registry_id] = session[:reg_id]
     end
 
-    def set_person
-      person_id = params[:person_id].to_i
-      @person = Person.find person_id
-    end
-
-    def set_guest
-      set_person
-      # if is not admin can't modify another guests
-      redirect_to_session unless is_admin
-
-      id = params[:id].to_i
-      @guest = @person.guests.find id
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def guest_params
-      params.require(:guest).permit(:name, :nickname, :relation, :ismale, :age, :person)
-    end
+    params.require(:guest).permit(:registry_id,
+                                  :name, :lastname, :nick, :is_male, :age,
+                                  :relation, :is_pregnant, :is_medicated,
+                                  :f_v1, :f_v2, :f_v3,
+                                  :f_s1, :f_s2, :f_s3,
+                                  :f_d1, :f_d2, :f_d3,
+                                  :f_l1, :f_l2, :f_l3,
+                                  :t_v1, :t_v2,
+                                  :t_s1, :t_s2,
+                                  :t_d1, :t_d2,
+                                  :t_l1, :t_l2,
+                                  :l_v, :l_s, :l_d, :l_l,
+                                  :l_room,
+                                  :fu_v1, :fu_v2, :fu_v3,
+                                  :fu_s1, :fu_s2, :fu_s3,
+                                  :fu_d1, :fu_d2, :fu_d3,
+                                  :fu_l1, :fu_l2, :fu_l3,
+                                  :tu_v1, :tu_v2,
+                                  :tu_s1, :tu_s2,
+                                  :tu_d1, :tu_d2,
+                                  :tu_l1, :tu_l2,
+                                  :lu_v,
+                                  :lu_s,
+                                  :lu_d,
+                                  :lu_l)
+  end
 end

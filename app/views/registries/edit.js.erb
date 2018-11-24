@@ -1,0 +1,14 @@
+$("#registryDiv").hide().after('<%= j render("form", registry: @registry) %>');
+
+if (<%= @registry.paid? %>) {
+    $("#registry_amount_offering").prop('disabled', true);
+}
+
+//modifies the Cancel default action
+$("#registryForm").find(".btn-outline-secondary").click(function() {
+    $("#registryForm").remove();
+    $("#registryDiv").show();
+    return false;
+});
+
+

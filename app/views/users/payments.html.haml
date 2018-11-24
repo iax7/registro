@@ -1,0 +1,26 @@
+-# frozen_string_literal: true
+%section#payments
+  %h3= fa_text :dollar_sign, 'Pagos'
+  .table-responsive
+    %table.table.table-bordered.table-sm
+      %thead.thead-dark
+        %tr.text-center
+          %th Id
+          %th Persona
+          %th Localidad
+          %th Cantidad
+      %tbody
+        - @pay_collectors.each do |p|
+          %tr
+            %td.text-right= p['id']
+            %td= p['name']
+            %td= p['location']
+            %td.text-right.text-monospace.h5= number_to_currency p['amount'], precision: 0, unit: ''
+      %tfoot
+        %tr
+          %td.border-0
+          %td.border-0
+          %td.text-right.border-0
+            %strong Total:
+          %td.text-right
+            %strong.text-monospace.h5= number_to_currency @sum, precision: 0

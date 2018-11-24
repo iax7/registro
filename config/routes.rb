@@ -1,75 +1,60 @@
-Rails.application.routes.draw do
-  root 'welcome#index'
+# frozen_string_literal: true
 
-  get 'apiclient/ui'
+Rails.application.routes.draw do
+  root 'main#index'
+
+  resources :registries do
+    get :totals, on: :collection
+    get :totals_food, on: :collection
+    get :list_lodging, on: :collection
+    get :list_transport, on: :collection
+    get :edit_payment
+    resources :guests # , shallow: true # only: [:index, :new, :create]
+  end
+  resources :users do
+    get :payments, on: :collection
+  end
+
+  get 'autocomplete/countries/:string' => 'autocomplete#countries', as: :autocomplete_countries
+  get 'autocomplete/states/:string' => 'autocomplete#states', as: :autocomplete_states
+  get 'autocomplete/cities/:string' => 'autocomplete#cities', as: :autocomplete_cities
+
+  # Session Routes -------------------------------------------------------------
+  get 'login' => 'access#login', as: 'login'
+  get 'logout' => 'access#logout', as: 'logout'
+  post 'access/attempt_login'
+  match 'access/reset_request' => 'access#reset_request', as: :reset_request, via: [:get, :post]
+  match 'access/reset(/:token)' => 'access#reset', as: :access_reset, via: [:get, :post]
+
+  # API Routes -----------------------------------------------------------------
+  get 'apiui/index'
   scope '/api' do
     scope '/v1' do
-      get 'ping' => 'base_api#ping'
-      get 'auth' => 'base_api#auth'
-      put 'assist/:id' => 'base_api#assist', as: 'api_assist'
-      put 'food/:day/:time/:id' => 'base_api#food'
-      put 'food_correction/:day/:time/:id(/:commit)' => 'base_api#food_correction'
-      get 'cancel/:hash' => 'base_api#cancel'
-      get 'make_admin/:id(/:commit)' => 'base_api#make_admin', as: 'make_admin'
+      get 'ping' => 'api#ping'
+      get 'change_pwd/:user_id/:password' => 'api#change_pwd'
+      get 'admin/:id(/:commit)' => 'api#admin'
+      get 'cancel/:hash' => 'api#cancel'
+      put 'assist/:id' => 'api#assist'
+      put 'food/:day/:time/:id' => 'api#food'
+      put 'food_correction/:day/:time/:id(/:commit)' => 'api#food_correction'
     end
   end
 
-  resources :allocations
-  resources :churches
-  resources :configs
-  resources :countries
-  resources :posts
-  resources :transports
-  resources :foods do
-    get 'totals', on: :collection
-  end
-  #resources :guests
-  resources :hotels do
-    get 'show_all', on: :collection
-  end
-  resources :states
-  resources :people do
-    get :autocomplete_country_name, on: :collection
-    get :autocomplete_church_name, on: :collection
-    get :autocomplete_state_name, on: :collection
-    resources :guests
-    get :payments, on: :collection
-    get :totals, on: :collection
-    get :comments, on: :collection
-    get :graphs, on: :collection
-  end
+  # Admin --------------------------------------------------------------------------
+  resources :events
 
-  get 'schedule' => 'welcome#schedule', as: 'schedule'
-
-  get 'food_totals/:percent' => 'foods#totals', as: 'food_totals'
-
-  get 'welcome/index'
-  get 'mydata' => 'people#show', as: 'view_person'
-  get 'editmydata' => 'people#edit', as: 'editmydata'
-
-  # Reportes routes-----------------------------------------------------------------
-  get 'registros' => 'reports#registros', as: 'registros'
-  get 'gafete(/:id(/:inline))' => 'reports#gafete', as: 'gafete'
-  get 'gafete_bulk' => 'reports#gafete_bulk', as: :gafete_bulk
-
-  # Session Routes -----------------------------------------------------------------
-  get 'login' => 'welcome#login', as: 'login'
-  post 'login' => 'welcome#login'
-  get 'logout' => 'welcome#logout', as: 'logout'
-  get 'reset/:id/:verify' => 'welcome#reset', as: 'reset'
-  post 'reset' => 'welcome#reset'
-  get 'recover' => 'welcome#recover', as: 'recover'
-  post 'recover' => 'welcome#recover'
-  get 'helpadmin' => 'welcome#helpadmin', as: 'helpadmin'
-
-  # Errors Routes ------------------------------------------------------------------
-  get 'errors/file_not_found'
-  get 'errors/unprocessable'
-  get 'errors/internal_server_error'
-  match '/404', to: 'errors#file_not_found', via: :all
-  match '/422', to: 'errors#unprocessable', via: :all
-  match '/500', to: 'errors#internal_server_error', via: :all
+  # Reports ------------------------------------------------------------------------
+  get 'badge(/:id(/:inline))' => 'reports#badge', as: 'badge'
+  get 'badge_bulk' => 'reports#badge_bulk', as: 'badge_bulk'
 
   # Let's Encrypt ------------------------------------------------------------------
-  get '/.well-known/acme-challenge/:id' => 'welcome#letsencrypt'
+  get '/.well-known/acme-challenge/:id' => 'main#letsencrypt'
+
+  # Errors Routes ------------------------------------------------------------------
+  # if Rails.env.production?
+  get '/404', to: 'errors#not_found'
+  get '/422', to: 'errors#unprocessable'
+  get '/500', to: 'errors#internal_server_error'
+
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

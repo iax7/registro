@@ -1,0 +1,28 @@
+-# frozen_string_literal: true
+- content_for :title do
+  = t '.title'
+
+%h2.text-center
+  = t '.title'
+= form_tag access_attempt_login_path, method: :post do
+  .form-row
+    .col
+    .col-sm-6.col-lg-4
+      = label :user, :email, class: 'sr-only'
+      .input-group
+        .input-group-prepend
+          .input-group-text
+            = fa_text :envelope
+        = email_field_tag :email, params[:email], placeholder: t('.user'), class: 'form-control', autofocus: true, required: true
+      .input-group
+        .input-group-prepend
+          .input-group-text
+            = fa_text :key
+        = password_field_tag :password, nil, class: 'form-control', placeholder: t('.password'), required: true
+    .col
+  .form-row.align-items-center
+    .col
+    .col-sm-6.col-lg-4
+      = link_to t('.recover'), reset_request_path, class: 'btn btn-link'
+      = submit_tag t('common.accept'), data: { disable_with: t('common.waiting') }, class: 'btn btn-sm btn-primary btn-block'
+    .col

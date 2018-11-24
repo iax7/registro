@@ -1,67 +1,50 @@
-<%# navigation styled for Bootstrap 3.0 %>
-<nav id="navMain" class="navbar navbar-default navbar-static-top" style="box-shadow: 0px 0px 20px 1px #000;">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a href="<%= Rails.application.config.reg_site_home_url %>">
-        <img alt="Marca" src="<%= image_path 'nav_logo_w.png' %>" style="margin-right: 10px;">
-      </a>
-    </div>
-    <div id="navbar" class="collapse navbar-collapse">
-      <ul class="nav navbar-nav">
-        <%= nav_li_link 'Inicio', root_path %>
-        <% if is_session_active %>
-            <%= nav_li_link 'Mis Datos', view_person_url %>
-        <% if is_admin %><%#---------------------------------------------------------------------- ADMIN ------------ %>
-            <li class="dropdown" id="mnuAdmin">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li class="dropdown-header">Operaciones</li>
-                <%= nav_li_link fa_with_text('question', 'Ayuda'           ), helpadmin_path %>
-                <%= nav_li_link fa_with_text('user', 'Personas Registradas'), people_path %>
-                <%= nav_li_link fa_with_text('commenting', 'Personas con Comentarios'), comments_people_path %>
-                <%= nav_li_link fa_with_text('terminal', 'Cliente API'     ), apiclient_ui_url %>
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Reportes</li>
-                <%= nav_li_link fa_with_text('list-ol'   , 'Totales Generales'), totals_people_path %>
-                <%= nav_li_link fa_with_text('usd'       , 'Total de Pagos'   ), payments_people_path %>
-                <%= nav_li_link fa_with_text('cutlery'   , 'Comidas'          ), food_totals_path(9) %>
-                <%= nav_li_link fa_with_text('suitcase'  , 'Hospedaje'        ), allocations_path %>
-                <%= nav_li_link fa_with_text('bus'       , 'Transporte'       ), transports_path %>
-                <%= nav_li_link fa_with_text('area-chart', 'Gráficas'         ), graphs_people_path %>
-                <%= nav_li_link fa_with_text('', 'Personas Registradas (OLD)'), registros_path(format: 'pdf') %>
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Catálogos</li>
-                <%= nav_li_link fa_with_text('cog', 'Configuracion'), configs_path %>
-                <%= nav_li_link fa_with_text('bed','Hoteles'       ), hotels_path %>
-                <%= nav_li_link fa_with_text('flag','Paises'       ), countries_path %>
-                <%= nav_li_link fa_with_text('', 'Estados'         ), states_path %>
-                <%= nav_li_link fa_with_text('', 'Iglesias'        ), churches_path %>
-                <%= nav_li_link fa_with_text('newspaper-o','Novedades'), posts_path %>
-              </ul>
-            </li>
-        <% end %>
-        <% end %>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <% if is_session_active %>
-            <li><%= link_to 'Salir <i class="fa fa-sign-out fa-fw" aria-hidden="true"></i>'.html_safe, logout_url %></li>
-        <% else %>
-            <%= nav_li_link '<i class="fa fa-sign-in fa-fw" aria-hidden="true"></i> Ingresar'.html_safe, login_url %>
-        <% end %>
-      </ul>
-    </div><!--/.nav-collapse -->
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary app-navbar-bottom-shadow">
+  <%# div class="container"></div %>
+  <a class="navbar-brand" href="<%= Rails.configuration.app[:author_home] %>">
+      <%= image_tag 'nav_logo_w.png', alt: 'Logo', style: 'width: 150px' %>
+  </a>
+  <%#-- Toggler/collapsibe Button --%>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"
+          aria-controls="collapsibleNavbar" aria-expanded="true" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <%#-- Navbar links --%>
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <%# *** Nav Links LEFT *** %>
+    <ul class="navbar-nav mr-auto">
+      <%= nav_li_link fa_text(:home, t('nav.home')), root_path %>
+      <% if session_active? %>
+        <%= nav_li_link fa_text(:user_circle, t('nav.mydata')), start_path %>
+        <% if admin? %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <%= fa_text :wrench, 'Admin.' %>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <%= nav_dropdown_link fa_text(:users, 'Registros'), registries_path %>
+              <%= nav_dropdown_link fa_text(:dollar_sign, 'Pagos'), payments_users_path %>
+              <%= nav_dropdown_link fa_text(:bed, 'Hospedaje'), list_lodging_registries_path %>
+              <%= nav_dropdown_link fa_text(:bus, 'Transporte'), list_transport_registries_path %>
+              <%= nav_dropdown_link fa_text(:list, 'Totales'), totals_registries_path %>
+              <%= nav_dropdown_link fa_text(:utensils, 'Totales Comidas'), totals_food_registries_path %>
+              <div class="dropdown-divider"></div>
+              <h6 class="dropdown-header">Sistema</h6>
+              <%= nav_dropdown_link fa_text(:terminal, 'Cliente API'), apiui_index_path %>
+              <%= nav_dropdown_link fa_text(:cog, 'Evento'), Event.current %>
+            </div>
+          </li>
+        <% end%>
+      <% end %>
+
+    </ul>
+    <%# *** Nav Links RIGHT *** %>
+    <ul class="nav navbar-nav navbar-right">
+      <% if session_active? %>
+        <%= nav_li_link fa_text(:sign_out_alt, t('nav.logout')), logout_path %>
+      <% else %>
+        <%= nav_li_link fa_text(:sign_in_alt, t('nav.login')), login_path %>
+      <% end %>
+    </ul>
   </div>
-  <script>
-    $(function() {
-        var active_li = $('#navMain li').find(".active");
-        if (active_li.parent().attr("class") == "dropdown-menu")
-          $('#mnuAdmin').addClass("active");
-      });
-  </script>
 </nav>

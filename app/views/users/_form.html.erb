@@ -1,0 +1,192 @@
+<%
+  form_grp_class = 'form-group row'
+  label_class = 'col-sm-4 col-form-label text-sm-right'
+  div_input_class = 'col-sm-6'
+  input_class = 'form-control'
+%>
+<%= form_with(model: @user, local: true) do |form| %>
+
+  <div class="<%= form_grp_class %>">
+    <%= form.label :name, class: label_class %>
+    <div class="<%= div_input_class %>">
+      <%= form.text_field :name, id: :user_name, class: input_class %>
+    </div>
+  </div>
+
+  <div class="<%= form_grp_class %>">
+    <%= form.label :lastname, class: label_class %>
+    <div class="<%= div_input_class %>">
+      <%= form.text_field :lastname, id: :user_lastname, class: input_class %>
+    </div>
+  </div>
+
+  <div class="<%= form_grp_class %>">
+    <%= form.label :nick, class: label_class %>
+    <div class="<%= div_input_class %>">
+      <%= form.text_field :nick, id: :user_nick, class: input_class, placeholder: 'Aparecerá en el gafete impreso' %>
+    </div>
+  </div>
+
+  <div class="<%= form_grp_class %>">
+    <%= form.label :dob, class: label_class %>
+    <div class="<%= div_input_class %>">
+      <%= form.date_field :dob, id: :user_dob, class: "col-6 #{input_class}", placeholder: 'dd/mm/aaaa' %>
+    </div>
+  </div>
+
+  <div class="<%= form_grp_class %>">
+    <%= form.label :is_male, class: label_class %>
+    <div class="<%= div_input_class %>">
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-light <%= 'active' if  @user.is_male %>"><%= form.radio_button :is_male, true  %><%= show_sex_symbol true %>&nbsp;<%= t 'common.male' %></label>
+        <label class="btn btn-light <%= 'active' if !@user.is_male %>"><%= form.radio_button :is_male, false %><%= show_sex_symbol false %>&nbsp;<%= t 'common.female' %></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="<%= form_grp_class %>">
+    <%= form.label :phone, class: label_class %>
+    <div class="<%= div_input_class %>">
+      <%= form.telephone_field :phone, id: :user_phone, class: "col-6 #{input_class}" %>
+    </div>
+  </div>
+
+  <div class="<%= form_grp_class %>">
+    <%= form.label :email, class: label_class %>
+    <div class="<%= div_input_class %>">
+      <%= form.email_field :email, id: :user_email, class: input_class, aria: {:describedby => 'emailHelp'} %>
+      <small id="emailHelp" class="form-text text-muted">
+        <i class="fas fa-exclamation-triangle text-warning"></i> Revisa bien tu correo, es tu nombre de usuario para seguir usando este sistema. No se permite duplicar el correo para otro registro.
+      </small>
+    </div>
+  </div>
+
+  <%# ------- Location Section ------------------------------- %>
+  <div class="<%= form_grp_class %>">
+    <%= form.label :country, class: label_class %>
+    <div class="<%= div_input_class %>">
+      <%= form.text_field :country, class: input_class, autocomplete: :off %>
+    </div>
+  </div>
+  <div class="<%= form_grp_class %>">
+    <%= form.label :state, class: label_class %>
+    <div class="<%= div_input_class %>">
+      <%= form.text_field :state, class: input_class, autocomplete: :off %>
+    </div>
+  </div>
+  <div class="<%= form_grp_class %>">
+    <%= form.label :city, class: label_class %>
+    <div class="<%= div_input_class %>">
+      <%= form.text_field :city, class: input_class, autocomplete: :off %>
+    </div>
+  </div>
+
+  <%# ------- Password Section ------------------------------- %>
+  <% if @user.id.nil? %>
+    <div class="<%= form_grp_class %>">
+      <%= form.label :password, class: label_class %>
+      <div class="<%= div_input_class %>">
+        <%= form.password_field :password, id: :user_password, class: input_class %>
+      </div>
+    </div>
+
+    <div class="<%= form_grp_class %>" id="pass2grp">
+      <%= form.label :password_confirmation, class: label_class %>
+      <div class="<%= div_input_class %>">
+        <div class="input-group add-on">
+          <%= form.password_field :password_confirmation, id: :user_password_confirmation, class: 'form-control' %>
+          <div class="input-group-append" id="appended">
+            <span class="input-group-text bg-white"><i class="fas fa-circle" id="pwd_icon"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <%# ------- Submit Buttons Section ---------------------- %>
+  <hr>
+  <div class="<%= form_grp_class %>">
+    <%= label_tag '', nil, class: label_class %>
+    <div id="actions" class="col-sm-6">
+      <%= form.submit data: { disable_with: t('common.waiting') }, class: 'btn btn-primary', id: 'submit_ajax' %>
+      <%= link_to 'Cancelar', start_path, {class: 'btn btn-outline-secondary' }  %>
+    </div>
+    <%= image_tag image_path('spinners/spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
+  </div>
+
+<% end %>
+
+<script>
+  let country = document.getElementById("user_country");
+  let state = document.getElementById("user_state");
+  let city  = document.getElementById("user_city");
+  let complete_opt = {
+      minChars: 1,
+      autoFirst: true
+  };
+  let acountry = new Awesomplete(country, complete_opt);
+  let astate = new Awesomplete(state, complete_opt);
+  let acity = new Awesomplete(city, complete_opt);
+  $('#user_password_confirmation').keyup(function() {
+    let pass1 = $('#user_password').val();
+    let pass2 = $('#user_password_confirmation').val();
+    $('#appended').show();
+    if (pass1 === pass2) {
+        $('#pwd_icon').removeClass().addClass('fas fa-check-circle text-success');
+    } else {
+        $('#pwd_icon').removeClass().addClass('fas fa-times-circle text-danger');
+    }
+  });
+  //$('#submit_ajax').click(function() {
+  //    $('#spinner').show();
+  //    $('#actions').hide();
+  //});
+  $("#user_country").on('keyup', function(e) {
+      if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40) {
+          return;
+      }
+      if (this.value.length > 0) {
+          options = {
+              url: '/autocomplete/countries/' + this.value,
+              type: 'GET',
+              dataType: 'json',
+              success: function (data) {
+                  acountry.list = data;
+              }
+          };
+          $.ajax(options);
+      }
+  });
+  $("#user_state").on('keyup', function(e) {
+      if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40) {
+          return;
+      }
+      if (this.value.length > 0) {
+          options = {
+              url: '/autocomplete/states/' + this.value,
+              type: 'GET',
+              dataType: 'json',
+              success: function (data) {
+                  astate.list = data;
+              }
+          };
+          $.ajax(options);
+      }
+  });
+  $("#user_city").on('keyup', function(e) {
+      if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40) {
+          return;
+      }
+      if (this.value.length > 0) {
+          options = {
+              url: '/autocomplete/cities/' + this.value,
+              type: 'GET',
+              dataType: 'json',
+              success: function (data) {
+                  acity.list = data;
+              }
+          };
+          $.ajax(options);
+      }
+  });
+</script>

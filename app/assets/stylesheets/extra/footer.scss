@@ -1,0 +1,41 @@
+/* Wrapper for page content to push down footer */
+html, body {
+  height: 100%;
+}
+
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by it's height */
+  margin: 0 auto -50px;
+}
+
+/* Set the fixed height of the footer here */
+#push {
+  height: 50px;
+}
+
+.footer {
+  height: 50px;
+  background-color: #f5f5f5;
+}
+
+/* Gradient Effect */
+.divider-inside-top {
+  padding-top: 15px;
+  position:relative;
+  overflow:hidden;
+  border-top:1px solid #ddd;
+}
+.divider-inside-top:before {
+  content: "";
+  position:absolute;
+  z-index: 1;
+  width:96%;
+  top: -10px;
+  height: 10px;
+  left: 2%;
+  border-radius: 100px / 5px;
+  box-shadow:0 0 18px rgba(0,0,0,0.6);
+}

@@ -1,0 +1,86 @@
+-# frozen_string_literal: true
+:css
+  ul {
+    list-style: none;
+  }
+
+%h3.text-center
+  = fa_text :info_circle, 'Información general'
+
+.row
+  .col.text-justify
+    %p
+      El rango de edades sería el siguiente: <strong>Adultos</strong> de #{event.adult_age} años en adelante y
+      <strong>Niños</strong> de 5 a #{event.adult_age - 1} años.
+    %p
+      Importante: El ingreso recabado por inscripciones y servicios será usado en su totalidad para cubrir los gastos de la conferencia.
+      Cristianismo Bíblico no persigue ningún fin de lucro.
+
+.row
+  .col.text-justify
+    %h4.text-info Inscripciones
+    %p.mb-2
+      Costos:
+      %ul.ml-0.pl-0
+        %li <strong>Adultos</strong>: #{number_to_currency event.event_full_price, precision: 0}
+        %li <strong>Niños</strong>: gratis
+        %li <strong>Infantes</strong>: gratis
+
+  .col.text-justify
+    %h4.text-info Comidas
+    %p.mb-2
+      Costos:
+      %ul.ml-0.pl-0
+        %li <strong>Adultos</strong>: #{number_to_currency event.food_full_price, precision: 0}
+        %li <strong>Niños</strong>: #{number_to_currency event.food_half_price, precision: 0}
+        %li <strong>Infantes</strong>: gratis
+
+  .col
+    %h4.text-info Serv. Estadía
+    %p.mb-2
+      Costos:
+      %ul.ml-0.pl-0
+        %li <strong>Adultos</strong>: #{number_to_currency event.lodging_full_price, precision: 0}
+        %li <strong>Niños</strong>: #{number_to_currency event.lodging_half_price, precision: 0}
+        %li <strong>Infantes</strong>: gratis
+
+  .col
+    %h4.text-info Transporte
+    %p.mb-2
+      Costos:
+      %ul.ml-0.pl-0
+        %li <strong>Adultos</strong>: #{number_to_currency event.transport_full_price, precision: 0}
+        %li <strong>Niños</strong>: #{number_to_currency event.transport_half_price, precision: 0}
+        %li <strong>Infantes</strong>: gratis
+
+  .col
+    %h4.text-info Informes
+    %p
+      = link_to fa_text(:phone, number_to_phone(@event.event_main_phone,
+                                                  area_code: true)),
+                  'tel:' + @event.event_main_phone,
+                  class: 'btn btn-link m-0 p-0'
+      %br
+      = mail_to @event.event_main_email,
+                  fa_text(:envelope, Event.current.event_main_email_name),
+                  subject: Event.current.event_main_email_subject,
+                  encode: 'hex',
+                  class: 'btn btn-link m-0 p-0'
+
+  .col.text-justify
+    %h4.text-info Ubicación
+    %address
+      = Event.current.address.html_safe
+    = link_to fa_text(:map_marker_alt, 'Mapa'), Event.current.maps_link,
+              class: 'btn btn-link',
+              target: '_blank'
+    - if !Event.current.maps_document_link.blank?
+      = link_to fa_text(:file_pdf, 'Mapa (PDF)'), Event.current.maps_document_link,
+                class: 'btn btn-link',
+                target: '_blank'
+    - if !Event.current.weather_link.blank?
+      = link_to fa_text(:cloud_sun_rain, 'Clima'), Event.current.weather_link,
+                class: 'btn btn-link',
+                target: '_blank'
+
+%br

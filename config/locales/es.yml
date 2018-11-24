@@ -1,0 +1,491 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# The following keys must be escaped otherwise they will not be retrieved by
+# the default I18n backend:
+#
+# true, false, on, off, yes, no
+#
+# Instead, surround them with single quotes.
+#
+# en:
+#   'true': 'foo'
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+es:
+  meta:
+    title: Registro
+    description: En este sitio podrá crear su cuenta para asistir a la conferencia.
+  common:
+    waiting: Procesando...
+    error_create: Ocurrió un error al crear el registro.
+    error_update: Ocurrió un error al actualizar el registro.
+    accept: Aceptar
+    male: Hombre
+    male_short: H
+    female: Mujer
+    female_short: M
+    me: &me Titular
+  nav:
+    home: Inicio
+    mydata: Mi Registro
+    login: Ingresar
+    logout: Salir
+  # Controllers
+  application:
+    confirm_logged_in:
+      error: Tienes que tener una sesión activa para acceder la sección que solicitaste.
+    require_admin:
+      error: Tienes que ser administrador para acceder la sección que solicitaste.
+  api:
+    assist:
+      not_found_error: Registro no encontrado.
+    food:
+      day_error: Error en el dia
+      time_error: Error en el tiempo
+      consumed_error: Error! Los platos solicitados ya han sido consumidos.
+    not_found_error: Error! Invitado no encontrado
+    not_paid_error: Error! No se han pagado los platillos.
+  errors_controller:
+    not_found:
+      msg: Ruta no encontrada
+    unprocessable:
+      msg: Entidad no procesable
+    internal_server_error:
+      msg: Error interno del servidor
+  access:
+    login:
+      title: Ingresar
+      user: Email
+      password: Contraseña
+      recover: Recuperar contraseña
+    attempt_login:
+      invalid: El Usuario o la Contraseña es inválida
+    logout:
+      msg: Salió correctamente
+    reset_request:
+      msg: Si existía el correo se enviaron las instrucciones para recuperar la contraseña.
+    confirm_logged_in:
+      msg: Por favor ingrese al sistema primero.
+    reset:
+      expired: El token ha vencido, por favor genera uno nuevo.
+      invalid: El token es inválido.
+      changed: La contraseña fue cambiada.
+  users:
+    create:
+      notice: El usuario fue creado correctamente.
+      alert: Fue imposible crear el usuario
+    update:
+      notice: El usuario fue actualizado correctamente.
+      alert: Fue imposible actualizar el usuario
+    destroy:
+      notice: El usuario fue eliminado correctamente.
+  guests:
+      create:
+        notice: El invitado fue creado correctamente.
+        alert: Fue imposible crear el invitado
+      update:
+        notice: El invitado fue actualizado correctamente.
+        alert: Fue imposible actualizar el invitado
+      destroy:
+        notice: El invitado fue eliminado correctamente.
+  headline:
+    new: Crear %{model}
+    edit: Actualizar %{model}
+
+  helpers:
+    select:
+      prompt: Por favor selecciona
+    submit:
+      create: Crear
+      submit: Guardar
+      update: Actualizar
+    label:
+      registry:
+        is_confirmed: Confirmado?
+        is_present: Asistió?
+        is_notified: Notificado?
+        comments: Comentarios
+        amount_debt: Por Pagar
+        amount_paid: Abonado
+        amount_offering: Ofrenda
+      user:
+        name: &name Nombre(s)
+        lastname: &last Apellidos
+        nick: &nick Seudónimo
+        email: Email
+        is_male: &is_male Sexo
+        age: &age Edad
+        phone: Teléfono
+        password: Contraseña
+        password_confirmation: Confirmar contraseña
+        dob: Nacimiento
+        country: País
+        state: Estado
+        city: Ciudad
+        location: Ubicación
+        food: &food Comida
+        transport: &transport Transporte
+        lodging: &lodging Servicios de Estadía
+      guest:
+        name: *name
+        lastname: *last
+        nick: *nick
+        is_male: *is_male
+        age: *age
+        is_pregnant: Embarazada?
+        is_medicated: Medicado?
+        relation: Relación
+        relations:
+          me: *me
+          family: Familiar
+          friend: Amigo
+          other: Otro
+        food: *food
+        transport: *transport
+        lodging: *lodging
+        f_v1: Desayuno
+        f_v2: Comida
+        f_v3: Cena
+        f_s1: Desayuno
+        f_s2: Comida
+        f_s3: Cena
+        f_d1: Desayuno
+        f_d2: Comida
+        f_d3: Cena
+        f_l1: Desayuno
+        f_l2: Comida
+        f_l3: Cena
+        t_v1: Viernes Ida
+        t_v2: Viernes Vuelta
+        t_s1: Sábado Ida
+        t_s2: Sábado Vuelta
+        t_d1: Domingo Ida
+        t_d2: Domingo Vuelta
+        t_l1: Lunes Ida
+        t_l2: Lunes Vuelta
+        l_v: 3 Noches
+        l_s: Noche
+        l_d: Noche
+        l_l: Noche
+      event:
+        name: Nombre
+        f_v1: Viernes Desayuno
+        f_v2: Viernes Comida
+        f_v3: Viernes Cena
+        f_s1: Sábado Desayuno
+        f_s2: Sábado Comida
+        f_s3: Sábado Cena
+        f_d1: Domingo Desayuno
+        f_d2: Domingo Comida
+        f_d3: Domingo Cena
+        f_l1: Lunes Desayuno
+        f_l2: Lunes Comida
+        f_l3: Lunes Cena
+        t_v1: Viernes Ida
+        t_s1: Sábado Ida
+        t_d1: Domingo Ida
+        t_l1: Lunes Ida
+        t_v2: Viernes Vuelta
+        t_s2: Sábado Vuelta
+        t_d2: Domingo Vuelta
+        t_l2: Lunes Vuelta
+        l_v: Viernes
+        l_s: Sábado
+        l_d: Domingo
+        l_l: Lunes
+
+# A C T I V E    R E C O R D ------------------------------------------
+  activerecord:
+    models:
+      event: Evento
+      registry: Registro
+      user: Usuario
+      guest: Invitado
+    #attributes:
+    #  user:
+    #    name: *name
+    #    lastname: *last
+    #    nick: *nick
+    #    email: Email
+    #    is_male: *is_male
+    #    age: *age
+    #    phone: Teléfono
+    #    password: Contraseña
+    #    password_confirmation: Confirmar contraseña
+    #    food: *food
+    #    transport: &transport
+    #    lodging: &lodging
+    #  guest:
+    #    name: *name
+    #    lastname: *last
+    #    nick: *nick
+    #    is_male: *is_male
+    #    age: *age
+    #    is_pregnant: Embarazada?
+    #    is_medicated: Medicado?
+    #    relation:
+    #      me: Yo
+    #      family: Familiar
+    #      friend: Amigo
+    #      other: Otro
+    #    food: *food
+    #    transport: *transport
+    #    lodging: *lodging
+    errors:
+      messages:
+        record_invalid: 'La validación falló: %{errors}'
+        restrict_dependent_destroy:
+          has_one: El registro no puede ser eliminado pues existe un %{record} dependiente
+          has_many: El registro no puede ser eliminado pues existen %{record} dependientes
+        model_invalid: 'Error de Validación: %{errors}'
+        inclusion: no está incluido en la lista
+        exclusion: está reservado
+        invalid: es inválido
+        confirmation: no concuerda con %{attribute}
+        accepted: debe ser aceptado
+        empty: no puede estar vacío
+        blank: es requerido
+        present: debe ser vacío
+        too_long:
+          one: es muy largo (máximo de 1 caracter)
+          other: es muy largo (máximo de %{count} caracteres)
+        too_short:
+          one: es muy corto (mínimo es 1 caracter)
+          other: es muy corto (mínimo de %{count} caracteres)
+        wrong_length:
+          one: tiene longitud incorrecta (debe ser 1 caracter)
+          other: tiene longitud incorrecta (debe ser %{count} caracteres)
+        not_a_number: no es un número
+        not_an_integer: debe ser un número entero
+        greater_than: debe ser mayor que %{count}
+        greater_than_or_equal_to: debe ser mayor o igual a %{count}
+        equal_to: debe ser igual a %{count}
+        less_than: debe ser menor a %{count}
+        less_than_or_equal_to: debe ser menor o igual a %{count}
+        other_than: debe ser diferente a %{count}
+        odd: debe ser número par
+        even: debe ser número impar
+        required: debe existir
+        taken: ya está registrado
+      template:
+        header:
+          one: 1 error impidió continuar
+          other: "%{count} errores impidieron continuar"
+        body: "Hubieron problemas con los siguientes campos:"
+
+  date:
+    abbr_day_names:
+    - dom
+    - lun
+    - mar
+    - mié
+    - jue
+    - vie
+    - sáb
+    abbr_month_names:
+    -
+    - ene
+    - feb
+    - mar
+    - abr
+    - may
+    - jun
+    - jul
+    - ago
+    - sep
+    - oct
+    - nov
+    - dic
+    day_names:
+    - domingo
+    - lunes
+    - martes
+    - miércoles
+    - jueves
+    - viernes
+    - sábado
+    formats:
+      default: "%d/%m/%Y"
+      long: "%A, %d de %B de %Y"
+      short: "%d de %b"
+    month_names:
+    -
+    - enero
+    - febrero
+    - marzo
+    - abril
+    - mayo
+    - junio
+    - julio
+    - agosto
+    - septiembre
+    - octubre
+    - noviembre
+    - diciembre
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: cerca de 1 hora
+        other: cerca de %{count} horas
+      about_x_months:
+        one: cerca de 1 mes
+        other: cerca de %{count} meses
+      about_x_years:
+        one: cerca de 1 año
+        other: cerca de %{count} años
+      almost_x_years:
+        one: casi 1 año
+        other: casi %{count} años
+      half_a_minute: medio minuto
+      less_than_x_minutes:
+        one: menos de 1 minuto
+        other: menos de %{count} minutos
+      less_than_x_seconds:
+        one: menos de 1 segundo
+        other: menos de %{count} segundos
+      over_x_years:
+        one: más de 1 año
+        other: más de %{count} años
+      x_days:
+        one: 1 día
+        other: "%{count} días"
+      x_minutes:
+        one: 1 minuto
+        other: "%{count} minutos"
+      x_months:
+        one: 1 mes
+        other: "%{count} meses"
+      x_seconds:
+        one: 1 segundo
+        other: "%{count} segundos"
+    prompts:
+      day: Día
+      hour: Hora
+      minute: Minuto
+      month: Mes
+      second: Segundos
+      year: Año
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: debe ser aceptado
+      blank: no puede estar en blanco
+      present: debe estar en blanco
+      confirmation: no coincide
+      empty: no puede estar vacío
+      equal_to: debe ser igual a %{count}
+      even: debe ser un número par
+      exclusion: está reservado
+      greater_than: debe ser mayor que %{count}
+      greater_than_or_equal_to: debe ser mayor o igual que %{count}
+      inclusion: no está incluido en la lista
+      invalid: es inválido
+      less_than: debe ser menor que %{count}
+      less_than_or_equal_to: debe ser menor o igual que %{count}
+      model_invalid: "La validación falló: %{errors}"
+      not_a_number: no es un número
+      not_an_integer: debe ser un entero
+      odd: debe ser un número non
+      required: debe existir
+      taken: ya ha sido tomado
+      too_long:
+        one: es demasiado largo (máximo 1 caracter)
+        other: es demasiado largo (máximo %{count} caracteres)
+      too_short:
+        one: es demasiado corto (mínimo 1 caracter)
+        other: es demasiado corto (mínimo %{count} caracteres)
+      wrong_length:
+        one: longitud errónea (debe ser de 1 caracter)
+        other: longitud errónea (debe ser de %{count} caracteres)
+      other_than: debe ser diferente a %{count}
+    template:
+      body: 'Revise que los siguientes campos sean válidos:'
+      header:
+        one: "%{model} no pudo guardarse debido a 1 error"
+        other: "%{model} no pudo guardarse debido a %{count} errores"
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "$"
+    format:
+      delimiter: ","
+      precision: 2
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: mil millones
+          million:
+            one: millón
+            other: millones
+          quadrillion: mil billones
+          thousand: mil
+          trillion:
+            one: billón
+            other: billones
+          unit: ''
+      format:
+        delimiter: ","
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ","
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ","
+  support:
+    array:
+      last_word_connector: " y "
+      two_words_connector: " y "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%a, %d %b %Y %I:%M:%S %p %Z"
+      long: "%B %d, %Y %I:%M %p"
+      short: "%d %b %I:%M %p"
+    pm: pm

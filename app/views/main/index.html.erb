@@ -1,0 +1,20 @@
+<% content_for :top do %>
+  <div class="jumbotron app-jumbotron-bg rounded-0">
+    <div class="container">
+      <h3 class="display-4 app-text-shadow app-jumbotron-text"><%= @event.event_title %></h3>
+      <p class="lead app-text-shadow"><strong><%= @event.event_subtitle %></strong></p>
+      <hr class="my-4">
+      <p class="app-text-shadow"><%= @event.event_subtitle2 %></p>
+      <p class="lead">
+        <%= link_to 'Inscribirse &raquo;'.html_safe,
+                    new_user_path,
+                    class: 'btn btn-lg btn-light',
+                    role: "button" unless session_active? %>
+      </p>
+    </div>
+  </div>
+<% end %>
+
+<section>
+  <%= render 'information', event: @event %>
+</section>

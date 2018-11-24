@@ -1,0 +1,72 @@
+-# frozen_string_literal: true
+%h3= fa_text :bed, 'Hospedaje'
+
+.table-responsive
+  %table.table.table-striped.table-hover.table-bordered.table-sm
+    %thead
+      %tr.text-center
+        %th
+          %span{ :data => { toggle: 'tooltip', placement: 'top' },
+                 :title => "Consecutivo" } #
+        %th
+          %span{ :data => { toggle: 'tooltip', placement: 'top' },
+                 :title => "Id de Registro" } Reg
+        %th Id
+        %th Nombre
+        %th Sexo
+        %th Edad
+        %th Relación
+        %th Localidad
+        %th Cuarto
+        %th
+          %span{ :data => { toggle: 'tooltip', placement: 'top' },
+                 :title => 'Pagado' } Pag
+    %tbody
+      - index = 0
+      - @guests.each do |guest|
+        - index += 1
+        - full_name = guest.me? ? guest.full_name : "-> #{guest.full_name}"
+        - name_style = guest.me? ? '' : 'padding-left: 25px;'
+        - row_class = guest.registry.paid? ? '' : 'table-warning'
+        - paid_with_no_room_class = (guest.registry.paid? && guest.l_room.blank?) ? 'bg-danger' : ''
+        %tr{ class: "text-center #{row_class}" }
+          %td.text-right= index
+          %td.text-right
+            %strong= guest.registry.id
+          %td.text-right= guest.id
+          %td.text-left{ style: "#{name_style}" }= make_bold full_name, guest.me?
+          %td.text-center
+            = show_sex_symbol guest.is_male, show_text: true, short: true
+          %td.text-right= guest.age
+          %td= guest.relation_t
+          %td= guest.registry.user.location if guest.me?
+          %td{ class: "#{paid_with_no_room_class}"}= guest.l_room
+          %td= render_bool guest.registry.paid?
+
+- if @guests.size == 0
+  %em No se encontraron registros
+
+= link_to 'Cambiar Iconos', '#', id: 'toggle_link', remote: true, class: 'btn btn-link'
+%br
+%br
+
+:css
+  .ok {}
+  .no {}
+
+:javascript
+  $("#toggle_link").click( function() {
+    count_ok = $("span.ok").remove().length;
+    count_no = $("span.no").remove().length;
+    if(count_ok > 0 || count_no > 0) {
+      $("i.fa-check").show()
+      $("i.fa-times").show()
+
+    } else {
+      $("i.fa-check").hide().after('<span class="text-success ok">&#9989;</span>');
+      $("i.fa-times").hide().after('<span class="text-danger no">&#10006;</span>');
+      $("td:empty").html('<span class="text-muted no">0</span>')
+    }
+    return false;
+  });
+

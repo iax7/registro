@@ -1,0 +1,96 @@
+-# frozen_string_literal: true
+.table-responsive
+  %table.table.table-bordered.table-sm
+    %thead
+      %tr
+        %th.border-left-0.border-top-0{ rowspan: '2' }
+        %th.text-center.friday-bg{ colspan: '3' } Viernes
+        %th.text-center.saturday-bg{ colspan: '3' } Sábado
+        %th.text-center.sunday-bg{ colspan: '3' } Domingo
+        %th.text-center.monday-bg{ colspan: '3' } Lunes
+      %tr
+        %th.text-center.friday-bg Des
+        %th.text-center.friday-bg Com
+        %th.text-center.friday-bg Cen
+        %th.text-center.saturday-bg Des
+        %th.text-center.saturday-bg Com
+        %th.text-center.saturday-bg Cen
+        %th.text-center.sunday-bg Des
+        %th.text-center.sunday-bg Com
+        %th.text-center.sunday-bg Cen
+        %th.text-center.monday-bg Des
+        %th.text-center.monday-bg Com
+        %th.text-center.monday-bg Cen
+    %tbody
+      -# Adultos ------------------------------------------------
+      %tr.text-right
+        %td.col-xs-1
+          %strong Adultos
+        %td= dim_zeros count[:v1]
+        %td= dim_zeros count[:v2]
+        %td= dim_zeros count[:v3]
+        %td= dim_zeros count[:s1]
+        %td= dim_zeros count[:s2]
+        %td= dim_zeros count[:s3]
+        %td= dim_zeros count[:d1]
+        %td= dim_zeros count[:d2]
+        %td= dim_zeros count[:d3]
+        %td= dim_zeros count[:l1]
+        %td= dim_zeros count[:l2]
+        %td= dim_zeros count[:l3]
+      -# Kids ------------------------------------------------
+      %tr.text-right
+        %td.col-xs-1
+          %strong Niños
+        %td= dim_zeros count[:v1c]
+        %td= dim_zeros count[:v2c]
+        %td= dim_zeros count[:v3c]
+        %td= dim_zeros count[:s1c]
+        %td= dim_zeros count[:s2c]
+        %td= dim_zeros count[:s3c]
+        %td= dim_zeros count[:d1c]
+        %td= dim_zeros count[:d2c]
+        %td= dim_zeros count[:d3c]
+        %td= dim_zeros count[:l1c]
+        %td= dim_zeros count[:l2c]
+        %td= dim_zeros count[:l3c]
+      -# Suma ------------------------------------------------
+      %tr.text-right.table-secondary
+        %td.col-xs-1
+          %strong Suma
+        %td= dim_zeros count[:v1] + count[:v1c]
+        %td= dim_zeros count[:v2] + count[:v2c]
+        %td= dim_zeros count[:v3] + count[:v3c]
+        %td= dim_zeros count[:s1] + count[:s1c]
+        %td= dim_zeros count[:s2] + count[:s2c]
+        %td= dim_zeros count[:s3] + count[:s3c]
+        %td= dim_zeros count[:d1] + count[:d1c]
+        %td= dim_zeros count[:d2] + count[:d2c]
+        %td= dim_zeros count[:d3] + count[:d3c]
+        %td= dim_zeros count[:l1] + count[:l1c]
+        %td= dim_zeros count[:l2] + count[:l2c]
+        %td= dim_zeros count[:l3] + count[:l3c]
+      -# Total ------------------------------------------------
+      - if defined? money
+        %tr.text-right.table-success
+          %td.col-xs-1
+            %strong Total
+          %td= number_to_currency money[:v1] + money[:v1c], precision: 0
+          %td= number_to_currency money[:v2] + money[:v2c], precision: 0
+          %td= number_to_currency money[:v3] + money[:v3c], precision: 0
+          %td= number_to_currency money[:s1] + money[:s1c], precision: 0
+          %td= number_to_currency money[:s2] + money[:s2c], precision: 0
+          %td= number_to_currency money[:s3] + money[:s3c], precision: 0
+          %td= number_to_currency money[:d1] + money[:d1c], precision: 0
+          %td= number_to_currency money[:d2] + money[:d2c], precision: 0
+          %td= number_to_currency money[:d3] + money[:d3c], precision: 0
+          %td= number_to_currency money[:l1] + money[:l1c], precision: 0
+          %td= number_to_currency money[:l2] + money[:l2c], precision: 0
+          %td= number_to_currency money[:l3] + money[:l3c], precision: 0
+      -# grandtotal -------------------------------------------
+      - if defined? money_total
+        %tr
+          %td.col-xs-1.text-right
+            %strong Gran T.
+          %td.text-center{ colspan: '12' }
+            %strong= number_to_currency money_total, presicion: 0

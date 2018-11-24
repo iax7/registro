@@ -1,0 +1,90 @@
+-# frozen_string_literal: true
+%h3= fa_text :bus, 'Transporte'
+
+.table-responsive
+  %table.table.table-striped.table-hover.table-bordered.table-sm
+    %thead
+      %tr.text-center
+        %th.border-0
+        %th.border-0
+        %th.border-0
+        %th.border-0
+        %th.border-0
+        %th.friday-bg{ colspan: '2' } Viernes
+        %th.saturday-bg{ colspan: '2' } Sábado
+        %th.sunday-bg{ colspan: '2' } Domingo
+        %th.monday-bg{ colspan: '2' } Lunes
+      %tr.text-center
+        %th Reg Id
+        %th Id
+        %th Nombre
+        %th Telefono
+        %th Pagado
+        %th.friday-bg=   fa_text :arrow_up
+        %th.friday-bg=   fa_text :arrow_down
+        %th.saturday-bg= fa_text :arrow_up
+        %th.saturday-bg= fa_text :arrow_down
+        %th.sunday-bg=   fa_text :arrow_up
+        %th.sunday-bg=   fa_text :arrow_down
+        %th.monday-bg=   fa_text :arrow_up
+        %th.monday-bg=   fa_text :arrow_down
+    %tbody
+      - totals = { v1: 0, v2: 0, s1: 0, s2: 0, d1: 0, d2: 0, l1: 0, l2: 0 }
+      - @guests.each do |guest|
+        - row_class = guest.registry.paid? ? '' : ''
+        - totals.each_key {|k| totals[k] += guest["t_#{k}"] ? 1 : 0 }
+        %tr{ class: "text-center #{row_class}" }
+          %td= guest.registry.id
+          %td= guest.id
+          %td.text-left= guest.full_name
+          %td= link_to number_to_phone(guest.registry.user.phone, area_code: true),
+                  'tel:' + guest.registry.user.phone,
+                  class: 'btn btn-link m-0 p-0'
+          %td= render_bool guest.registry.paid?
+          %td= render_bool guest.t_v1, false, colorless: true
+          %td= render_bool guest.t_v2, false, colorless: true
+          %td= render_bool guest.t_s1, false, colorless: true
+          %td= render_bool guest.t_s2, false, colorless: true
+          %td= render_bool guest.t_d1, false, colorless: true
+          %td= render_bool guest.t_d2, false, colorless: true
+          %td= render_bool guest.t_l1, false, colorless: true
+          %td= render_bool guest.t_l2, false, colorless: true
+      %tr.text-center.table-success
+        %td.text-right{ colspan: 5 }
+          %strong Suma:
+        %td= totals[:v1]
+        %td= totals[:v2]
+        %td= totals[:s1]
+        %td= totals[:s2]
+        %td= totals[:d1]
+        %td= totals[:d2]
+        %td= totals[:l1]
+        %td= totals[:l2]
+
+- if @guests.size == 0
+  %em No se encontraron registros
+
+= link_to "Cambiar Iconos", '#', id: 'toggle_link', remote: true, class: 'btn btn-link'
+%br
+%br
+
+:css
+  .ok {}
+  .no {}
+
+:javascript
+  $("#toggle_link").click( function() {
+    count_ok = $("span.ok").remove().length;
+    count_no = $("span.no").remove().length;
+    if(count_ok > 0 || count_no > 0) {
+      $("i.fa-check").show()
+      $("i.fa-times").show()
+
+    } else {
+      $("i.fa-check").hide().after('<span class="text-success ok">&#9989;</span>');
+      $("i.fa-times").hide().after('<span class="text-danger no">&#10006;</span>');
+      $("td:empty").html('<span class="text-muted no">0</span>')
+    }
+    return false;
+  });
+

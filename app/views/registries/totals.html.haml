@@ -1,0 +1,140 @@
+-# frozen_string_literal: true
+%section#people
+  %h3= fa_text :users, 'Personas'
+  .row
+    .col-md-5.col-sm-6.col-xs-10
+      .table-responsive
+        %table.table.table-bordered.table-sm.table-striped
+          %thead
+            %tr
+              %th.border-left-0.border-top-0
+              %th Número
+          %tbody
+            - @people.each do |row|
+              %tr
+                %td
+                  %strong= row['status']
+                %td.text-right= dim_zeros row['total']
+%br
+
+%section#offerings
+  %h3= fa_text :donate, 'Ofrendas'
+  .row
+    .col-md-5.col-sm-6.col-xs-10
+      .table-responsive
+        %table.table.table-bordered.table-sm.table-striped
+          %thead
+            %tr
+              %th.border-left-0.border-top-0
+              %th Número
+          %tbody
+            - @offerings.each do |row|
+              %tr
+                %td
+                  %strong= row['status']
+                %td.text-right= number_to_currency row['total'], precision: 0
+%br
+
+%section#food
+  %h3= fa_text :utensils, 'Comida'
+  .table-responsive
+    %table.table.table-bordered.table-sm.table-striped
+      %thead
+        %tr
+          %th.border-left-0.border-top-0{ rowspan: 2 }
+          %th{ colspan: 3, class: 'text-center friday-bg' } Viernes
+          %th{ colspan: 3, class: 'text-center saturday-bg' } Sábado
+          %th{ colspan: 3, class: 'text-center sunday-bg' } Domingo
+          %th{ colspan: 3, class: 'text-center monday-bg' } Lunes
+        %tr
+          %th.text-center.friday-bg   Des
+          %th.text-center.friday-bg   Com
+          %th.text-center.friday-bg   Cen
+          %th.text-center.saturday-bg Des
+          %th.text-center.saturday-bg Com
+          %th.text-center.saturday-bg Cen
+          %th.text-center.sunday-bg   Des
+          %th.text-center.sunday-bg   Com
+          %th.text-center.sunday-bg   Cen
+          %th.text-center.monday-bg   Des
+          %th.text-center.monday-bg   Com
+          %th.text-center.monday-bg   Cen
+      %tbody
+        - @services.each do |row|
+          %tr
+            %td
+              %strong= row['status']
+            %td.text-right= dim_zeros row['f_v1']
+            %td.text-right= dim_zeros row['f_v2']
+            %td.text-right= dim_zeros row['f_v3']
+            %td.text-right= dim_zeros row['f_s1']
+            %td.text-right= dim_zeros row['f_s2']
+            %td.text-right= dim_zeros row['f_s3']
+            %td.text-right= dim_zeros row['f_d1']
+            %td.text-right= dim_zeros row['f_d2']
+            %td.text-right= dim_zeros row['f_d3']
+            %td.text-right= dim_zeros row['f_l1']
+            %td.text-right= dim_zeros row['f_l2']
+            %td.text-right= dim_zeros row['f_l3']
+%br
+
+%section#lodging
+  %h3= fa_text :bed, 'Hospedaje'
+  .table-responsive
+    %table.table.table-bordered.table-sm.table-striped
+      %thead
+        %tr.text-center
+          %th.border-left-0.border-top-0
+          %th= show_sex_symbol true, show_text: true
+          %th.female-color-darker= show_sex_symbol false, show_text: true
+          %th= fa_text :child, 'Niño'
+          %th.female-color-darker= fa_text :child, 'Niña'
+          %th (Total)
+      %tbody
+        - @lodging.each do |row|
+          %tr
+            %td
+              %strong= row['status']
+            %td.text-right= dim_zeros row['m']
+            %td.text-right= dim_zeros row['f']
+            %td.text-right= dim_zeros row['cm']
+            %td.text-right= dim_zeros row['cf']
+            %td.text-right= dim_zeros row['sum']
+%br
+
+%section#transport
+  %h3= fa_text :bus, 'Transporte'
+  .table-responsive
+    %table.table.table-bordered.table-sm.table-striped
+      %thead
+        %tr
+          %th.border-left-0.border-top-0{ rowspan: 2 }
+          %th{ colspan: 2, class: 'text-center friday-bg' } Viernes
+          %th{ colspan: 2, class: 'text-center saturday-bg' } Sábado
+          %th{ colspan: 2, class: 'text-center sunday-bg' } Domingo
+          %th{ colspan: 2, class: 'text-center monday-bg' } Lunes
+        %tr
+          %th.text-center.friday-bg=   fa_text :arrow_up
+          %th.text-center.friday-bg=   fa_text :arrow_down
+          %th.text-center.saturday-bg= fa_text :arrow_up
+          %th.text-center.saturday-bg= fa_text :arrow_down
+          %th.text-center.sunday-bg=   fa_text :arrow_up
+          %th.text-center.sunday-bg=   fa_text :arrow_down
+          %th.text-center.monday-bg=   fa_text :arrow_up
+          %th.text-center.monday-bg=   fa_text :arrow_down
+      %tbody
+        - @services.each do |row|
+          %tr
+            %td
+              %strong= row['status']
+            %td.text-right= dim_zeros row['t_v1']
+            %td.text-right= dim_zeros row['t_v2']
+            %td.text-right= dim_zeros row['t_s1']
+            %td.text-right= dim_zeros row['t_s2']
+            %td.text-right= dim_zeros row['t_d1']
+            %td.text-right= dim_zeros row['t_d2']
+            %td.text-right= dim_zeros row['t_l1']
+            %td.text-right= dim_zeros row['t_l2']
+
+%br
+%br

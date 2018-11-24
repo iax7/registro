@@ -1,0 +1,13 @@
+<br>
+<br>
+<div class="row">
+  <div class="col">
+    <div class="text-center">
+      <%= image_tag 'error.png', style: 'height: 256px;width: 256px;' %>
+      <h1 class="text-danger">Error <%= @err[:code] %></h1>
+      <h4><%= @err[:msg] %></h4>
+      <br>
+      <%= link_to '&laquo; regresar'.html_safe, root_url, { class: 'btn btn-link' } %>
+    </div>
+  </div>
+</div>

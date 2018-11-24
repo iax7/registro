@@ -1,3 +1,3 @@
-<h1>Nuevo Invitado</h1>
-
-<%= render 'form' %>
+<h1><%= t 'headline.new', model: t('activerecord.models.guest') %></h1>
+<hr>
+<%= render 'form', guest: @guest %>

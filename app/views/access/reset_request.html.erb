@@ -1,0 +1,31 @@
+<% content_for :title do %>Recuperar Contraseña<% end %>
+
+<h2 class="text-center">Recuperar Contraseña</h2>
+<hr>
+<%
+  form_grp_class = 'form-group form-row justify-content-center'
+  label_class = 'sr-only'
+  div_input_class = 'col-sm-5'
+  input_class = 'form-control'
+%>
+<%= form_with url: reset_request_path, method: :post, local: true do |form| %>
+
+  <div class="<%= form_grp_class %>">
+    <%= label :user, :password, class: label_class %>
+    <div class="<%= div_input_class %>">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="envelope-addon"><%= fa_text :envelope %></span>
+        </div>
+        <%= email_field_tag :email, '', placeholder: 'Email', class: input_class, required: true %>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="<%= form_grp_class %>">
+    <div class="<%= div_input_class %>">
+      <%= submit_tag 'Aceptar', data: { disable_with: 'Procesando...' }, class: 'btn btn-sm btn-primary btn-block' %>
+    </div>
+  </div>
+<% end %>

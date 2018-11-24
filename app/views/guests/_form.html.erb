@@ -1,38 +1,302 @@
-<%= form_for [@person, @guest], html: {class:'form-horizontal', role:'form'} do |f| %>
+<%
+  form_grp_class = 'form-group row'
+  label_class = 'col-sm-4 col-form-label text-sm-right'
+  div_input_class = 'col-sm-6'
+  input_class = 'form-control'
+  chk_class = 'form-check app-big-checkbox'
+%>
+<%= form_with model: [ :registry, guest], local: true do |form| %>
+  <%= form.hidden_field :registry_id  %>
 
-    <div class="form-group"><%= f.label :name,     class: 'control-label col-sm-2' %><div class='col-sm-6'><%= f.text_field :name,     class: 'form-control input-sm' %></div></div>
-    <div class="form-group"><%= f.label :nickname, class: 'control-label col-sm-2' %><div class='col-sm-6'><%= f.text_field :nickname, class: 'form-control input-sm', placeholder: 'Aparecerá en el gafete impreso' %></div></div>
-    <div class="form-group"><%= f.label :relation, class: 'control-label col-sm-2' %><div class='col-sm-2'><%= f.select :relation, Guest.i18n_relations, {}, { class: 'form-control input-sm' } %></div></div>
-    <div class="form-group"><%= f.label :ismale,   class: 'control-label col-sm-2' %>
-      <div class='col-sm-4'>
-        <div class="btn-group btn-group-md" data-toggle="buttons">
-          <label class="btn btn-default <%= 'active' if @guest.ismale %>"><%= f.radio_button :ismale, true  %><%= show_sex_symbol true %> Hombre</label>
-          <label class="btn btn-default <%= 'active' unless @guest.ismale %>"><%= f.radio_button :ismale, false %><%= show_sex_symbol false %> Mujer</label>
-        </div>
-        <%#div class='col-sm-2'><%= f.select :ismale, [['Hombre', true], ['Mujer', false]], {}, { class: 'form-control input-sm'} %>
+  <% if guest.me? %>
+    <div class="text-center text-info">
+      <h2><%= guest.me? ? fa_text(:user, t('common.me')) : g.nick %></h2>
+    </div>
+  <% else %>
+    <div class="<%= form_grp_class %>">
+      <%= form.label :relation, class: label_class %>
+      <div class="<%= div_input_class %>">
+        <%= form.select :relation,
+                        options_for_select(Guest.relations_to_show, Guest.relations[guest.relation]),
+                        {},
+                        { class: 'form-control input-sm' } %>
       </div>
     </div>
-    <div class="form-group"><%= f.label :age,      class: 'control-label col-sm-2' %><div class='col-sm-2'><%= f.number_field :age,    class: 'form-control input-sm', min: 0 %></div></div>
 
-  <% if @guest.errors.any? %>
-    <div class="alert alert-danger fade in no-border">
-      <h2><%= pluralize(@guest.errors.count, 'error impidió', 'errores impidieron') %> que se guardara el invitado:</h2>
+    <div class="<%= form_grp_class %>">
+      <%= form.label :name, class: label_class %>
+      <div class="<%= div_input_class %>">
+        <%= form.text_field :name, id: :user_name, class: input_class %>
+      </div>
+    </div>
 
-      <ul>
-        <% @guest.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+    <div class="<%= form_grp_class %>">
+      <%= form.label :lastname, class: label_class %>
+      <div class="<%= div_input_class %>">
+        <%= form.text_field :lastname, id: :user_lastname, class: input_class %>
+      </div>
+    </div>
+
+    <div class="<%= form_grp_class %>">
+      <%= form.label :nick, class: label_class %>
+      <div class="<%= div_input_class %>">
+        <%= form.text_field :nick, id: :user_nick, class: input_class, placeholder: 'Aparecerá en el gafete impreso' %>
+      </div>
+    </div>
+
+    <div class="<%= form_grp_class %>">
+      <%= form.label :age, class: label_class %>
+      <div class="<%= div_input_class %>">
+        <%= form.number_field :age, id: :user_age, min: 0, class: "col-4 #{input_class}" %>
+      </div>
+    </div>
+
+    <div class="<%= form_grp_class %>">
+      <%= form.label :is_male, class: label_class %>
+      <div class="<%= div_input_class %>">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-light <%= 'active' if @guest.is_male   %>"><%= form.radio_button :is_male, true %><%= show_sex_symbol true %> <%= t 'common.male' %></label>
+          <label class="btn btn-light <%= 'active' if @guest.female? %>"><%= form.radio_button :is_male, false %><%= show_sex_symbol false %> <%= t 'common.female' %></label>
+        </div>
+      </div>
     </div>
   <% end %>
 
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-6">
-        <div id="actions">
-          <%= f.submit 'Aceptar', data: { disable_with: 'Procesando...' }, class: 'btn btn-sm btn-primary', id: 'submit_ajax' %>
-          <%= link_to 'Cancelar', get_start, { class: 'btn btn-sm btn-link' }  %>
-        </div>
-        <%= image_tag image_path('spinners/spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
+  <% if (guest.me? && guest.female?) || !guest.me? %>
+    <div class="<%= form_grp_class %>">
+      <%= form.label :is_pregnant, class: label_class %>
+      <div class="<%= div_input_class %>">
+        <span class="row" style="margin-left: 0px;">
+          <%= form.check_box :is_pregnant, id: :user_is_pregnant, class: chk_class, style: "margin-right: 5px;" %>
+          <h4 class="text-muted"
+              tabindex="0"
+              data-toggle="popover"
+              data-placement="right"
+              data-trigger="focus"
+              title="¿Embarazada?"
+              data-content="¿Asistirás a las conferencias embarazada y requieres condiciones y cuidados especiales?">
+            <%= fa_text :question_circle, style: 'vertical-align: middle;' %>
+          </h4>
+        </span>
       </div>
     </div>
+  <% end %>
+
+  <div class="<%= form_grp_class %>">
+    <%= form.label :is_medicated, class: label_class %>
+    <div class="<%= div_input_class %>">
+      <span class="row" style="margin-left: 0px;">
+        <%= form.check_box :is_medicated, id: :user_is_medicated, class: chk_class, style: "margin-right: 5px;" %>
+        <h4 class="text-muted"
+            tabindex="0"
+            data-toggle="popover"
+            data-placement="right"
+            data-trigger="focus"
+            title="¿Medicado?"
+            data-content="¿estás tomando algún medicamento y requieres condiciones y cuidados especiales debido a esto?">
+          <%= fa_text :question_circle, style: 'vertical-align: middle;' %>
+        </h4>
+      </span>
+    </div>
+  </div>
+  <%# FOOD --------------------------------------------------------------------------------------%>
+  <section id="foodSection" class="pt-3 pb-3">
+    <div class="text-center">
+      <h2><%= fa_text :utensils %> <%= form.label :food %>
+        <a class="text-info" data-toggle="collapse" href="#collapseFood" role="button" aria-expanded="false" aria-controls="collapseFood">
+          <%= fa_text :question_circle %>
+        </a>
+      </h2>
+    </div>
+    <div class="collapse mb-3" id="collapseFood">
+      <div class="card card-body shadow-sm bg-light">
+        <ul>
+          <li>Costos:
+            <strong>Adultos</strong>: <%= number_to_currency Event.current.food_full_price, precision: 0 %>,
+            <strong>Niños</strong>: <%= number_to_currency Event.current.food_half_price, precision: 0 %>,
+            <strong>Infantes</strong>: gratis.
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col text-center">
+        <%= link_to fa_text(:check_square, 'Todos'), '#', id: 'f_all', class: 'btn btn-link' %>&nbsp;|&nbsp;
+        <%= link_to fa_text(:square, 'Ninguno'), '#', id: 'f_none', class: 'btn btn-link' %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="<%= form_grp_class %>">
+          <%= form.label 'Viernes', class: label_class + ' friday-text font-weight-bold' %>
+          <div class="<%= div_input_class %>">
+            <%= form.check_box :f_v3, class: chk_class %>
+            <%= label :guest, :f_v3, class: 'form-check-label', for: :guest_f_v3 %>
+          </div>
+        </div>
+        <div class="<%= form_grp_class %>">
+          <%= form.label 'Sábado', class: label_class + ' saturday-text font-weight-bold' %>
+          <div class="<%= div_input_class %> row">
+            <div class="col-3">
+              <%= form.check_box :f_s1, class: chk_class %>
+              <%= label :guest,  :f_s1, class: 'form-check-label', for: :guest_f_s1 %>
+            </div>
+            <div class="col-3">
+              <%= form.check_box :f_s2, class: chk_class %>
+              <%= label :guest,  :f_s2, class: 'form-check-label', for: :guest_f_s2 %>
+            </div>
+            <div class="col-3">
+              <%= form.check_box :f_s3, class: chk_class %>
+              <%= label :guest,  :f_s3, class: 'form-check-label', for: :guest_f_s3 %>
+            </div>
+          </div>
+        </div>
+        <div class="<%= form_grp_class %>">
+          <%= form.label 'Domingo', class: label_class + ' sunday-text font-weight-bold' %>
+          <div class="<%= div_input_class %> row">
+            <div class="col-3">
+              <%= form.check_box :f_d1, class: chk_class %>
+              <%= label :guest,  :f_d1, class: 'form-check-label', for: :guest_f_d1 %>
+            </div>
+            <div class="col-3">
+              <%= form.check_box :f_d2, class: chk_class %>
+              <%= label :guest,  :f_d2, class: 'form-check-label', for: :guest_f_d2 %>
+            </div>
+            <div class="col-3">
+              <%= form.check_box :f_d3, class: chk_class %>
+              <%= label :guest,  :f_d3, class: 'form-check-label', for: :guest_f_d3 %>
+            </div>
+          </div>
+        </div>
+        <div class="<%= form_grp_class %>">
+          <%= form.label 'Lunes', class: label_class + ' monday-text font-weight-bold' %>
+          <div class="<%= div_input_class %>">
+            <%= form.check_box :f_l1, class: chk_class %>
+            <%= label :guest,  :f_l1, class: 'form-check-label', for: :guest_f_l3 %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <%# TRANSPORT  --------------------------------------------------------------------------------------%>
+  <section id="transportSection" class="pb-3">
+    <div class="text-center">
+      <h2><%= fa_text :bus %> <%= form.label :transport %>
+        <a class="text-info" data-toggle="collapse" href="#collapseTransport" role="button" aria-expanded="false" aria-controls="collapseTransport">
+          <%= fa_text :question_circle %>
+        </a>
+      </h2>
+    </div>
+    <div class="collapse mb-3" id="collapseTransport">
+      <div class="card card-body shadow-sm bg-light">
+        <ul>
+          <li>Costos: <strong>Adultos</strong>: <%= number_to_currency Event.current.transport_full_price, precision: 0 %>,
+            <strong>Niños</strong>: <%= number_to_currency Event.current.transport_half_price, precision: 0 %>,
+            <strong>Infantes</strong>: gratis.</li>
+          <li>Salida del <span class="friday-text">Viernes</span> es a la <strong>1:00pm</strong> (13:00)</li>
+          <li>Salida del <span class="saturday-text">Sábado</span> es a las <strong>8:00am</strong> (08:00)</li>
+          <li>Ambas salidas parten de la gasolinera de Av Patria cruce con Av Colón
+            <%= link_to fa_text(:map_marker_alt, 'Mapa'), Event.current.transport_map,
+                        class: 'btn btn-link m-0 p-0',
+                        target: '_blank' %>
+          </li>
+          <li>El único regreso en <span class="monday-text">Lunes</span> será al terminar las conferencias hacia el punto de partida.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="<%= form_grp_class %>">
+          <%= form.label 'Viaje', class: label_class + ' font-weight-bold' %>
+          <div class="<%= div_input_class %> row">
+            <div class="col-3">
+              <%= form.check_box :t_v1, class: chk_class %>
+              <%= label :guest, :t_v1, class: 'form-check-label friday-text', for: :guest_t_v1 %>
+            </div>
+            <div class="col-3">
+              <%= form.check_box :t_s1, class: chk_class %>
+              <%= label :guest, :t_s1, class: 'form-check-label saturday-text', for: :guest_t_s1 %>
+            </div>
+            <div class="col-3">
+              <%= form.check_box :t_l2, class: chk_class %>
+              <%= label :guest, :t_l2, class: 'form-check-label monday-text', for: :guest_t_l2 %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <%# LODGING --------------------------------------------------------------------------------------%>
+  <section id="lodgingSection">
+    <div class="text-center">
+      <h2><%= fa_text :bed %> <%= form.label :lodging %>
+        <a class="text-info" data-toggle="collapse" href="#collapseLodging" role="button" aria-expanded="false" aria-controls="collapseLodging">
+          <%= fa_text :question_circle %>
+        </a>
+      </h2>
+    </div>
+    <div class="collapse mb-3" id="collapseLodging">
+      <div class="card card-body shadow-sm bg-light">
+        <ul>
+          <li>Costos:
+            <strong>Adultos</strong>: <%= number_to_currency Event.current.lodging_full_price, precision: 0 %>,
+            <strong>Niños</strong>: <%= number_to_currency Event.current.lodging_half_price, precision: 0 %>,
+            <strong>Infantes</strong>: gratis.
+          </li>
+          <li>Incluye las 3 noches que dura la conferencia.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="<%= form_grp_class %>">
+          <%= form.label 'Estadía', class: label_class + ' font-weight-bold' %>
+          <div class="<%= div_input_class %>">
+            <%= form.check_box :l_v, class: chk_class %>
+            <%= label :guest, :l_v, class: 'form-check-label', for: :guest_l_v %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% if admin? %>
+      <div class="row">
+        <div class="col">
+          <div class="<%= form_grp_class %>">
+            <%= form.label 'Habitación', class: label_class + ' font-weight-bold' %>
+            <div class="<%= div_input_class %>">
+              <%= form.text_field :l_room, class: input_class + ' col-3' %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% end %>
+  </section>
+
+  <%# ------- Submit Buttons Section ---------------------- %>
+  <hr>
+  <div class="<%= form_grp_class %>">
+    <%= label_tag '', nil, class: label_class %>
+    <div id="actions" class="col-sm-6">
+      <%= form.submit 'Aceptar', data: {disable_with: t('common.waiting')}, class: 'btn btn-primary', id: 'submit_ajax' %>
+      <%= link_to 'Cancelar', start_path, {class: 'btn btn-outline-secondary'} %>
+    </div>
+    <%= image_tag image_path('spinners/spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
+  </div>
 <% end %>
+
+<script>
+  $("#guest_is_male_true").change(function() {
+      $("#user_is_pregnant").prop('checked', false).prop('disabled', true);
+  });
+  $("#guest_is_male_false").change(function () {
+      $("#user_is_pregnant").prop('disabled', false);
+  });
+  $("#f_all").click(function() {
+     $("#foodSection").find(":checkbox").prop('checked', true);
+     return false;
+  });
+  $("#f_none").click(function () {
+     $("#foodSection").find(":checkbox").prop('checked', false);
+     return false;
+  });
+</script>

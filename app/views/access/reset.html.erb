@@ -1,0 +1,56 @@
+<% content_for :title do %>Restablecer Contraseña<% end %>
+
+<h2 class="text-center">Restablecer Contraseña</h2>
+<h4 class="text-center text-info"><%= @email %></h4>
+<hr>
+<%
+  form_grp_class = 'form-group form-row justify-content-center'
+  label_class = 'sr-only'
+  div_input_class = 'col-sm-5'
+  input_class = 'form-control'
+%>
+<%= form_with url: access_reset_path, method: :post, local: true do |form| %>
+  <%= hidden_field_tag :email, @email %>
+
+  <%# ------- Password Section ------------------------------- %>
+  <div class="<%= form_grp_class %>">
+    <%= label :user, :password, class: label_class %>
+    <div class="<%= div_input_class %>">
+      <%= form.password_field :password, id: :user_password, placeholder: 'Nueva Contraseña', required: true, class: input_class %>
+    </div>
+  </div>
+
+  <div class="<%= form_grp_class %>" id="pass2grp">
+    <%= label :user, :password_confirmation, class: label_class %>
+    <div class="<%= div_input_class %>">
+      <div class="input-group add-on">
+        <%= form.password_field :password_confirmation, id: :user_password_confirmation, placeholder: 'Confirmar', required: true, class: 'form-control' %>
+        <div class="input-group-append" id="appended">
+          <span class="input-group-text bg-white"><i class="fas fa-circle" id="pwd_icon"></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="<%= form_grp_class %>">
+    <div class="<%= div_input_class %>">
+      <%= submit_tag 'Aceptar', data: { disable_with: 'Procesando...' }, class: 'btn btn-sm btn-primary btn-block', disabled: true %>
+    </div>
+  </div>
+<% end %>
+
+<script>
+    $('#user_password_confirmation').keyup(function() {
+        var pass1 = $('#user_password').val();
+        var pass2 = $('#user_password_confirmation').val();
+        btn = $('input:submit');
+        $('#appended').show();
+        if (pass1 === pass2) {
+            $('#pwd_icon').removeClass().addClass('fas fa-check-circle text-success');
+            btn.prop('disabled', false)
+        } else {
+            $('#pwd_icon').removeClass().addClass('fas fa-times-circle text-danger');
+            btn.prop('disabled', true)
+        }
+    });
+</script>

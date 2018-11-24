@@ -1,0 +1,257 @@
+<%
+  label_class = 'col-4 control-label text-right'
+  input_class = 'col-8'
+%>
+<%# user Data %>
+<h2 class="text-center">
+  <span class="badge badge-<%= badge_class my_reg?(@registry.id) %>"><%= @registry.user.id %></span><br>
+  <%= @registry.user.full_name false %>
+</h2>
+
+<div class="row justify-content-center">
+  <%= link_to fa_text(:edit, 'Cambiar mis Datos'),
+              edit_user_path(@registry.user),
+              class: 'btn btn-link' %>
+</div>
+
+<div class="row">
+  <div class="<%= label_class %>"><strong><%= label :user, :id %>:</strong></div>
+  <div class="<%= input_class %>"><strong><%= @registry.user.id %></strong></div>
+</div>
+<div class="row">
+  <div class="<%= label_class %>"><strong><%= label :user, :nick %>:</strong></div>
+  <div class="<%= input_class %>"><%= @registry.user.nick %></div>
+</div>
+<div class="row">
+  <div class="<%= label_class %>"><strong><%= label :user, :email %>:</strong></div>
+  <div class="<%= input_class %>"><%= @registry.user.email %></div>
+</div>
+<div class="row">
+  <div class="<%= label_class %>"><strong><%= label :user, :phone %>:</strong></div>
+  <div class="<%= input_class %>"><%= number_to_phone(@registry.user.phone, area_code: true) %></div>
+</div>
+<div class="row">
+  <div class="<%= label_class %>"><strong><%= label :user, :is_male %>:</strong></div>
+  <div class="<%= input_class %>"><%= show_sex_symbol @registry.user.is_male, show_text: true %></div>
+</div>
+<div class="row">
+  <div class="<%= label_class %>"><strong><%= label :user, :location %>:</strong></div>
+  <div class="<%= input_class %>"><%= @registry.user.location %></div>
+</div>
+<br>
+
+<%= link_to 'Alternar precios/iconos',
+            '#',
+            class: 'btn btn-link',
+            id: 'lnkPriceToggle',
+            remote: true %>
+<div class="table-responsive">
+  <table class="table table-hover table-sm">
+    <thead class="thead-dark">
+    <tr class="text-center">
+      <% if admin? %><th scope="col" rowspan="2">Id</th><% end %>
+      <th scope="col" rowspan="2"></th>
+      <th scope="col" rowspan="2">Nombre</th>
+      <th scope="col" rowspan="2" data-toggle="tooltip" title="Asistencia">As.</th>
+      <th scope="col" colspan="8"><%= fa_text :utensils %> Comida</th>
+      <th scope="col" rowspan="2" data-toggle="tooltip" title="Hospedaje"><%= fa_text :bed %></th>
+      <th scope="col" colspan="3"><%= fa_text :bus %> Transporte</th>
+      <th scope="col" rowspan="2">Costo</th>
+    </tr>
+    <tr class="text-center bg-dark">
+      <th class="friday-text"   data-toggle="tooltip" title="Cena">V3</th>
+      <th class="saturday-text" data-toggle="tooltip" title="Desayuno">S1</th>
+      <th class="saturday-text" data-toggle="tooltip" title="Comida">S2</th>
+      <th class="saturday-text" data-toggle="tooltip" title="Cena">S3</th>
+      <th class="sunday-text"   data-toggle="tooltip" title="Desayuno">D1</th>
+      <th class="sunday-text"   data-toggle="tooltip" title="Comida">D2</th>
+      <th class="sunday-text"   data-toggle="tooltip" title="Cena">D3</th>
+      <th class="monday-text"   data-toggle="tooltip" title="Desayuno">L1</th>
+      <th data-toggle="tooltip" title="Viernes Ida">V<%= fa_text :arrow_up, class_name: 'text-info' %></th>
+      <th data-toggle="tooltip" title="Sábado Ida">S<%= fa_text :arrow_up, class_name: 'text-info' %></th>
+      <th data-toggle="tooltip" title="Lunes Regreso">L<%= fa_text :arrow_down, class_name: 'text-danger' %></th>
+    </tr>
+    </thead>
+    <tfoot>
+      <tr class="text-center">
+        <% if admin? %><th></th><% end %>
+        <th rowspan="2"><%= link_to fa_text(:plus, 'Invitado'),
+                                    new_registry_guest_path(@registry),
+                                    class: 'btn btn-link m-0 p-0' %></th>
+        <th rowspan="2"></th>
+        <th rowspan="2"><%= number_to_currency @registry.totals[:assist],  precision: 0 %></th>
+        <th colspan="8"><%= number_to_currency @registry.totals[:food],    precision: 0 %></th>
+        <th rowspan="1"><%= number_to_currency @registry.totals[:lodging], precision: 0 %></th>
+        <th colspan="3"><%= number_to_currency @registry.totals[:trans],   precision: 0 %></th>
+        <th rowspan="2" class="text-right"><%= number_to_currency @registry.totals[:total], precision: 0 %></th>
+      </tr>
+      <% if false %>
+      <tr class="text-center">
+        <th><%= dim_zeros @registry.counts[:f_v3] %></th>
+        <th><%= dim_zeros @registry.counts[:f_s1] %></th>
+        <th><%= dim_zeros @registry.counts[:f_s2] %></th>
+        <th><%= dim_zeros @registry.counts[:f_s3] %></th>
+        <th><%= dim_zeros @registry.counts[:f_d1] %></th>
+        <th><%= dim_zeros @registry.counts[:f_d2] %></th>
+        <th><%= dim_zeros @registry.counts[:f_d3] %></th>
+        <th><%= dim_zeros @registry.counts[:f_l1] %></th>
+        <th><%= dim_zeros @registry.counts[:l_v]  %></th>
+        <th><%= dim_zeros @registry.counts[:t_v1] %></th>
+        <th><%= dim_zeros @registry.counts[:t_s1] %></th>
+        <th><%= dim_zeros @registry.counts[:t_l2] %></th>
+      </tr>
+      <% end %>
+    </tfoot>
+    <tbody>
+    <% @registry.guests.each do |g| %>
+      <tr class="text-center">
+        <% if admin? %><td><%= g.id %></td><% end %>
+        <td class="text-left">
+          <div class="btn-group">
+            <%= link_to fa_text(:edit),
+                        edit_registry_guest_path(@registry.id, g),
+                        class: 'btn btn-primary btn-sm',
+                        data: { toggle: "tooltip" },
+                        title: "Editar" %>
+            <%= link_to fa_text(:trash),
+                        registry_guest_path(@registry.id, g),
+                        method: :delete,
+                        data: {confirm: '¿estás seguro?', toggle: "tooltip"},
+                        rel: 'nofollow',
+                        class: 'btn btn-danger btn-sm',
+                        title: "Borrar" unless g.me? %>
+          </div>
+        </td>
+        <td class="d-flex justify-content-between align-items-center <%= 'female-color-darker' if g.female? %>">
+          <%= g.me? ? fa_text(:user, t('common.me')) : g.nick %>
+          <span class="badge badge-primary badge-pill"><%= g.age %></span>
+        </td>
+        <td class="border-right"><%= icon_cost_render true, g.costs_per_service(:assist) %></td>
+        <%# Food %>
+        <td><%= icon_cost_render g.f_v3, g.costs_per_service(:food) %></td>
+        <td><%= icon_cost_render g.f_s1, g.costs_per_service(:food) %></td>
+        <td><%= icon_cost_render g.f_s2, g.costs_per_service(:food) %></td>
+        <td><%= icon_cost_render g.f_s3, g.costs_per_service(:food) %></td>
+        <td><%= icon_cost_render g.f_d1, g.costs_per_service(:food) %></td>
+        <td><%= icon_cost_render g.f_d2, g.costs_per_service(:food) %></td>
+        <td><%= icon_cost_render g.f_d3, g.costs_per_service(:food) %></td>
+        <td class="border-right"><%= icon_cost_render g.f_l1, g.costs_per_service(:food) %></td>
+        <%# Lodging %>
+        <td class="border-right"><%= icon_cost_render g.l_v, g.costs_per_service(:lodging) %></td>
+        <%# Transport %>
+        <td><%= icon_cost_render g.t_v1, g.costs_per_service(:transport) %></td>
+        <td><%= icon_cost_render g.t_s1, g.costs_per_service(:transport) %></td>
+        <td class="border-right"><%= icon_cost_render g.t_l2, g.costs_per_service(:transport) %></td>
+        <%# Total %>
+        <td class="text-right"><%= number_to_currency g.total, precision: 0 %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+
+
+<%# ----------------------------------------------------------------------------------------- Extras --%>
+<div class="row" id="registryDiv">
+  <div class="<%= label_class %>"><strong><%= label :registry, :comments %>:</strong></div>
+  <div class="<%= input_class %>" id="regComments"><%= @registry.comments %></div>
+  <div class="<%= label_class %>"><strong><%= label :registry, :amount_offering %>:</strong></div>
+  <div class="<%= input_class %>" id="regOffering"><%= number_to_currency @registry.amount_offering, precision: 0 %></div>
+
+  <div class="col text-center mb-5">
+    <%= link_to fa_text(:edit, 'Editar comentarios/ofrenda'), edit_registry_path, class: 'btn btn-link', remote: true %>
+  </div>
+</div>
+
+<%# ----------------------------------------------------------------------------------------- Pago --%>
+<section id="payment" class="custom-section">
+  <div class="card">
+    <h2 class="card-header text-center bg-white"><%= fa_text :credit_card %> Pago</h2>
+    <div class="card-body bg-light">
+      <% if @registry.paid? %>
+        <br>
+        <div class="text-center text-success">
+          <h3><%= fa_text :check_double %> Pagado, gracias.</h3>
+        </div>
+        <br>
+        <br>
+        <p class="text-justify">
+          Puedes contactar a cualquier persona encargada para resolver cualquier duda acerca de la conferencia:
+        </p>
+      <% else %>
+        <div class="card card-body bg-primary text-warning">
+          <h5 class="text-center"><%= fa_text :exclamation_triangle %> ¡Atención!</h5>
+          <p class="lead text-center">
+            No está asegurado tu lugar, comida, hospedaje, ni transporte hasta no
+            haber efectuado el pago total de tu registro.
+          </p>
+        </div>
+        <br>
+          <table class='table table-sm borderless h4'>
+            <tr>
+              <td class="text-right w-50 border-0">Gran Total:</td>
+              <td class="w-50 border-0 text-monospace" id="lbl_grand_total"><%= dim_zeros_currency @registry.grand_total, decimals: 0 %></td>
+            </tr>
+            <% if @registry.amount_paid > 0 %>
+              <tr>
+                <td class="text-right w-50 border-0">Abonado:</td>
+                <td class="w-50 border-0 text-monospace text-primary" id="lbl_paid"><%= dim_zeros_currency @registry.amount_paid, decimals: 0 %></td>
+              </tr>
+              <tr>
+                <td class="text-right w-50 border-0">Saldo:</td>
+                <td class="w-50 border-0 text-monospace text-danger" id="lbl_remaining"><%= dim_zeros_currency @registry.amount_remaining, decimals: 0 %></td>
+              </tr>
+            <% end %>
+          </table>
+        <hr>
+        <p class="text-justify">
+          Para pagar puedes contactar a la persona encargada mas cercana a ti. Ten a la mano
+          tu número de identificación (el cual es <strong><%= @registry.user_id %></strong>) para proporcionárselo:
+        </p>
+      <% end %>
+
+      <div class="row">
+      <% @event.paycollectors.each_with_index do |paycollector, index|
+           p = OpenStruct.new paycollector
+           link_classes = 'btn btn-link m-0 p-0'
+      %>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
+          <address>
+            <strong class="lead"><%= p.name %></strong><br>
+            <%= link_to  fa_text(p.phone_type.to_sym) + ' ' + number_to_phone(p.phone, area_code: true),
+                         'tel:' + p.phone,
+                         class: link_classes %><br>
+            <% if defined? p.phone2 %>
+              <%= link_to  fa_text(p.phone2_type.to_sym) + number_to_phone(p.phone2, area_code: true),
+                           'tel:' + p.phone2,
+                           class: link_classes %><br>
+            <% end %>
+            <%= mail_to p.email,
+                        fa_text(:envelope, 'Email'),
+                        subject: 'Pago de conferencia',
+                        class: link_classes %><br>
+            <%= p.church %><br>
+            <strong><%= p.location %></strong>
+          </address>
+        </div>
+      <% end %>
+      </div>
+
+      <p class="text-justify">
+        <strong class="text-danger">Cancelaciones</strong>: Una vez realizado el pago correspondiente de su registro; en caso
+        de querer realizar una cancelación, le informamos que dada a la magnitud del
+        evento y la contratación de sus servicios, ya no será posible la devolución de
+        su dinero, quedando este como ofrenda para la conferencia.
+      </p>
+    </div>
+  </div>
+</section>
+<br>
+<br>
+<script>
+  $("#lnkPriceToggle").click( function() {
+     $(".bool").toggle();
+     $(".cost").toggle();
+     return false;
+  });
+</script>

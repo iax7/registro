@@ -1,0 +1,43 @@
+<h1>Users</h1>
+
+<table class="table table-sm">
+  <thead>
+  <tr>
+    <th>Id</th>
+    <th>Name</th>
+    <th>LastName</th>
+    <th>Nick</th>
+    <th>Phone</th>
+    <th>Email</th>
+    <th>DOB</th>
+    <th>Admin</th>
+    <th></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @users.each do |user| %>
+    <tr>
+      <td><%= user.id %></td>
+      <td><%= user.name %></td>
+      <td><%= user.lastname %></td>
+      <td><%= user.nick %></td>
+      <td><%= user.phone %></td>
+      <td><%= user.email %></td>
+      <td><%= user.dob %></td>
+      <td><%= render_bool user.is_admin, false %></td>
+      <td>
+        <div class="btn-group">
+          <%= link_to fa_text(:eye), user, class: 'btn btn-primary btn-sm' %>
+          <%= link_to fa_text(:edit), edit_user_path(user), class: 'btn btn-primary btn-sm' %>
+          <%= link_to fa_text(:trash), user, method: :delete, data: {confirm: 'Are you sure?'}, class: 'btn btn-danger btn-sm' %>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New User', new_user_path %>

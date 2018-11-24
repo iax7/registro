@@ -1,0 +1,21 @@
+-# frozen_string_literal: true
+%h3 Solicitadas
+= render 'food_table', count: @totals_food[:requested].count,
+                       money: @totals_food[:requested].money,
+                       money_total: @totals_food[:requested].money_total
+%br
+
+-# -----------------------------------------------------------------------------------------------
+%h3 Pagadas
+= render 'food_table', count: @totals_food[:paid].count,
+                       money: @totals_food[:paid].money,
+                       money_total: @totals_food[:paid].money_total
+%br
+
+-# -----------------------------------------------------------------------------------------------
+%h3 Consumo Real
+= render 'food_table', count: @totals_food[:used].count,
+                       money: @totals_food[:used].money,
+                       money_total: @totals_food[:used].money_total
+%br
+%br

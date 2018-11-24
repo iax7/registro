@@ -1,0 +1,47 @@
+<%
+  form_grp_class = 'form-group row'
+  label_class = 'col-sm-4 col-form-label text-sm-right'
+  div_input_class = 'col-sm-6'
+  input_class = 'form-control'
+  chk_class = 'form-check app-big-checkbox'
+%>
+<%= form_with(model: event, local: true) do |form| %>
+
+  <div class="<%= form_grp_class %>">
+    <%= form.label :name, class: label_class %>
+    <div class="<%= div_input_class %>"><%= form.text_field :name, class: input_class %></div>
+  </div>
+
+  <div class="<%= form_grp_class %>">
+    <%= form.label :settings, class: label_class %>
+    <div class="<%= div_input_class %>">
+      <%= form.text_area :settings, rows: 30, class: input_class, style: "font-family: monospace;" %>
+    </div>
+  </div>
+
+  <% for field in [:f_v1,:f_v2,:f_v3,
+                   :f_s1,:f_s2,:f_s3,
+                   :f_d1,:f_d2,:f_d3,
+                   :f_l1,:f_l2,:f_l3,
+                   :t_v1,:t_s1,:t_d1,:t_l1,
+                   :t_v2,:t_s2,:t_d2,:t_l2,
+                   :l_v,:l_s,:l_d,:l_l,] %>
+    <div class="<%= form_grp_class %>">
+      <%= form.label field, class: label_class %>
+      <div class="<%= div_input_class %>"><%= form.text_field field, class: input_class %></div>
+    </div>
+  <% end %>
+
+
+  <%# ------- Submit Buttons Section ---------------------- %>
+  <hr>
+  <div class="<%= form_grp_class %>">
+    <%= label_tag '', nil, class: label_class %>
+    <div id="actions" class="col-sm-6">
+      <%= form.submit data: {disable_with: t('common.waiting')}, class: 'btn btn-primary', id: 'submit_ajax' %>
+      <%= link_to 'Cancelar', start_path, {class: 'btn btn-outline-secondary'} %>
+    </div>
+    <%= image_tag image_path('spinners/spinner.gif'), id: 'spinner', style: 'display:none', alt: 'Waiting...' %>
+  </div>
+
+<% end %>
