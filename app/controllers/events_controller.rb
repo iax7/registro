@@ -83,6 +83,17 @@ class EventsController < ApplicationController
     end
   end
 
+  # GET /events/1/calculate_statistics
+  def calculate_statistics
+    require 'create_event_statistics'
+
+    event = Event.find params[:event_id]
+    CreateEventStatistics.calculate event.name
+    logger.info("*** Calculated Event statistics for [#{event.name}]")
+
+    redirect_to event
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -93,12 +104,7 @@ class EventsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def event_params
     params.require(:event).permit(:name,
-                                  :f_v1, :f_v2, :f_v3,
-                                  :f_s1, :f_s2, :f_s3,
-                                  :f_d1, :f_d2, :f_d3,
-                                  :f_l1, :f_l2, :f_l3,
-                                  :t_v, :t_s, :t_d, :t_l,
-                                  :l_v, :l_s, :l_d, :l_l,
-                                  :settings)
+                                  :settings,
+                                  :statistics)
   end
 end

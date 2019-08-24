@@ -124,8 +124,10 @@ es:
         is_notified: Notificado?
         comments: Comentarios
         amount_debt: Por Pagar
-        amount_paid: Abonado
+        amount_paid: Cantidad
         amount_offering: Ofrenda
+        kind: Tipo de Pago
+        complete_amount: Completar con el restante
       user:
         name: &name Nombre(s)
         lastname: &last Apellidos
@@ -143,7 +145,11 @@ es:
         location: Ubicación
         food: &food Comida
         transport: &transport Transporte
-        lodging: &lodging Servicios de Estadía
+        lodging: &lodging Hospedaje
+      payments:
+        kinds:
+          money: Monetario
+          gift: Cortesía
       guest:
         name: *name
         lastname: *last
@@ -219,6 +225,7 @@ es:
       registry: Registro
       user: Usuario
       guest: Invitado
+      payment: Pagos
     #attributes:
     #  user:
     #    name: *name

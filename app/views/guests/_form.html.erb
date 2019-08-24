@@ -3,7 +3,6 @@
   label_class = 'col-sm-4 col-form-label text-sm-right'
   div_input_class = 'col-sm-6'
   input_class = 'form-control'
-  chk_class = 'form-check app-big-checkbox'
 %>
 <%= form_with model: [ :registry, guest], local: true do |form| %>
   <%= form.hidden_field :registry_id  %>
@@ -67,7 +66,7 @@
       <%= form.label :is_pregnant, class: label_class %>
       <div class="<%= div_input_class %>">
         <span class="row" style="margin-left: 0px;">
-          <%= form.check_box :is_pregnant, id: :user_is_pregnant, class: chk_class, style: "margin-right: 5px;" %>
+          <%= render 'components/checkbox', form: form, field: :is_pregnant %>
           <h4 class="text-muted"
               tabindex="0"
               data-toggle="popover"
@@ -86,7 +85,7 @@
     <%= form.label :is_medicated, class: label_class %>
     <div class="<%= div_input_class %>">
       <span class="row" style="margin-left: 0px;">
-        <%= form.check_box :is_medicated, id: :user_is_medicated, class: chk_class, style: "margin-right: 5px;" %>
+        <%= render 'components/checkbox', form: form, field: :is_medicated %>
         <h4 class="text-muted"
             tabindex="0"
             data-toggle="popover"
@@ -129,50 +128,30 @@
       <div class="col">
         <div class="<%= form_grp_class %>">
           <%= form.label 'Viernes', class: label_class + ' friday-text font-weight-bold' %>
-          <div class="<%= div_input_class %>">
-            <%= form.check_box :f_v3, class: chk_class %>
-            <%= label :guest, :f_v3, class: 'form-check-label', for: :guest_f_v3 %>
+          <div class="<%= div_input_class %> row">
+            <%= render 'components/checkbox', form: form, model: :guest, field: :f_v3 %>
           </div>
         </div>
         <div class="<%= form_grp_class %>">
           <%= form.label 'Sábado', class: label_class + ' saturday-text font-weight-bold' %>
           <div class="<%= div_input_class %> row">
-            <div class="col-3">
-              <%= form.check_box :f_s1, class: chk_class %>
-              <%= label :guest,  :f_s1, class: 'form-check-label', for: :guest_f_s1 %>
-            </div>
-            <div class="col-3">
-              <%= form.check_box :f_s2, class: chk_class %>
-              <%= label :guest,  :f_s2, class: 'form-check-label', for: :guest_f_s2 %>
-            </div>
-            <div class="col-3">
-              <%= form.check_box :f_s3, class: chk_class %>
-              <%= label :guest,  :f_s3, class: 'form-check-label', for: :guest_f_s3 %>
-            </div>
+            <%= render 'components/checkbox', form: form, model: :guest, field: :f_s1 %>
+            <%= render 'components/checkbox', form: form, model: :guest, field: :f_s2 %>
+            <%= render 'components/checkbox', form: form, model: :guest, field: :f_s3 %>
           </div>
         </div>
         <div class="<%= form_grp_class %>">
           <%= form.label 'Domingo', class: label_class + ' sunday-text font-weight-bold' %>
           <div class="<%= div_input_class %> row">
-            <div class="col-3">
-              <%= form.check_box :f_d1, class: chk_class %>
-              <%= label :guest,  :f_d1, class: 'form-check-label', for: :guest_f_d1 %>
-            </div>
-            <div class="col-3">
-              <%= form.check_box :f_d2, class: chk_class %>
-              <%= label :guest,  :f_d2, class: 'form-check-label', for: :guest_f_d2 %>
-            </div>
-            <div class="col-3">
-              <%= form.check_box :f_d3, class: chk_class %>
-              <%= label :guest,  :f_d3, class: 'form-check-label', for: :guest_f_d3 %>
-            </div>
+            <%= render 'components/checkbox', form: form, model: :guest, field: :f_d1 %>
+            <%= render 'components/checkbox', form: form, model: :guest, field: :f_d2 %>
+            <%= render 'components/checkbox', form: form, model: :guest, field: :f_d3 %>
           </div>
         </div>
         <div class="<%= form_grp_class %>">
           <%= form.label 'Lunes', class: label_class + ' monday-text font-weight-bold' %>
-          <div class="<%= div_input_class %>">
-            <%= form.check_box :f_l1, class: chk_class %>
-            <%= label :guest,  :f_l1, class: 'form-check-label', for: :guest_f_l3 %>
+          <div class="<%= div_input_class %> row">
+            <%= render 'components/checkbox', form: form, model: :guest, field: :f_l1 %>
           </div>
         </div>
       </div>
@@ -209,18 +188,9 @@
         <div class="<%= form_grp_class %>">
           <%= form.label 'Viaje', class: label_class + ' font-weight-bold' %>
           <div class="<%= div_input_class %> row">
-            <div class="col-3">
-              <%= form.check_box :t_v1, class: chk_class %>
-              <%= label :guest, :t_v1, class: 'form-check-label friday-text', for: :guest_t_v1 %>
-            </div>
-            <div class="col-3">
-              <%= form.check_box :t_s1, class: chk_class %>
-              <%= label :guest, :t_s1, class: 'form-check-label saturday-text', for: :guest_t_s1 %>
-            </div>
-            <div class="col-3">
-              <%= form.check_box :t_l2, class: chk_class %>
-              <%= label :guest, :t_l2, class: 'form-check-label monday-text', for: :guest_t_l2 %>
-            </div>
+            <%= render 'components/checkbox', form: form, model: :guest, field: :t_v1 %>
+            <%= render 'components/checkbox', form: form, model: :guest, field: :t_s1 %>
+            <%= render 'components/checkbox', form: form, model: :guest, field: :t_l2 %>
           </div>
         </div>
       </div>
@@ -251,9 +221,8 @@
       <div class="col">
         <div class="<%= form_grp_class %>">
           <%= form.label 'Estadía', class: label_class + ' font-weight-bold' %>
-          <div class="<%= div_input_class %>">
-            <%= form.check_box :l_v, class: chk_class %>
-            <%= label :guest, :l_v, class: 'form-check-label', for: :guest_l_v %>
+          <div class="<%= div_input_class %> row">
+            <%= render 'components/checkbox', form: form, model: :guest, field: :l_v %>
           </div>
         </div>
       </div>
@@ -298,5 +267,23 @@
   $("#f_none").click(function () {
      $("#foodSection").find(":checkbox").prop('checked', false);
      return false;
+  });
+  $(".guest-row").click(function(eventData) {
+      id = eventData.target.id;
+      data = JSON.parse($('#guest_' + id)[0].value);
+
+      $('#guest_relation').val(data.relation);
+      $('#user_name').val(data.name);
+      $('#user_lastname').val(data.lastname);
+      $('#user_nick').val(data.nick);
+      $('#user_age').val(data.age + 1);
+      if (data.is_male)
+          $('#guest_is_male_true').parent()[0].click();
+      else
+          $('#guest_is_male_false').parent()[0].click();
+
+      $('#row_' + id).hide(1000);
+
+      return false;
   });
 </script>

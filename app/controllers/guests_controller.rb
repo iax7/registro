@@ -19,6 +19,7 @@ class GuestsController < ApplicationController
   # GET /guests/new
   def new
     @guest = Guest.new
+    @guest_history = User.where(id: helpers.session_id).pluck(:guest_history).first
   end
 
   # GET /guests/1/edit
@@ -29,7 +30,6 @@ class GuestsController < ApplicationController
   def create
     @guest = Guest.new(guest_params)
 
-    puts @guest.inspect
     respond_to do |format|
       if @guest.save
         format.html { redirect_to define_redirection_create_update, notice: t('.notice') }
@@ -72,7 +72,6 @@ class GuestsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_guest
     @guest = Guest.find params[:id]
-    puts @guest.inspect
   end
 
   def define_redirection_create_update

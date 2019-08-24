@@ -85,6 +85,7 @@ class Registry < ApplicationRecord
     @counts = Hash[keys.collect { |key| [key, 0] }].with_indifferent_access
 
     guests.each do |g|
+      # Calculate *Totals*
       @totals[:pregnant] += g.is_pregnant ? 1 : 0
       @totals[:medicated] += g.is_medicated ? 1 : 0
       @totals[:assist] += g.assist_cost
@@ -93,12 +94,14 @@ class Registry < ApplicationRecord
       @totals[:lodging] += g.lodging_cost
       @totals[:total] += g.total
 
+      # Calculate *Counts*
       attr_true = g.attributes.select { |k, v| k.to_s.match(/^._\w\d?$/) && v }
       attr_true.each { |k, _| @counts[k.to_sym] += 1 }
     end
     @is_calculated = true
 
     if amount_debt != @totals[:total]
+      logger.debug("*** Debt Changed Reg[#{id}] --> Current: #{amount_debt} | New: #{@totals[:total]}")
       self.amount_debt = @totals[:total]
       save!
     end

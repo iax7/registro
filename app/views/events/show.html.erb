@@ -5,41 +5,20 @@
 
 <% class_names = 'text-monospace border rounded bg-light p-2' %>
 
-<div class="row">
-  <div class="col-3">
-    <h3>Food</h3>
-  </div>
-  <div class="col"><strong>V: </strong><span class="<%= class_names %>"><%= @event.f_v1 %> | <%= @event.f_v2 %> | <%= @event.f_v3 %></span></div>
-  <div class="col"><strong>S: </strong><span class="<%= class_names %>"><%= @event.f_s1 %> | <%= @event.f_s2 %> | <%= @event.f_s3 %></span></div>
-  <div class="col"><strong>D: </strong><span class="<%= class_names %>"><%= @event.f_d1 %> | <%= @event.f_d2 %> | <%= @event.f_d3 %></span></div>
-  <div class="col"><strong>L: </strong><span class="<%= class_names %>"><%= @event.f_l1 %> | <%= @event.f_l2 %> | <%= @event.f_l3 %></span></div>
-</div>
-
-<div class="row">
-  <div class="col-3">
-    <h3>Transport</h3>
-  </div>
-  <div class="col"><strong>V: </strong><span class="<%= class_names %>"><%= @event.t_v1 %> | <%= @event.t_v2 %></span></div>
-  <div class="col"><strong>S: </strong><span class="<%= class_names %>"><%= @event.t_s1 %> | <%= @event.t_s2 %></span></div>
-  <div class="col"><strong>D: </strong><span class="<%= class_names %>"><%= @event.t_d1 %> | <%= @event.t_d2 %></span></div>
-  <div class="col"><strong>L: </strong><span class="<%= class_names %>"><%= @event.t_l1 %> | <%= @event.t_l2 %></span></div>
-</div>
-
-<div class="row">
-  <div class="col-3">
-    <h3>Lodging</h3>
-  </div>
-  <div class="col"><strong>V: </strong><span class="<%= class_names %>"><%= @event.l_v %></span></div>
-  <div class="col"><strong>S: </strong><span class="<%= class_names %>"><%= @event.l_s %></span></div>
-  <div class="col"><strong>D: </strong><span class="<%= class_names %>"><%= @event.l_d %></span></div>
-  <div class="col"><strong>L: </strong><span class="<%= class_names %>"><%= @event.l_l %></span></div>
-</div>
-
 <p>
   <h3><%= fa_text :cog %> Settings:</h3>
   <pre class="<%= class_names %>">
     <code>
       <%= @event.settings.to_yaml %>
+    </code>
+  </pre>
+</p>
+
+<p>
+  <h3><%= fa_text :chart_pie %> Statistics:</h3>
+  <pre class="<%= class_names %>">
+    <code>
+      <%= @event.statistics.to_yaml %>
     </code>
   </pre>
 </p>

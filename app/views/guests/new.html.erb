@@ -1,3 +1,22 @@
 <h1><%= t 'headline.new', model: t('activerecord.models.guest') %></h1>
+<% if @guest_history.size > 0 %>
+  <div class="row justify-content-center">
+    <table class="table table-sm" style="width: 450px;">
+      <tr>
+        <th colspan="3">Histórico de Invitados</th>
+      </tr>
+      <% @guest_history.each do |guest| %>
+        <tr id="row_<%= guest['id'] %>">
+          <td><%= guest['name'] %></td>
+          <td><%= guest['age'] %></td>
+          <td style="width: 30%;">
+            <a href="#" class="btn btn-dark btn-sm guest-row" id="<%= guest['id'] %>"><%= fa_text :arrow_left %>&nbsp;Seleccionar</a>
+            <input type="hidden" value="<%= guest.to_json %>" id="guest_<%= guest['id'] %>">
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+<% end %>
 <hr>
 <%= render 'form', guest: @guest %>

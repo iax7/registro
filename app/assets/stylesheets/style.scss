@@ -4,15 +4,13 @@ $enable-gradients: false;
 $enable-shadows: true;
 
 @import "theme/variables";
-@import "bootstrap";
+@import "bootstrap/scss/bootstrap";
 @import "theme/bootswatch";
 
 @import "extra/footer";
 @import "extra/spinner";
 @import "extra/weekdays";
 @import "extra/checkbox";
-
-@import "extra/awesomplete";
 
 .female-color { color: #ff9cf9; }
 .female-color-darker { color: fuchsia; }

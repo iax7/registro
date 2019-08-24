@@ -1,13 +1,13 @@
 ---
 default: &default
-  author:      'Cristianismo Bíblico'
-  author_home: 'http://www.cristianismobiblico.com/'
-  twitter_id:  '@C_Biblico'
+  author:      'Generic Author'
+  author_home: 'http://www.heroku.com/'
+  twitter_id:  '@isaiaspina'
   facebk_id:   '297759137246012'
-  site_url:    'registro.cristianismobiblico.com'
+  site_url:    'reg.herokuapp.com'
 
-  default_url: 'https://registro.cristianismobiblico.com'
-  mailer_from_addr: 'Registro Cristianismo Biblico <registro@cristianismobiblico.com>'
+  default_url: 'https://reg.herokuapp.com'
+  mailer_from_addr: 'Registro <registro@google.com>'
   letsencrypt: none
 
 development:

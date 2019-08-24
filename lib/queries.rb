@@ -21,16 +21,19 @@ module Queries
 
   def self.offerings(event)
     <<~SQL
-      SELECT 'all' AS status, COALESCE(SUM(r.amount_offering), 0) AS total
-        FROM registries r INNER JOIN
-             events e ON r.event_id = e.id
-       WHERE e.name = '#{event}'
+      WITH offerings AS (
+            SELECT r.amount_offering AS offering,
+                   r.amount_debt + r.amount_offering AS debt,
+                   r.amount_paid AS paid
+              FROM registries r INNER JOIN
+                   events e ON r.event_id = e.id
+             WHERE e.name = '#{event}')
+      SELECT 'all' AS status, COALESCE(SUM(o.offering), 0) AS total
+        FROM offerings o
       UNION ALL
-      SELECT 'paid' AS status, COALESCE(SUM(r.amount_offering), 0) AS total
-        FROM registries r INNER JOIN
-             events e ON r.event_id = e.id
-       WHERE e.name = '#{event}'
-         AND (r.amount_debt + r.amount_offering ) <= r.amount_paid
+      SELECT 'paid' AS status, COALESCE(SUM(o.offering), 0) AS total
+        FROM offerings o
+       WHERE o.debt <= o.paid;
     SQL
   end
 
@@ -75,6 +78,7 @@ module Queries
     SQL
   end
 
+
   def self.food_by_age_paid_status(event)
     <<~SQL
       SELECT f.is_paid,
@@ -84,7 +88,7 @@ module Queries
              sum(f.f_d1) AS f_d1, sum(f.f_d2) AS f_d2, sum(f.f_d3) AS f_d3,
              sum(f.f_l1) AS f_l1, sum(f.f_l2) AS f_l2, sum(f.f_l3) AS f_l3
         FROM (
-              SELECT CASE WHEN (g.age >= (SELECT settings ->> 'adult_age' FROM events)::int)
+              SELECT CASE WHEN (g.age >= (SELECT settings ->> 'adult_age' FROM events WHERE events.name = '#{event}')::int)
                           THEN 'adult' ELSE 'child' END AS age,
                      (r.amount_debt + r.amount_offering ) <= r.amount_paid AS is_paid,
                      g.f_v1::int, g.f_v2::int, g.f_v3::int,
@@ -107,7 +111,7 @@ module Queries
              sum(f.fu_d1) AS f_d1, sum(f.fu_d2) AS f_d2, sum(f.fu_d3) AS f_d3,
              sum(f.fu_l1) AS f_l1, sum(f.fu_l2) AS f_l2, sum(f.fu_l3) AS f_l3
         FROM (
-      SELECT CASE WHEN (g.age >= (SELECT settings ->> 'adult_age' FROM events)::int)
+      SELECT CASE WHEN (g.age >= (SELECT settings ->> 'adult_age' FROM events WHERE events.name = '#{event}')::int)
                           THEN 'adult' ELSE 'child' END AS age,
                      g.fu_v1, g.fu_v2, g.fu_v3,
                      g.fu_s1, g.fu_s2, g.fu_s3,
@@ -123,6 +127,14 @@ module Queries
 
   def self.lodging_by_age_sex(event)
     <<~SQL
+      WITH lodging_stats AS ( 
+        SELECT (g.age >= (SELECT settings ->> 'adult_age' FROM events WHERE events.name = '#{event}')::int) AS is_adult,
+               (r.amount_debt + r.amount_offering ) <= r.amount_paid AS is_paid,
+               g.is_male, g.l_v, g.l_s, g.l_d, g.l_l
+          FROM registries r INNER JOIN
+               guests g ON r.id = g.registry_id INNER JOIN
+               events e ON r.event_id = e.id
+         WHERE e.name = '#{event}')
       SELECT 'all' AS status,
              sum(CASE WHEN (l.is_adult and l.is_male)
                       THEN 1 ELSE 0 END) AS m,
@@ -133,16 +145,8 @@ module Queries
              sum(CASE WHEN (l.is_adult = false and l.is_male = false)
                       THEN 1 ELSE 0 END) AS cf,
              count(1) AS sum
-        FROM (
-              SELECT (g.age >= (SELECT settings ->> 'adult_age' FROM events)::int) AS is_adult,
-                     (r.amount_debt + r.amount_offering ) <= r.amount_paid AS is_paid,
-                     g.is_male, g.l_v, g.l_s, g.l_d, g.l_l
-                FROM registries r INNER JOIN
-                     guests g ON r.id = g.registry_id INNER JOIN
-                     events e ON r.event_id = e.id
-               WHERE e.name = '#{event}'
-              ) l
-      WHERE l.l_v = true
+        FROM lodging_stats l
+       WHERE l.l_v = true
       UNION ALL
       SELECT 'paid' AS status,
              COALESCE(sum(CASE WHEN (l.is_adult and l.is_male)
@@ -154,21 +158,15 @@ module Queries
              COALESCE(sum(CASE WHEN (l.is_adult = false and l.is_male = false)
                                THEN 1 ELSE 0 END), 0) AS cf,
              COUNT(1) AS sum
-        FROM (
-              SELECT (g.age >= (SELECT settings ->> 'adult_age' FROM events)::int) AS is_adult,
-                     (r.amount_debt + r.amount_offering ) <= r.amount_paid AS is_paid,
-                     g.is_male, g.l_v, g.l_s, g.l_d, g.l_l
-                FROM registries r INNER JOIN
-                     guests g ON r.id = g.registry_id INNER JOIN
-                     events e ON r.event_id = e.id
-               WHERE e.name = '#{event}'
-              ) l
-      WHERE l.l_v = true
-        AND l.is_paid
+        FROM lodging_stats l
+       WHERE l.l_v = true
+         AND l.is_paid
     SQL
   end
 
+  # @deprecated Please use {#user_payments} instead
   def self.pay_collectors(event)
+    warn "[DEPRECATION] `pay_collectors` is deprecated.  Please use `user_payments` instead."
     <<~SQL
       SELECT u.id,
              CONCAT(u.name ,' ', u.lastname) AS name,
@@ -180,6 +178,26 @@ module Queries
        WHERE e.name = '#{event}'
       GROUP BY 1, 2, 3
       ORDER BY 1
+    SQL
+  end
+
+  # Uses the new table to get more acurrate report
+  def self.user_payments(event)
+    <<~SQL
+      WITH user_payments AS (
+         SELECT u.id,
+                concat(u.name, ' ', u.lastname) AS name,
+                concat(u.city, ', ', u.state) AS location,
+                CASE WHEN p.kind = 0 THEN p.amount ELSE 0 END AS real,
+                CASE WHEN p.kind = 1 THEN p.amount ELSE 0 END AS courtesy
+           FROM payments p INNER JOIN
+                users u ON p.user_id = u.id INNER JOIN
+                registries r ON p.registry_id = r.id INNER JOIN
+                events e ON r.event_id = e.id
+          WHERE e.name = '#{event}')
+        SELECT id, name, location, sum(real) AS real, sum(courtesy) AS courtesy
+          FROM user_payments
+      GROUP BY id, name, location
     SQL
   end
 

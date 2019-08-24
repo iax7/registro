@@ -161,7 +161,7 @@
         <td><%= dim_zeros r["t_l2"], '-' %></td>
         <td class="text-right">
           <%= link_to number_to_currency(r["grand_total"], precision: 0),
-                      registry_edit_payment_url(r["id"]),
+                      registry_edit_payment_url(r["registry_id"]),
                       remote: true,
                       class: 'btn btn-sm btn-info w-100 p-1 m-0' %>
         </td>

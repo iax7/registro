@@ -1,0 +1,48 @@
+diff --git i/app/controllers/access_controller.rb w/app/controllers/access_controller.rb
+index e87a5a..432124 100644
+--- i/app/controllers/access_controller.rb
++++ w/app/controllers/access_controller.rb
+@@ -22,15 +22,19 @@ class AccessController < ApplicationController
+       logger.debug "*** User (#{authorized_user.id}) #{authorized_user.nick} is logged! ***"
+ 
+       current_registry = Registry.find_by user_id: authorized_user.id, event_id: Event.current.id
+-      helpers.set_session_vars authorized_user.id, authorized_user.is_admin, current_registry.id
+-      # session[:user_id] = authorized_user.id
+-      # session[:is_admin] = authorized_user.is_admin
+-      # session[:reg_id] = current_registry.id
++      helpers.set_session_vars authorized_user.id, authorized_user.is_admin, current_registry&.id
+ 
+       if session[:return_to]
++        # Redirect to requested page
+         redirect_to session[:return_to]
+         session[:return_to] = nil
+       else
++        # User has no subscription active
++        unless session[:reg_id]
++          redirect_to controller: :users, action: :show, id: authorized_user.id
++          return
++        end
++
+         redirect_to controller: :registries, action: :show, id: session[:reg_id]
+       end
+     else
+diff --git i/app/controllers/application_controller.rb w/app/controllers/application_controller.rb
+index a43531..21f03a 100644
+--- i/app/controllers/application_controller.rb
++++ w/app/controllers/application_controller.rb
+@@ -25,7 +25,14 @@ class ApplicationController < ActionController::Base
+   def start_path
+     if helpers.session_active?
+       url_for session[:return_to] = nil
+-      url_for registry_path(session[:reg_id])
++
++      if session[:reg_id]
++        # Has current subscription
++        url_for registry_path(session[:reg_id])
++      else
++        # No subscription
++        url_for user_path(session[:user_id])
++      end
+     else
+       url_for root_url
+     end

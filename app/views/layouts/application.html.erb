@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <%# favicon_link_tag 'favicon.ico' %>
 
   <%= render 'layouts/meta' %>
 
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
 
   <%# FontAwesome 5 %>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-
-  <%= csrf_meta_tags %>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 </head>
 
 <body>
   <div id="modal-holder"></div>
   <div id="wrap"> <%# Footer_bottom wrapper %>
-    <%#--- Header ---%>
+    <%#--- Header ------------------------------------------------------------------------------------------------%>
     <header>
       <%= render 'layouts/navigation' %>
       <% if !Rails.env.production? %>
@@ -38,6 +37,8 @@
     </header>
 
     <%=  yield :top if content_for? :top %>
+
+    <%# --- Main ------------------------------------------------------------------------------------------------ %>
     <main role="main" style="margin-top: 16px;">
       <div class="container mw-85">
         <%= render 'layouts/messages' %>
@@ -47,15 +48,14 @@
     <div id="push"></div>
   </div>
 
-  <%#--- Footer ---%>
+  <%#--- Footer ------------------------------------------------------------------------------------------------- %>
   <footer class="footer divider-inside-top">
     <div class="container">
       <p class="text-muted text-center">
-        <%= fa_text :copyright %> <%= Rails.configuration.app[:author] %> 2015-2018
+        <%= fa_text :copyright %> <%= Rails.configuration.app[:author] %> 2015-2019
       </p>
     </div>
   </footer>
-  <%#--- /Footer ---%>
 </body>
 
 </html>

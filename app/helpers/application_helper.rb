@@ -89,7 +89,7 @@ module ApplicationHelper
   end
 
   def dim_zeros(number, custom_char_zero = '0')
-    return number unless number.zero?
+    return number unless number&.zero?
 
     %(<span class="text-muted">#{custom_char_zero}</span>).html_safe
   end

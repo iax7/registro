@@ -35,18 +35,12 @@ class Event < ApplicationRecord
                  :max_lodging_women,
                  :paycollectors
 
-  validates :f_v1, :f_v2, :f_v3,
-            :f_s1, :f_s2, :f_s3,
-            :f_d1, :f_d2, :f_d3,
-            :f_l1, :f_l2, :f_l3,
-            :t_v1, :t_v2,
-            :t_s1, :t_s2,
-            :t_d1, :t_d2,
-            :t_l1, :t_l2,
-            :l_v, :l_s, :l_d, :l_l,
-            presence: true,
-            numericality: { only_integer: true,
-                            greater_than_or_equal_to: 0 }
+  store_accessor :statistics,
+                 :people,
+                 :offerings,
+                 :services,
+                 :lodging,
+                 :totals_food
 
   def self.current
     Rails.configuration.appcache.fetch('Event.current', expires_in: 1.year) do
@@ -87,31 +81,12 @@ class Event < ApplicationRecord
       }
     }
 
-    # Totals
-    self.f_v1 ||= 0
-    self.f_v2 ||= 0
-    self.f_v3 ||= 0
-    self.f_s1 ||= 0
-    self.f_s2 ||= 0
-    self.f_s3 ||= 0
-    self.f_d1 ||= 0
-    self.f_d2 ||= 0
-    self.f_d3 ||= 0
-    self.f_l1 ||= 0
-    self.f_l2 ||= 0
-    self.f_l3 ||= 0
-    self.t_v1 ||= 0
-    self.t_v2 ||= 0
-    self.t_s1 ||= 0
-    self.t_s2 ||= 0
-    self.t_d1 ||= 0
-    self.t_d2 ||= 0
-    self.t_l1 ||= 0
-    self.t_l2 ||= 0
-    self.l_v  ||= 0
-    self.l_s  ||= 0
-    self.l_d  ||= 0
-    self.l_l  ||= 0
+    # --- Statistics Totals
+    self.people      ||= []
+    self.offerings   ||= []
+    self.services    ||= []
+    self.lodging     ||= []
+    self.totals_food ||= []
 
     # --- Settings
     self.event_title      ||= 'My Title'
@@ -123,7 +98,7 @@ class Event < ApplicationRecord
     self.event_main_email_subject ||= 'Information'
 
     self.registration_starts  ||= Time.now
-    self.event_ends           ||= Time.now
+    self.event_ends           ||= Time.new(Time.now.year, 12, 31)
 
     self.address              ||= '<strong>Place Name</strong><br>Street #1400<br>CP 12345, City, State.'
     self.maps_link            ||= 'https://www.google.com.mx/maps'
@@ -151,7 +126,7 @@ class Event < ApplicationRecord
         phone_type: 'mobile',
         email: 'known@domain.com',
         location: 'City, ST',
-        church: 'MyChurch'
+        church: 'MyChurch1'
       },
       {
         name: 'PayCollector2',

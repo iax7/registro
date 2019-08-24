@@ -2,8 +2,42 @@
 %section#payments
   %h3= fa_text :dollar_sign, 'Pagos'
   .table-responsive
-    %table.table.table-bordered.table-sm
-      %thead.thead-dark
+  %table.table.table-bordered.table-striped.table-sm
+    %thead.thead-dark
+      %tr.text-center
+        %th Id
+        %th Persona
+        %th Localidad
+        %th Cantidad
+        %th Cortesía
+    %tbody
+      - @user_payments.each do |p|
+        %tr
+          %td.text-right= p['id']
+          %td= p['name']
+          %td= p['location']
+          %td.text-right.text-monospace.h5= number_to_currency p['real'], precision: 0, unit: ''
+          %td.text-right.text-monospace.h5= number_to_currency p['courtesy'], precision: 0, unit: ''
+    %tfoot
+      %tr.table-info
+        %td.border-0
+        %td.border-0
+        %td.text-right.border-0
+          %strong Total:
+        %td.text-right
+          %strong.text-monospace.h5= number_to_currency @sum_user_payments[:real], precision: 0
+        %td.text-right
+          %strong.text-monospace.h5= number_to_currency @sum_user_payments[:courtesy], precision: 0
+
+  -# OLD TABLE
+  %br
+  %hr
+  %h4
+    %s
+      Legacy
+  .table-responsive
+    %table.table.table-bordered.table-sm.table-dark
+      %thead
         %tr.text-center
           %th Id
           %th Persona
@@ -23,4 +57,4 @@
           %td.text-right.border-0
             %strong Total:
           %td.text-right
-            %strong.text-monospace.h5= number_to_currency @sum, precision: 0
+            %strong.text-monospace.h5= number_to_currency @sum_pay_collectors, precision: 0

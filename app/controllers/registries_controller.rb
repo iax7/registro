@@ -116,7 +116,24 @@ class RegistriesController < ApplicationController
   # PATCH/PUT /registries/1.json
   def update
     respond_to do |format|
-      if @registry.update(registry_params)
+      updated = nil
+      is_payment_update = params['registry']['paid_by'].present? && params['payment']['amount'].present?
+      if is_payment_update
+        payment_permitted = params.require(:payment).permit(:amount, :kind).to_hash.symbolize_keys
+        amount, kind = payment_permitted.values_at(:amount, :kind)
+
+        registry_permitted = registry_params
+        registry_permitted['amount_paid'] = @registry.amount_paid + amount.to_i
+
+        Registry.transaction do
+          updated = @registry.update(registry_permitted)
+          create_payment(paid_by: registry_permitted['paid_by'], amount: amount, kind: kind)
+        end
+      else
+        updated = @registry.update(registry_params)
+      end
+
+      if updated
         format.html { redirect_to @registry, notice: 'Registry was successfully updated.' }
         format.js
         format.json { render :show, status: :ok, location: @registry }
@@ -154,21 +171,37 @@ class RegistriesController < ApplicationController
   end
 
   def totals
-    @people = Totals.people(Event.current.name)
-    @offerings = Totals.offerings(Event.current.name)
-    @services = Totals.services(Event.current.name)
-    @lodging = Totals.lodging_by_age_sex(Event.current.name)
+    if params[:name]
+      event = Event.find_by_name params[:name]
+      redirect_to(totals_registries_path, alert: "Error, event #{params[:name]} was not found.") && return unless event
+
+      @people = event.people
+      @offerings = event.offerings
+      @services = event.services
+      @lodging = event.lodging
+    else
+      @people = Totals.people(Event.current.name)
+      @offerings = Totals.offerings(Event.current.name)
+      @services = Totals.services(Event.current.name)
+      @lodging = Totals.lodging_by_age_sex(Event.current.name)
+    end
   end
 
   def totals_food
-    full = Event.current.food_full_price
-    half = Event.current.food_half_price
+    if params[:name]
+      event = Event.find_by_name params[:name]
+      redirect_to(totals_food_registries_path, alert: "Error, event #{params[:name]} was not found.") && return unless event
 
-    foods = Totals.food_by_age_paid_status(Event.current.name)
-    used = Totals.food_used_by_age(Event.current.name)
+      @totals_food = event.totals_food.deep_symbolize_keys
+    else
+      require 'totals_helper'
 
-    helper = TotalsHelper.new full, half
-    @totals_food = helper.process foods, used
+      helper = TotalsHelper.new(Event.current.food_full_price, Event.current.food_half_price)
+      foods = Totals.food_by_age_paid_status(Event.current.name)
+      used = Totals.food_used_by_age(Event.current.name)
+
+      @totals_food = helper.process foods, used
+    end
   end
 
   def edit_payment
@@ -199,9 +232,20 @@ class RegistriesController < ApplicationController
     unless helpers.admin?
       params[:registry].delete :amount_paid
       params[:registry].delete :paid_by
+      params[:registry].delete :type
     end
 
     params.require(:registry).permit(:user_id, :event_id, :comments, :is_confirmed, :is_present,
                                      :is_notified, :amount_debt, :amount_paid, :amount_offering, :paid_by)
+  end
+
+  def create_payment(paid_by:, amount:, kind:)
+    Payment.create(registry: @registry,
+                   user_id: paid_by,
+                   amount: amount,
+                   kind: kind)
+    logger.debug "  *** Payment created for registry [#{@registry.id}], Received by: #{@registry.paid_by} => #{amount} / #{kind}"
+  rescue StandardError
+    logger.error "  *** Err! Payment log was not created for [#{@registry.id}], Received by: #{@registry.paid_by} => #{amount} / #{kind}"
   end
 end

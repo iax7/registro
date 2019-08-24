@@ -86,7 +86,7 @@ SELECT e.name,
        g.id, g.registry_id, g.name, g.lastname, g.nick, g.is_male, g.age, g.relation,
        g.is_pregnant::int, g.is_medicated::int,
        (r.amount_debt + r.amount_offering ) <= r.amount_paid AS is_paid,
-       (g.age >= (SELECT settings ->> 'adult_age' FROM events)::int) AS is_adult,
+       (g.age >= (SELECT settings ->> 'adult_age' FROM events WHERE events.name = '2018')::int) AS is_adult,
        g.f_v1::int AS f_v1, g.f_v2::int AS f_v2, g.f_v3::int AS f_v3,
        g.f_s1::int AS f_s1, g.f_s2::int AS f_s2, g.f_s3::int AS f_s3,
        g.f_d1::int AS f_d1, g.f_d2::int AS f_d2, g.f_d3::int AS f_d3,
@@ -203,7 +203,7 @@ SELECT f.is_paid,
        sum(f.f_d1) AS f_d1, sum(f.f_d2) AS f_d2, sum(f.f_d3) AS f_d3,
        sum(f.f_l1) AS f_l1, sum(f.f_l2) AS f_l2, sum(f.f_l3) AS f_l3
   FROM (
-        SELECT CASE WHEN (g.age >= (SELECT settings ->> 'adult_age' FROM events)::int)
+        SELECT CASE WHEN (g.age >= (SELECT settings ->> 'adult_age' FROM events WHERE events.name = '2018')::int)
                     THEN 'adult' ELSE 'child' END AS age,
                (r.amount_debt + r.amount_offering ) <= r.amount_paid AS is_paid,
                g.f_v1::int, g.f_v2::int, g.f_v3::int,
@@ -225,7 +225,7 @@ SELECT f.age AS status,
        sum(f.fu_d1) AS f_d1, sum(f.fu_d2) AS f_d2, sum(f.fu_d3) AS f_d3,
        sum(f.fu_l1) AS f_l1, sum(f.fu_l2) AS f_l2, sum(f.fu_l3) AS f_l3
   FROM (
-SELECT CASE WHEN (g.age >= (SELECT settings ->> 'adult_age' FROM events)::int)
+SELECT CASE WHEN (g.age >= (SELECT settings ->> 'adult_age' FROM events WHERE events.name = '2018')::int)
                     THEN 'adult' ELSE 'child' END AS age,
                g.fu_v1, g.fu_v2, g.fu_v3,
                g.fu_s1, g.fu_s2, g.fu_s3,
@@ -240,51 +240,62 @@ GROUP BY 1;
 
 ## Lodging by Age and Sex
 ```sql
-SELECT 'all' AS status,
-       sum(CASE WHEN (l.is_adult and l.is_male)
-                THEN 1 ELSE 0 END) AS m,
-       sum(CASE WHEN (l.is_adult and l.is_male = false)
-                THEN 1 ELSE 0 END) AS f,
-       sum(CASE WHEN (l.is_adult = false and l.is_male)
-                THEN 1 ELSE 0 END) AS cm,
-       sum(CASE WHEN (l.is_adult = false and l.is_male = false)
-                THEN 1 ELSE 0 END) AS cf,
-       count(1) AS sum
-  FROM (
-        SELECT (g.age >= (SELECT settings ->> 'adult_age' FROM events)::int) AS is_adult,
-               (r.amount_debt + r.amount_offering ) <= r.amount_paid AS is_paid,
-               g.is_male, g.l_v, g.l_s, g.l_d, g.l_l
-          FROM registries r INNER JOIN
-               guests g ON r.id = g.registry_id INNER JOIN
-               events e ON r.event_id = e.id
-         WHERE e.name = '2018'
-        ) l
-WHERE l.l_v = true
-UNION ALL
-SELECT 'paid' AS status,
-       COALESCE(sum(CASE WHEN (l.is_adult and l.is_male)
-                         THEN 1 ELSE 0 END), 0) AS m,
-       COALESCE(sum(CASE WHEN (l.is_adult and l.is_male = false)
-                         THEN 1 ELSE 0 END), 0) AS f,
-       COALESCE(sum(CASE WHEN (l.is_adult = false and l.is_male)
-                         THEN 1 ELSE 0 END), 0) AS cm,
-       COALESCE(sum(CASE WHEN (l.is_adult = false and l.is_male = false)
-                         THEN 1 ELSE 0 END), 0) AS cf,
-       count(1) AS sum
-  FROM (
-        SELECT (g.age >= (SELECT settings ->> 'adult_age' FROM events)::int) AS is_adult,
-               (r.amount_debt + r.amount_offering ) <= r.amount_paid AS is_paid,
-               g.is_male, g.l_v, g.l_s, g.l_d, g.l_l
-          FROM registries r INNER JOIN
-               guests g ON r.id = g.registry_id INNER JOIN
-               events e ON r.event_id = e.id
-         WHERE e.name = '2018'
-        ) l
-WHERE l.l_v = true
-  AND l.is_paid;
+  WITH lodging_stats AS ( 
+    SELECT (g.age >= (SELECT settings ->> 'adult_age' FROM events WHERE events.name = '2018')::int) AS is_adult,
+           (r.amount_debt + r.amount_offering ) <= r.amount_paid AS is_paid,
+           g.is_male, g.l_v, g.l_s, g.l_d, g.l_l
+      FROM registries r INNER JOIN
+           guests g ON r.id = g.registry_id INNER JOIN
+           events e ON r.event_id = e.id
+     WHERE e.name = '2018')
+  SELECT 'all' AS status,
+         sum(CASE WHEN (l.is_adult and l.is_male)
+                  THEN 1 ELSE 0 END) AS m,
+         sum(CASE WHEN (l.is_adult and l.is_male = false)
+                  THEN 1 ELSE 0 END) AS f,
+         sum(CASE WHEN (l.is_adult = false and l.is_male)
+                  THEN 1 ELSE 0 END) AS cm,
+         sum(CASE WHEN (l.is_adult = false and l.is_male = false)
+                  THEN 1 ELSE 0 END) AS cf,
+         count(1) AS sum
+    FROM lodging_stats l
+   WHERE l.l_v = true
+  UNION ALL
+  SELECT 'paid' AS status,
+         COALESCE(sum(CASE WHEN (l.is_adult and l.is_male)
+                           THEN 1 ELSE 0 END), 0) AS m,
+         COALESCE(sum(CASE WHEN (l.is_adult and l.is_male = false)
+                           THEN 1 ELSE 0 END), 0) AS f,
+         COALESCE(sum(CASE WHEN (l.is_adult = false and l.is_male)
+                           THEN 1 ELSE 0 END), 0) AS cm,
+         COALESCE(sum(CASE WHEN (l.is_adult = false and l.is_male = false)
+                           THEN 1 ELSE 0 END), 0) AS cf,
+         COUNT(1) AS sum
+    FROM lodging_stats l
+   WHERE l.l_v = true
+     AND l.is_paid
 ```
 
 ## Payments
+### Payments table
+```sql
+  WITH user_payments AS (
+     SELECT u.id,
+            concat(u.name, ' ', u.lastname) AS name,
+            concat(u.city, ', ', u.state) AS location,
+            CASE WHEN p.kind = 0 THEN p.amount ELSE 0 END AS real,
+            CASE WHEN p.kind = 1 THEN p.amount ELSE 0 END AS courtesy
+       FROM payments p INNER JOIN
+            users u ON p.user_id = u.id INNER JOIN
+            registries r ON p.registry_id = r.id INNER JOIN
+            events e ON r.event_id = e.id
+      WHERE e.name = '#{event}')
+    SELECT id, name, location, sum(real) AS real, sum(courtesy) AS courtesy
+      FROM user_payments
+  GROUP BY id, name, location
+```
+
+### Legacy based on last edited registry user.
 ```sql
 SELECT u.id,
        CONCAT(u.name ,' ', u.lastname) AS name,
@@ -391,3 +402,90 @@ SELECT users.id,
  WHERE registries.event_id = 1
  ORDER BY users.lastname;
  ```
+
+## Guests (as JSON)
+```sql
+-- GET current guests as each JSON objects
+SELECT json_build_object('name', name, 'lastname', lastname, 'nick', nick, 'is_male', is_male, 'age', age) AS guests
+  FROM guests
+ WHERE registry_id = 1
+   AND relation <> 0
+ ORDER BY age DESC;
+
+-- GET all guest records as a JSON array
+WITH data AS (
+    SELECT name, lastname, nick, is_male, age, relation
+      FROM guests
+     WHERE registry_id = 1
+       AND relation <> 0
+     ORDER BY age DESC)
+SELECT to_json(array_agg(x)) AS guest_array 
+  FROM data x;
+
+-- Each record as Guest record
+SELECT *
+  FROM jsonb_populate_recordset(NULL::GUESTS,(SELECT guest_history FROM users WHERE id = 1));
+```
+
+## Users
+```sql
+-- All Admins
+SELECT *
+  FROM users
+ WHERE is_admin
+ ORDER BY 1;
+
+-- Revoke all except id = 1
+UPDATE users
+   SET is_admin = false
+ WHERE is_admin
+   AND id <> 1;
+
+-- Clear guests_history
+UPDATE users
+   SET guest_history = '[]'::jsonb;
+```
+
+## Stored Procedures
+[Stored Procedure](../db/migrate/20190820210357_create_set_guest_history_procedure.rb)
+
+```sql
+-- DROP PROCEDURE SET_GUEST_HISTORY;
+-- CALL SET_GUEST_HISTORY();
+CREATE OR REPLACE PROCEDURE SET_GUEST_HISTORY()
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    users      CURSOR FOR SELECT id FROM users ORDER BY 1;
+    guests_arr JSONB;
+    cur_id     BIGINT;
+BEGIN
+    OPEN users;
+    LOOP
+        FETCH users INTO cur_id;
+        EXIT WHEN NOT FOUND;
+
+        -- Generate Guests JSON array
+        WITH data AS (
+          SELECT id,
+                 EXTRACT(year FROM created_at) as cy, 
+                 name, lastname, nick, is_male, age, relation
+            FROM guests
+           WHERE registry_id = cur_id
+             AND relation <> 0
+           ORDER BY age DESC)
+        SELECT to_json(array_agg(x)) AS guest_array
+          INTO guests_arr
+          FROM data x;
+
+        CONTINUE WHEN guests_arr IS NULL;
+
+        UPDATE users
+           SET guest_history = guests_arr
+         WHERE id = cur_id;
+
+    END LOOP;
+    CLOSE users;
+    COMMIT;
+END; $$
+```

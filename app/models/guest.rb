@@ -84,6 +84,9 @@ class Guest < ApplicationRecord
     requested.size * costs_per_service(:transport)
   end
 
+  ##
+  # Sum of all costs
+  # @return [Integer]
   def total
     (
       assist_cost +
@@ -93,7 +96,8 @@ class Guest < ApplicationRecord
     )
   end
 
-  # @param service [Symbol] possible values: :assist, :food, :lodging, :transport
+  ##
+  # @param [Symbol] service - possible values: :assist, :food, :lodging, :transport
   # @return [Integer] price assigned for the service
   def costs_per_service(service)
     # 1 is Adult
@@ -167,13 +171,16 @@ class Guest < ApplicationRecord
   end
 
   def normalize
-    self.name = name.titleize.strip.squish
-    self.lastname = lastname.titleize.strip.squish
-    self.nick = nick.titleize.strip.squish
+    self.name = name.titleize.squish
+    self.lastname = lastname.titleize.squish
+    self.nick = nick.titleize.squish
+    self.l_room = l_room&.squish
   end
 
+  # :nocov:
   def registry_totals
     # This method saves if the result is different than saved
     registry.totals
   end
+  # :nocov:
 end

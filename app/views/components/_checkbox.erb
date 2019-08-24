@@ -1,0 +1,7 @@
+<span class="app-checkbox-box" style="width: 67px;text-align: center; margin: 5px 5px;">
+  <label>
+    <%= form.check_box field, class: 'css-checkbox' %>
+    <i></i>
+  </label><br>
+  <%= label(model, field, for: "#{model}_#{field}".to_sym) if defined?(model) %>
+</span>

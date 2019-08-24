@@ -9,7 +9,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    @users = User.order(is_admin: :desc, lastname: :asc).all
   end
 
   # GET /users/1
@@ -36,7 +36,8 @@ class UsersController < ApplicationController
         flash.notice = t('.notice')
 
         # creating and setting current session active
-        helpers.set_session_vars @user.id, @user.is_admin, @user.current.id
+        current_reg = @user.current || @user.registries.last
+        helpers.set_session_vars @user.id, @user.is_admin, current_reg.id
 
         # Send Welcome Email
         UserMailer.welcome(@user).deliver_now
@@ -71,6 +72,11 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
+    if  @user.registries.size > 0
+      redirect_to(users_url, alert: "Error, User #{@user.id} has #{@user.registries.size} registries.")
+      return
+    end
+
     @user.destroy
     respond_to do |format|
       format.html { redirect_to users_url, notice: t('.notice') }
@@ -78,13 +84,25 @@ class UsersController < ApplicationController
     end
   end
 
+  # GET /users/payments
   def payments
-    # unless is_admin
-    #  redirect_to action: :show
-    # end
+    @user_payments = Totals.user_payments(Event.current.name)
+    @sum_user_payments = {
+      real: @user_payments.sum { |p| p['real'] },
+      courtesy: @user_payments.sum { |p| p['courtesy'] }
+    }
 
+    # Legacy
     @pay_collectors = Totals.pay_collectors(Event.current.name)
-    @sum = @pay_collectors.sum { |p| p['amount'] }
+    @sum_pay_collectors = @pay_collectors.sum { |p| p['amount'] }
+  end
+
+  # GET /users/revoke_admins
+  def revoke_admins
+    User.where.not(id: 1).update_all(is_admin: false)
+    logger.info("*** Revoked all user administrators by user_id: [#{session[:user_id]}] <--")
+
+    redirect_to users_url, notice: 'Revoked all administration access.'
   end
 
   private

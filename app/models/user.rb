@@ -68,6 +68,19 @@ class User < ApplicationRecord
     save!
   end
 
+  def register_current_event!
+    new_reg = create_registry
+    new_reg.save
+  end
+
+  def token_data
+    {
+      id: id,
+      reg_id: current.id,
+      is_admin: is_admin
+    }
+  end
+
   private
 
   def init
@@ -89,7 +102,7 @@ class User < ApplicationRecord
 
   def create_registry
     # Makes sure it always has a registry if none is defined
-    registries.build(event: Event.current) if registries.size <= 0
+    registries.build(event: Event.current) unless current
   end
 
   def update_guest_self

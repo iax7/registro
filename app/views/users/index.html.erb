@@ -1,42 +1,55 @@
 <h1>Users</h1>
 
-<table class="table table-sm">
-  <thead>
-  <tr>
-    <th>Id</th>
-    <th>Name</th>
-    <th>LastName</th>
-    <th>Nick</th>
-    <th>Phone</th>
-    <th>Email</th>
-    <th>DOB</th>
-    <th>Admin</th>
-    <th></th>
-  </tr>
-  </thead>
-
-  <tbody>
-  <% @users.each do |user| %>
+<div class="table-responsive">
+  <table class="table table-striped table-hover table-sm">
+    <thead>
     <tr>
-      <td><%= user.id %></td>
-      <td><%= user.name %></td>
-      <td><%= user.lastname %></td>
-      <td><%= user.nick %></td>
-      <td><%= user.phone %></td>
-      <td><%= user.email %></td>
-      <td><%= user.dob %></td>
-      <td><%= render_bool user.is_admin, false %></td>
-      <td>
-        <div class="btn-group">
-          <%= link_to fa_text(:eye), user, class: 'btn btn-primary btn-sm' %>
-          <%= link_to fa_text(:edit), edit_user_path(user), class: 'btn btn-primary btn-sm' %>
-          <%= link_to fa_text(:trash), user, method: :delete, data: {confirm: 'Are you sure?'}, class: 'btn btn-danger btn-sm' %>
-        </div>
-      </td>
+      <th>Id</th>
+      <th>Name</th>
+      <th>LastName</th>
+      <th>Nick</th>
+      <th>Contact</th>
+      <th>Age/DOB</th>
+      <th data-toggle="tooltip" title="Is Administrator">A.</th>
+      <th></th>
     </tr>
-  <% end %>
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.id %></td>
+        <td><%= user.name %></td>
+        <td><%= user.lastname %></td>
+        <td><%= user.nick %></td>
+        <td><%= link_to fa_text(:phone),
+                        'tel:' + user.phone,
+                        class: 'btn btn-link m-0 p-0',
+                        data: { toggle: "tooltip" },
+                        title: number_to_phone(user.phone, area_code: true) %>
+            <%= mail_to user.email,
+                        fa_text(:envelope),
+                        subject: Event.current.event_main_email_subject,
+                        encode: 'hex',
+                        class: 'btn btn-link m-0 p-0',
+                        data: { toggle: "tooltip" },
+                        title: user.email %></td>
+        <td><span data-toggle="tooltip" title="<%= user.dob %>" class="d-block d-lg-none"><%= user.age %></span>
+            <span class="d-none d-lg-block d-xl-block"><%= user.dob %></span>
+        </td>
+        <td><%= render_bool user.is_admin, false %></td>
+        <td>
+          <div class="btn-group">
+            <%= link_to fa_text(:eye), user, class: 'btn btn-primary btn-sm' %>
+            <%= link_to fa_text(:edit), edit_user_path(user), class: 'btn btn-primary btn-sm' %>
+            <%= link_to fa_text(:trash), user, method: :delete, data: {confirm: 'Are you sure?'}, class: 'btn btn-danger btn-sm' %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
 
 <br>
 

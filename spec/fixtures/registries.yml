@@ -1,0 +1,24 @@
+
+not_paid:
+  user: two
+  event: one
+  comments: Necesito supervisión médica constante
+  is_confirmed: false
+  is_present: false
+  is_notified: false
+  amount_debt: 100
+  amount_paid: 10
+  amount_offering: 0
+  paid_by:
+
+paid:
+  user: three
+  event: one
+  comments: No puedo estar en litera por embarazo
+  is_confirmed: false
+  is_present: false
+  is_notified: false
+  amount_debt: 1000
+  amount_paid: 2000
+  amount_offering: 1000
+  paid_by:

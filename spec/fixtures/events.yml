@@ -1,0 +1,66 @@
+
+one:
+  name: 2018
+  settings:
+    address: "<strong>Centro Cristiano de los Altos: Cristo Vive</strong><br>Arandas, Jalisco."
+    max_food: 500
+    adult_age: 11
+    maps_link: https://goo.gl/maps/oZWRJ5JkL2L2
+    event_ends: '2018-06-25T02:37:57.623+00:00'
+    max_people: 1200
+    event_title: 5a Conferencia Anual
+    paycollectors:
+    - name: Daniel López
+      email: dxxlast@kwon.com
+      phone: '1234567890'
+      church: Centro
+      location: Guadalajara, JAL
+      phone_type: mobile
+    - name: Carlos Perez
+      email: carlos@perez.com
+      phone: '0987654321'
+      church: Centro 2
+      location: Guadalajara, JAL
+      phone_type: mobile
+    transport_map: https://goo.gl/maps/GmJE3mCijZr
+    event_subtitle: My Glory Event
+    event_subtitle2: 16 al 19 de Noviembre del 2018
+    food_full_price: 50
+    food_half_price: 25
+    max_lodging_men: 125
+    event_full_price: 100
+    event_main_email: confmail@my.com
+    event_main_phone: '1234567890'
+    max_lodging_women: 125
+    lodging_full_price: 100
+    lodging_half_price: 50
+    registration_starts: '2018-06-25T02:37:57.622+00:00'
+    transport_full_price: 100
+    transport_half_price: 50
+    event_main_email_name: Registro
+    event_main_email_subject: Informes de conferencias
+  statistics:
+    f_v1: 1
+    f_v2: 1
+    f_v3: 1
+    f_s1: 1
+    f_s2: 1
+    f_s3: 1
+    f_d1: 1
+    f_d2: 1
+    f_d3: 1
+    f_l1: 1
+    f_l2: 1
+    f_l3: 1
+    t_v1: 1
+    t_v2: 1
+    t_s1: 1
+    t_s2: 1
+    t_d1: 1
+    t_d2: 1
+    t_l1: 1
+    t_l2: 1
+    l_v: 1
+    l_s: 1
+    l_d: 1
+    l_l: 1

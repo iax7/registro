@@ -23,5 +23,14 @@
   <%= render_bool @user.is_admin %>
 </p>
 
+<p>
+  <h3>Guest History:</h3>
+  <pre class="text-monospace border rounded bg-light p-2">
+    <code>
+      <%= @user.guest_history&.to_yaml %>
+    </code>
+  </pre>
+</p>
+
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>

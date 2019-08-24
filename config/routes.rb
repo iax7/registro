@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  resources :payments
   root 'main#index'
 
   resources :registries do
-    get :totals, on: :collection
-    get :totals_food, on: :collection
+    get 'totals(/:name)', to: 'registries#totals', on: :collection, as: :totals # Creates: totals_registries_path
+    get 'totals_food(/:name)', to: 'registries#totals_food', on: :collection, as: :totals_food
     get :list_lodging, on: :collection
     get :list_transport, on: :collection
     get :edit_payment
@@ -13,6 +14,7 @@ Rails.application.routes.draw do
   end
   resources :users do
     get :payments, on: :collection
+    get :revoke_admins, on: :collection
   end
 
   get 'autocomplete/countries/:string' => 'autocomplete#countries', as: :autocomplete_countries
@@ -41,14 +43,16 @@ Rails.application.routes.draw do
   end
 
   # Admin --------------------------------------------------------------------------
-  resources :events
+  resources :events do
+    get :calculate_statistics
+  end
 
   # Reports ------------------------------------------------------------------------
   get 'badge(/:id(/:inline))' => 'reports#badge', as: 'badge'
   get 'badge_bulk' => 'reports#badge_bulk', as: 'badge_bulk'
 
   # Let's Encrypt ------------------------------------------------------------------
-  get '/.well-known/acme-challenge/:id' => 'main#letsencrypt'
+  # get '/.well-known/acme-challenge/:id' => 'main#letsencrypt'
 
   # Errors Routes ------------------------------------------------------------------
   # if Rails.env.production?

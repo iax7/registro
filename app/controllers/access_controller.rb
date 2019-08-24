@@ -8,6 +8,7 @@ class AccessController < ApplicationController
 
   def attempt_login
     params.permit(:email, :password)
+    authorized_user = nil
 
     if params[:email].present? && params[:password].present?
       found_user = User.find_by email: params[:email]
@@ -22,6 +23,16 @@ class AccessController < ApplicationController
       logger.debug "*** User (#{authorized_user.id}) #{authorized_user.nick} is logged! ***"
 
       current_registry = Registry.find_by user_id: authorized_user.id, event_id: Event.current.id
+
+      # Creates new registration if current event is not already created
+      # This should be handled in other place, and being redirected there.
+      unless current_registry
+        logger.debug("*** User has not active registration, creating one...")
+        authorized_user.register_current_event!
+        current_registry = authorized_user.registries.last
+      end
+
+      # JWT Token: Auth.generate_jwt(authorized_user.token_data) <----------------
       helpers.set_session_vars authorized_user.id, authorized_user.is_admin, current_registry.id
       # session[:user_id] = authorized_user.id
       # session[:is_admin] = authorized_user.is_admin
