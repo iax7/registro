@@ -4,7 +4,7 @@ This webapp was developed using the following tools, those are not required but
 can be a good baseline to start working in this project
 
 * OS: `Fedora 30`
-* Ruby `2.6.3`
+* Ruby `2.6.5`
 * Rails `6`
 * Postgres Docker Image `postgres:11.5`
 
