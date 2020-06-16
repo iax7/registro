@@ -3,10 +3,10 @@
 This webapp was developed using the following tools, those are not required but
 can be a good baseline to start working in this project
 
-* OS: `Fedora 30`
-* Ruby `2.6.3`
+* OS: `Fedora 32`
+* Ruby `2.7.1`
 * Rails `6`
-* Postgres Docker Image `postgres:11.5`
+* Postgres Docker Image `postgres:12.3`
 
 ## Run Locally
 ### Ubuntu 18.04 LTS Prerequisites
@@ -15,7 +15,7 @@ sudo apt-get install -y ruby build-essential patch ruby-dev zlib1g-dev liblzma-d
 sudo apt-get install -y libpq-dev #PostgreSQL
 ```
 
-### Fedora 30 Prerequisites
+### Fedora 32 Prerequisites
 ```bash
 sudo dnf install -y ruby ruby-devel gcc openssl-devel zlib-devel rpm-build libpq-devel g++
 sudo dnf group install -y "C Development Tools and Libraries"
@@ -48,18 +48,20 @@ sudo dnf group install -y "C Development Tools and Libraries"
 
 1. Start **PostgreSQL** DB (with docker)
     ```bash
-    docker run --name regdb -p 5432:5432 \
-           -e POSTGRES_PASSWORD=123 -e POSTGRES_USER=reg -e POSTGRES_DB=reg \
-           -v ~/dev/data/regdb:/var/lib/postgresql/data -d postgres:11.5
+    docker run --name reg -p 5432:5432 \
+           -v ~/dev/data/reg:/var/lib/postgresql/data \
+           -e POSTGRES_PASSWORD=123456 -d postgres:12.3
     ```
-    * Intialize the db:
-        ```bash
-        rails db:migrate
-        rails db:seed
-      
-        # Optional - If you want to generate random data
-        rails db:populate
-        ```
+    1. Intialize the db:
+    
+    ```bash
+    rails db:create
+    rails db:migrate
+    rails db:seed
+  
+    # Optional - If you want to generate random data
+    rails db:populate
+    ``
 
 1. Install yarn dependencies:
     ```bash
@@ -75,11 +77,8 @@ sudo dnf group install -y "C Development Tools and Libraries"
 ## Test
 
 This project used RSPEC to run test. Set your environment first:
-```bash
-docker run -it --rm -e PGPASSWORD=123 \
-           --link regdb:postgres postgres:11.5 \
-           createdb -h regdb -U reg --owner=reg reg_test
 
+```bash
 rails db:migrate RAILS_ENV=test
 ```
 Run tests using: `rspec`
