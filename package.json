@@ -1,6 +1,11 @@
 {
   "name": "reg",
+  "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "12",
+    "yarn": ">= 1.0"
+  },
   "dependencies": {
     "@rails/actioncable": "^6.0.0-alpha",
     "@rails/activestorage": "^6.0.0-alpha",
@@ -11,7 +16,6 @@
     "popper.js": "^1.15.0",
     "turbolinks": "^5.2.0"
   },
-  "version": "0.1.0",
   "devDependencies": {
     "webpack-dev-server": "^3.8.0"
   }

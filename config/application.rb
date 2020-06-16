@@ -32,6 +32,5 @@ module Reg
     config.appcache = ActiveSupport::Cache::MemoryStore.new
     # Default main url, used specifically for mailer
     Rails.application.routes.default_url_options[:host] = config.app[:default_url]
-    puts '-----------------------------------------------------------'
   end
 end

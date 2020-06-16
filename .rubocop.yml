@@ -1,4 +1,5 @@
----
+inherit_from: .rubocop_todo.yml
+
 AllCops:
   Exclude:
     - 'node_modules/**/*'
@@ -9,61 +10,29 @@ AllCops:
     - 'test/**/*'
     - 'spec/**/*'
 
-Metrics/ClassLength:
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+Lint/RaiseException:
+  Enabled: true
+Lint/StructNewOverride:
   Enabled: false
-
-Metrics/AbcSize:
-  Enabled: false
-
-Metrics/LineLength:
-  Enabled: false
-
-Metrics/ModuleLength:
-  Enabled: false
-
-Metrics/BlockLength:
-  Enabled: false
-
-Metrics/MethodLength:
-  Enabled: false
-
-Style/HashSyntax:
-  Enabled: false
-
-Metrics/CyclomaticComplexity:
-  Exclude:
-    - app/models/guest.rb
-    - app/controllers/api_controller.rb
-    - app/controllers/registries_controller.rb
-
-Metrics/PerceivedComplexity:
-  Exclude:
-    - app/models/guest.rb
-    - app/controllers/access_controller.rb
-    - app/controllers/api_controller.rb
-    - app/controllers/registries_controller.rb
-
-Style/NumericPredicate:
-  Exclude:
-    - app/controllers/api_controller.rb
-
-Style/GuardClause:
-  Exclude:
-    - app/models/registry.rb
-
-Layout/AlignHash:
-  EnforcedHashRocketStyle: table
-  EnforcedColonStyle: key
-  Exclude:
-    - app/models/registry.rb
-
-SymbolArray:
-  MinSize: 5
-
-Layout/SpaceInsideArrayPercentLiteral:
-  Exclude:
-    - app/controllers/registries_controller/totals_helper.rb
-
-Style/EmptyCaseCondition:
-  Exclude:
-    - app/helpers/application_helper.rb
+Style/ExponentialNotation:
+  Enabled: true
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
+Style/SlicingWithRange:
+  Enabled: true
+Lint/MixedRegexpCaptureTypes:
+  Enabled: true
+Style/RedundantRegexpCharacterClass:
+  Enabled: true
+Style/RedundantRegexpEscape:
+  Enabled: true
