@@ -1,77 +1,89 @@
 ## DataBase Diagram
-![DB](img/reg2019-db.png)
+
+![DB](img/2020-regdb.png)
 
 ## Queries
+
 There are a list of common used [queries](queries.md).
 
 ### Run DB Commands
 
+All scripts use the following variables:
+
+```bash
+db_container=regdb
+db=reg
+pwd=123456
+```
+
 #### Configure JetBrains DataGrip
+
 ##### Heroku
+
 ```bash
 heroku pg:credentials:url
 ```
-Copy the results, and in advanced tab set the following:
-* `ssl` => `true`
-* `sslfactory` => `org.postgresql.ssl.NonValidatingFactory`
 
+Copy the results, and in advanced tab set the following:
+
+- `ssl` => `true`
+- `sslfactory` => `org.postgresql.ssl.NonValidatingFactory`
 
 Reset heroku db
+
 ```bash
 heroku pg:reset --confirm <app_name>
 ```
 
 Interactive console
+(add `-c 'SELECT * FROM users'` to run queries from command line)
+
 ```bash
-docker run -it --rm -e PGPASSWORD=123 \
-           --link regdb:postgres postgres:11.5 \
-           psql -h regdb -U reg -d reg
-```
-Make queries from Command line
-```bash
-docker run -it --rm -e PGPASSWORD=123 \
-           --link regdb:postgres postgres:11.5 \
-           psql -h regdb -U reg -d reg -c 'SELECT * FROM users'
+docker run -it --rm -e PGPASSWORD=$pwd \
+           --link $db_container:postgres postgres:12.3 \
+           psql -h $db_container -d $db
 ```
 
-### Create DB Backups ⬇️
+---
 
-#### Heroku
+## DataBase Backups 📦
+
+### Create ⬇️
+
+#### Heroku 🌎
+
 ```bash
-day=$(date +%y%m%d-%H%M)
-appname=<APPNAME>
-dump_file="$day-db.dump"
+appname={{HEROKU_APPNAME}}
+dump_file="$(date +%y%m%d-%H%M)-db.dump"
 
-heroku pg:backups capture --app $appname
-url=$(heroku pg:backups public-url --app $appname)
+heroku pg:backups capture -a $appname
+url=$(heroku pg:backups public-url -a $appname)
 curl -o "$dump_file" "$url"
 ```
 
-#### Local
+#### Local 🏠
+
 ```bash
-user=reg
-pwd=123
-db=reg
 docker run -it --rm -v $PWD:/tmp/data -e PGPASSWORD="$pwd" \
-           --link regdb:postgres postgres:11.5 \
-           pg_dump -h regdb -U "$user" -d "$db" \
+           --link $db_container:postgres postgres:12.3 \
+           pg_dump -h $db_container -U postgres -d "$db" \
            -Fc --no-acl --no-owner -f "/tmp/data/db.dump"
 ```
 
-### Restore DB Backups ⬆️
-#### Heroku
+### Restore ⬆️
+
+#### Heroku 🌎
+
 ```bash
 heroku pg:backups
 heroku pg:backups:restore b001 --confirm app_name
 ```
 
-#### Local
+#### Local 🏠
+
 ```bash
-user=reg
-pwd=123
-db=reg
 docker run -it --rm -v $PWD:/tmp/data:ro -e PGPASSWORD="$pwd" \
-           --link regdb:postgres postgres:11.5 \
+           --link $db_container:postgres postgres:12.3 \
            pg_restore --verbose --clean --no-acl --no-owner --no-password \
-           -h regdb -U "$user" -d "$db" /tmp/data/db.dump 
+           -h $db_container -U postgres -d "$db" /tmp/data/db.dump
 ```
