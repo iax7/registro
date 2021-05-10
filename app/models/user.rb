@@ -2,8 +2,8 @@
 
 # User Model
 class User < ApplicationRecord
-  before_validation :normalize, :on => [:create, :update]
   after_initialize :init
+  before_validation :normalize, :on => [:create, :update]
   before_create :create_registry
   after_update :update_guest_self
 
@@ -53,7 +53,7 @@ class User < ApplicationRecord
     country.present? ? %(#{city}, #{state}, #{country}) : 'N/A'
   end
 
-  def full_name(is_last_first = true)
+  def full_name(is_last_first: true)
     is_last_first ? "#{lastname}, #{name}" : "#{name} #{lastname}"
   end
 
@@ -93,7 +93,7 @@ class User < ApplicationRecord
     self.name = name.titleize.strip.squish
     self.lastname = lastname.titleize.strip.squish
     self.nick = nick.strip.squish
-    self.phone = phone.scan(/\d/).join ''
+    self.phone = phone.scan(/\d/).join
     self.email = email.downcase.strip
     self.country = country.titleize.strip.squish
     self.state = state.titleize.strip.squish

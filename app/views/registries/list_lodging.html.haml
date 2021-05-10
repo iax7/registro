@@ -34,7 +34,7 @@
           %td.text-right
             %strong= guest.registry.id
           %td.text-right= guest.id
-          %td.text-left{ style: "#{name_style}" }= make_bold full_name, guest.me?
+          %td.text-left{ style: "#{name_style}" }= make_bold(full_name, skip: !guest.me?)
           %td.text-center
             = show_sex_symbol guest.is_male, show_text: true, short: true
           %td.text-right= guest.age

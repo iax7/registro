@@ -5,8 +5,8 @@ class Registry < ApplicationRecord
   after_initialize :init
   before_create :create_owner_as_guest
 
-  belongs_to :user, required: true
-  belongs_to :event, required: true
+  belongs_to :user, optional: false
+  belongs_to :event, optional: false
   has_many :guests
 
   scope :current, ->(user_id) { includes(:user, :guests).where(event_id: Event.current.id, user_id: user_id) }
@@ -82,7 +82,7 @@ class Registry < ApplicationRecord
               t_d1 t_d2
               t_l1 t_l2
               l_v l_s l_d l_l]
-    @counts = Hash[keys.collect { |key| [key, 0] }].with_indifferent_access
+    @counts = keys.index_with { |_key| 0 }.with_indifferent_access
 
     guests.each do |g|
       # Calculate *Totals*

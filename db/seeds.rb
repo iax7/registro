@@ -5,19 +5,22 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+Event.find_or_create_by(name: DateTime.now.year.to_s)
 
-admin = User.create name: 'Administrator',
-                    lastname: 'Account',
-                    nick: 'Admin',
-                    dob: DateTime.new(1980, DateTime.now.month, DateTime.now.day),
-                    is_male: true,
-                    email: 'admin@domain.com',
-                    phone: '1234567890',
-                    country: 'MX',
-                    state: 'ST',
-                    city: 'City',
-                    password: 'changeme',
-                    is_admin: true
-admin.save
+USER = 'admin@domain.com'
+PASS = 'changeme'
 
-Event.find_or_create_by(name: Time.current.year.to_s)
+User.create(name: 'Administrator',
+            lastname: 'Account',
+            nick: 'Admin',
+            dob: (DateTime.now - 20.years),
+            is_male: true,
+            email: USER,
+            password: PASS,
+            phone: '1234567890',
+            country: 'MX',
+            state: 'ST',
+            city: 'City',
+            is_admin: true)
+
+puts "Admin user created. Login using: #{USER}/#{PASS}"

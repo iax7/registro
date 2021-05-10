@@ -1,12 +1,16 @@
-# README
+# Registro
+
+[![Ruby][ruby-badge]][ruby-url]
+[![Rails][rails-badge]][rails-url]
+[![PostgreSQL][psql-badge]][psql-url]
+[![NodeJS][node-badge]][node-url]
 
 This webapp was developed using the following tools, those are not required but
 can be a good baseline to start working in this project
 
 - OS: [Fedora](https://getfedora.org/) `32`
-- [Ruby](https://www.ruby-lang.org/en/) `2.7.1`
-- [Rails](https://rubyonrails.org/) `6.0.x`
-- [PostgreSQL](https://www.postgresql.org/) `12.3`
+- [rvm](https://rvm.io/)
+- [nvm](https://github.com/nvm-sh/nvm)
 
 ## Run Locally
 
@@ -24,14 +28,17 @@ sudo dnf install -y ruby ruby-devel gcc openssl-devel zlib-devel rpm-build libpq
 sudo dnf group install -y "C Development Tools and Libraries"
 ```
 
-1. Ensure you have **Ruby** and **NodeJS** installed. (I suggest to use [rvm](https://rvm.io/) and [nvm](https://github.com/nvm-sh/nvm))
+1. Ensure you have **Ruby** and **NodeJS** installed.
 1. Install bundler gem: `sudo gem install bundler`
 1. Install all gem dependencies: `bundle install`
 1. Edit the **secrets** variables
 
-   - If you are starting over, create a key:
+   - If you are starting over:
 
      ```bash
+     # 1. create .env file
+     cp .env.template .env
+     # 2. create a key
      rake secret | tail -1 | cut -c1-32 > config/master.key
      ```
 
@@ -57,16 +64,15 @@ sudo dnf group install -y "C Development Tools and Libraries"
    ```bash
    docker run --name reg -p 5432:5432 \
           -v ~/dev/data/reg:/var/lib/postgresql/data \
-          -e POSTGRES_PASSWORD=123456 -d postgres:12.3
+          -e POSTGRES_PASSWORD=123456 -d postgres:13
    ```
 
-   1. Intialize the db:
+   1. Initialize the db:
 
    ```bash
    rails db:create
    rails db:schema:load
-   # rails db:migrate # or running migrations (Slower)
-
+  
    rails db:seed
 
    # Optional - If you want to generate random data
@@ -142,3 +148,13 @@ bundle update
 
 - [Database](docs/db.md)
 - [Security Map](docs/security.md)
+
+<!-- Links -->
+[ruby-badge]: https://img.shields.io/badge/ruby-3.0.1-blue?style=flat&logo=ruby&logoColor=CC342D&labelColor=white
+[ruby-url]: https://www.ruby-lang.org/en/
+[rails-badge]: https://img.shields.io/badge/rails-6.0-blue?style=flat&logo=ruby-on-rails&logoColor=CC0000&labelColor=white
+[rails-url]: https://rubyonrails.org/
+[psql-badge]: https://img.shields.io/badge/PostgreSQL-13.0-blue?style=flat&logo=postgresql&logoColor=336791&labelColor=white
+[psql-url]: https://www.postgresql.org/download/
+[node-badge]: https://img.shields.io/badge/NodeJS-12-blue?style=flat&logo=node.js&logoColor=339933&labelColor=white
+[node-url]: https://nodejs.org/en/

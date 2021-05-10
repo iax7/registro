@@ -2,8 +2,8 @@
 
 # Payment Model
 class Payment < ApplicationRecord
-  belongs_to :registry, required: true
-  belongs_to :user, required: true
+  belongs_to :registry, optional: false
+  belongs_to :user, optional: false
 
   validates :amount,
             :kind,
@@ -17,7 +17,7 @@ class Payment < ApplicationRecord
   }
 
   def self.human_attribute_kinds
-    Hash[kinds.map { |k, v| [I18n.t(".#{k}", scope: 'helpers.label.payments.kinds'), v] }]
+    kinds.map { |k, v| [I18n.t(".#{k}", scope: 'helpers.label.payments.kinds'), v] }.to_h
   end
 
   def kind_t

@@ -8,8 +8,8 @@ class ErrorsController < ApplicationController
       code: '404'
     }
     respond_to do |format|
-      format.html { render template: 'errors/error', layout: 'layouts/application', status: 404 }
-      format.all  { render nothing: true, status: 404 }
+      format.html { render template: 'errors/error', layout: 'layouts/application', status: :not_found }
+      format.all  { render nothing: true, status: :not_found }
     end
   end
 
@@ -19,8 +19,8 @@ class ErrorsController < ApplicationController
       code: '422'
     }
     respond_to do |format|
-      format.html { render template: 'errors/error', layout: 'layouts/application', status: 422 }
-      format.all  { render nothing: true, status: 422 }
+      format.html { render template: 'errors/error', layout: 'layouts/application', status: :unprocessable_entity }
+      format.all  { render nothing: true, status: :unprocessable_entity }
     end
   end
 
@@ -30,8 +30,8 @@ class ErrorsController < ApplicationController
       code: '500'
     }
     respond_to do |format|
-      format.html { render template: 'errors/error', layout: 'layouts/application', status: 500 }
-      format.all  { render nothing: true, status: 500 }
+      format.html { render template: 'errors/error', layout: 'layouts/application', status: :internal_server_error }
+      format.all  { render nothing: true, status: :internal_server_error }
     end
     # render 'errors/error'
   end

@@ -5,7 +5,7 @@
 <%# user Data %>
 <h2 class="text-center">
   <span class="badge badge-<%= badge_class my_reg?(@registry.id) %>"><%= @registry.user.id %></span><br>
-  <%= @registry.user.full_name false %>
+  <%= @registry.user.full_name(is_last_first: false) %>
 </h2>
 
 <div class="row justify-content-center">

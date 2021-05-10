@@ -33,7 +33,7 @@ class UserMailer < ApplicationMailer
       user_email: user.email,
       user_rst: user.password_reset_token,
       user_rst_url: access_reset_url(user.password_reset_token),
-      email_with_name: %("#{user.full_name(true)}" <#{user.email}>)
+      email_with_name: %("#{user.full_name}" <#{user.email}>)
     }
     @data = JSON.parse(data.to_json, object_class: OpenStruct)
 

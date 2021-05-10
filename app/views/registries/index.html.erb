@@ -166,7 +166,7 @@
                       class: 'btn btn-sm btn-info w-100 p-1 m-0' %>
         </td>
         <td class="text-right"><%= paid_format_colors r["amount_paid"], r["grand_total"] %></td>
-        <td><%= render_bool r["is_present"], false, colorless: true %></td>
+        <td><%= render_bool r["is_present"], render_false_value: false, with_color: false %></td>
         <td></td>
       </tr>
     <% end %>

@@ -95,7 +95,7 @@ class AccessController < ApplicationController
 
       @email = found_user.email
 
-      if found_user.password_reset_sent_at < 2.hour.ago
+      if found_user.password_reset_sent_at < 2.hours.ago
         flash[:error] = t '.expired'
         redirect_to login_path
       end

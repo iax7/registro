@@ -12,6 +12,7 @@
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
 
+  <%# Bootstrap 4 is on package.json %>
   <%# FontAwesome 5 %>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 </head>
@@ -22,21 +23,10 @@
     <%#--- Header ------------------------------------------------------------------------------------------------%>
     <header>
       <%= render 'layouts/navigation' %>
-      <% if !Rails.env.production? %>
-        <div style="height: 19px;
-            margin-top: 0px;
-            margin-bottom: 19px;
-            background-image: url(<%= image_path 'nav_uc.png' %>)">
-          <div style="font-size: large;
-              text-align: center;
-              color: white;
-              text-shadow: 2px 2px 4px #000;
-              font-weight: bolder;">Test Version</div>
-        </div>
-      <% end %>
+      <%= render 'layouts/dev_ribbon' unless Rails.env.production? %>
     </header>
 
-    <%=  yield :top if content_for? :top %>
+    <%=  yield :top if content_for?(:top) %>
 
     <%# --- Main ------------------------------------------------------------------------------------------------ %>
     <main role="main" style="margin-top: 16px;">

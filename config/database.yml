@@ -20,14 +20,10 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  host: localhost
-  port: 5432
-  username: postgres
-  password: 123456
 
 development:
   <<: *default
-  database: reg
+  database: reg_dev
 
   # Schema search path. The server defaults to $user,public
   #schema_search_path: myapp,sharedapp,public
@@ -56,5 +52,6 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
-  # from secrets: <%= Rails.application.credentials[:db_url] %>
-  url: <%= ENV['DATABASE_URL'] %>?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory
+  <<: *default
+  database: reg
+  # url: <%= ENV['DATABASE_URL'] %>?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory

@@ -15,7 +15,7 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
-    <%=  yield :top if content_for? :top %>
+    <%=  yield :top if content_for?(:top) %>
     <div class="container">
       <%= yield %>
     </div>

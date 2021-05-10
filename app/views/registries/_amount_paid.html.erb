@@ -4,7 +4,7 @@
       <div class="modal-header">
         <h5 class="modal-title" id="mainModalLabel">
           <span class="badge badge-info"><%= registry.user_id %></span>&nbsp;
-          <%= registry.user.full_name false %>
+          <%= registry.user.full_name(is_last_first: false) %>
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>

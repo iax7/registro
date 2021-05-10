@@ -42,9 +42,7 @@ class ApiController < ActionController::API
       user = User.lock(true).find id
       current = user.is_admin
       user.is_admin = !current
-      if commit
-        logger.info "*** User id #{user.id} (#{user.name}) was updated to administrador: #{user.is_admin}" if user.save(validate: false)
-      end
+      logger.info "*** User id #{user.id} (#{user.name}) was updated to administrador: #{user.is_admin}" if commit && user.save(validate: false)
     rescue StandardError => e
       logger.fail "*** Error while working with user id #{user.id} (#{user.name}) => #{e.message}"
       render_error 'User not found'

@@ -42,7 +42,7 @@ module ApplicationHelper
   def nav_li_link(text, link_path)
     active_class = current_page?(link_path) ? 'active' : ''
 
-    content_tag(:li, class: "nav-item #{active_class}") do
+    tag.li(class: "nav-item #{active_class}") do
       link_to text, link_path, class: 'nav-link'
     end
   end
@@ -70,13 +70,14 @@ module ApplicationHelper
            end
   end
 
-  def render_bool(value, render_false = true, options = {})
+  def render_bool(value, render_false_value: true, with_color: true)
+    color = ''
     if value
-      color = options.key?(:colorless) ? '' : 'text-success'
+      color = 'text-success' if with_color
       %(<i class="fas fa-check #{color}"></i>).html_safe
     else
-      color = options.key?(:colorless) ? '' : 'text-danger'
-      %(<i class="fas fa-times #{color}"></i>).html_safe if render_false
+      color = 'text-danger' if with_color
+      %(<i class="fas fa-times #{color}"></i>).html_safe if render_false_value
     end
   end
 
@@ -113,8 +114,11 @@ module ApplicationHelper
     %(<span class="#{class_name}">#{number_to_currency paid, precision: decimals}</span>).html_safe
   end
 
-  def make_bold(text, make_it = true)
-    return text.html_safe unless make_it
+  # @param text [String]
+  # @param skip [Boolean]
+  # @return [String]
+  def make_bold(text, skip: false)
+    return text.html_safe if skip
 
     %(<strong>#{text}</strong>).html_safe
   end

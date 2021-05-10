@@ -10,7 +10,7 @@ class ReportsController < ApplicationController
   before_action :require_admin
 
   def badge
-    is_downloaded = params.key?(:inline) ? false : true
+    is_downloaded = !params.key?(:inline)
 
     if params.key? :id
       # id = is_admin ? params[:id] : session_id
@@ -23,11 +23,10 @@ class ReportsController < ApplicationController
       guests << digest_guest_data(guest)
     end
 
-    view_mode = is_downloaded ? 'attachment' : 'inline'
     send_data render_badge(guests),
               filename: 'badge.pdf',
               type: 'application/pdf',
-              disposition: view_mode
+              disposition: view_mode(is_downloaded)
   end
 
   def badge_bulk
@@ -38,14 +37,19 @@ class ReportsController < ApplicationController
       guests << digest_guest_data(guest)
     end
 
-    view_mode = is_downloaded ? 'attachment' : 'inline'
     send_data render_badge_bulk(guests),
               filename: 'badge_bulk.pdf',
               type: 'application/pdf',
-              disposition: view_mode
+              disposition: view_mode(is_downloaded)
   end
 
   private
+
+  # @param is_downloaded [Boolean]
+  # @return [String (frozen)]
+  def view_mode(is_downloaded)
+    is_downloaded ? 'attachment' : 'inline'
+  end
 
   def render_badge(guests)
     report_file = 'badge'

@@ -2,11 +2,11 @@
 
 # Guest Model
 class Guest < ApplicationRecord
-  before_validation :normalize, :on => [:create, :update]
   after_initialize :init
+  before_validation :normalize, :on => [:create, :update]
   after_save :registry_totals
 
-  belongs_to :registry, required: true
+  belongs_to :registry, optional: false
 
   enum relation: {
     me: 0,
@@ -46,7 +46,7 @@ class Guest < ApplicationRecord
     I18n.t(".#{relation}", scope: 'helpers.label.guest.relations')
   end
 
-  def full_name(is_last_first = true)
+  def full_name(is_last_first: true)
     is_last_first ? "#{lastname}, #{name}" : "#{name} #{lastname}"
   end
 
