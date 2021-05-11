@@ -46,6 +46,7 @@ group :development, :test do
   gem "rubocop", require: false
   gem "rubocop-rails", require: false
   gem "rubocop-rspec", require: false
+  gem "code-scanning-rubocop", "~> 0.5"
   gem "simplecov", require: false
 end
 

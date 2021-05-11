@@ -1,5 +1,6 @@
 # Registro
 
+[![Rubocop](https://github.com/iax7/registro/actions/workflows/rubocop-analysis.yml/badge.svg)](https://github.com/iax7/registro/actions/workflows/rubocop-analysis.yml)
 [![Ruby][ruby-badge]][ruby-url]
 [![Rails][rails-badge]][rails-url]
 [![PostgreSQL][psql-badge]][psql-url]
