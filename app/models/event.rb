@@ -43,7 +43,7 @@ class Event < ApplicationRecord
                  :totals_food
 
   def self.current
-    Rails.configuration.appcache.fetch("Event.current", expires_in: 1.year) do
+    Rails.configuration.appcache.fetch("Event.current", expires_in: 3.months) do
       Event.find_or_create_by(name: Time.current.year.to_s)
     end
   end

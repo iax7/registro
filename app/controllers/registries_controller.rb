@@ -58,7 +58,7 @@ class RegistriesController < ApplicationController
       reg = reg.where("amount_debt + amount_offering <> amount_paid") if permitted[:is_unpaid].present?
       qry = reg.order(order).where(filters).to_sql
 
-      @registries = ActiveRecord::Base.connection.select_all(qry).to_hash
+      @registries = ActiveRecord::Base.connection.select_all(qry).to_a
     end
 
     respond_to do |format|

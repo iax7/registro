@@ -8,7 +8,7 @@ default: &default
 
   default_url: 'https://reg.herokuapp.com'
   mailer_from_addr: 'Registro <registro@google.com>'
-  letsencrypt: none
+  letsencrypt:
 
 development:
   <<: *default
