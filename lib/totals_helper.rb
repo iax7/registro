@@ -20,8 +20,8 @@ class TotalsHelper
 
   def process(foods, used)
     # Divide the result by 'is_paid' status
-    food_not_paid = foods.reject { |f| f['is_paid'] }
-    food_paid = foods.select { |f| f['is_paid'] }
+    food_not_paid = foods.reject { |f| f["is_paid"] }
+    food_paid = foods.select { |f| f["is_paid"] }
 
     food_not_paid_f = flatten food_not_paid
     food_paid_f = flatten food_paid
@@ -30,9 +30,9 @@ class TotalsHelper
     food_requested_f = food_not_paid_f.merge(food_paid_f) { |_k, not_paid_v, paid_v| not_paid_v + paid_v }
 
     {
-      :requested => create_hash(food_requested_f),
-      :paid      => create_hash(food_paid_f),
-      :used      => create_hash(used_f)
+      requested: create_hash(food_requested_f),
+      paid: create_hash(food_paid_f),
+      used: create_hash(used_f)
     }
   end
 
@@ -45,10 +45,10 @@ class TotalsHelper
   # @param [Array] array_of_hash
   # @return [Hash]
   def flatten(array_of_hash)
-    keys = %i[v1  v2  v3
-              s1  s2  s3
-              d1  d2  d3
-              l1  l2  l3
+    keys = %i[v1 v2 v3
+              s1 s2 s3
+              d1 d2 d3
+              l1 l2 l3
               v1c v2c v3c
               s1c s2c s3c
               d1c d2c d3c
@@ -58,8 +58,9 @@ class TotalsHelper
     array_of_hash.each do |row|
       row.each do |k, v|
         next unless k.match?(/f_.+/)
-        key = k.sub('f_', '')
-        key_target = row['status'] == 'adult' ? key : "#{key}c"
+
+        key = k.sub("f_", "")
+        key_target = row["status"] == "adult" ? key : "#{key}c"
         flat[key_target] = v
       end
     end
@@ -82,9 +83,9 @@ class TotalsHelper
     end
     # OLD: monetized.reduce(0) { |total, (_, v)| total + v }
     {
-      :count       => hash,
-      :money       => monetized,
-      :money_total => monetized.each_value.reduce(0, :+)
+      count: hash,
+      money: monetized,
+      money_total: monetized.each_value.reduce(0, :+)
     }
   end
 end

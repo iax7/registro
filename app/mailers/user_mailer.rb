@@ -37,7 +37,7 @@ class UserMailer < ApplicationMailer
     }
     @data = JSON.parse(data.to_json, object_class: OpenStruct)
 
-    path = Rails.root.join('app', 'assets', 'images', 'email_logo.jpg')
-    attachments.inline['logo.jpg'] = File.read(path)
+    path = Rails.root.join("app", "assets", "images", "email_logo.jpg")
+    attachments.inline["logo.jpg"] = File.read(path)
   end
 end

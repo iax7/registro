@@ -29,31 +29,31 @@ module ApplicationHelper
   end
 
   def fa_text(icon_name, text = nil, class_name: nil, style: nil)
-    name = icon_name.is_a?(Symbol) ? icon_name.to_s.tr('_', '-') : icon_name
+    name = icon_name.is_a?(Symbol) ? icon_name.to_s.tr("_", "-") : icon_name
     text = "&nbsp;#{text}" unless text.nil?
     # Named Args
     style_text = %( style="#{style}") unless style.nil?
-    fa_icon = name.gsub(/fa-/, '')
+    fa_icon = name.gsub(/fa-/, "")
 
     %(<i class="fas fa-#{fa_icon} fa-fw #{class_name}"#{style_text} aria-hidden="true"></i>#{text}).html_safe
   end
 
   # NAV -----------------------------------------------------------
   def nav_li_link(text, link_path)
-    active_class = current_page?(link_path) ? 'active' : ''
+    active_class = current_page?(link_path) ? "active" : ""
 
     tag.li(class: "nav-item #{active_class}") do
-      link_to text, link_path, class: 'nav-link'
+      link_to text, link_path, class: "nav-link"
     end
   end
 
   def nav_dropdown_link(text, link_path)
-    active_class = current_page?(link_path) ? 'active' : ''
+    active_class = current_page?(link_path) ? "active" : ""
     link_to text, link_path, class: "dropdown-item #{active_class}"
   end
 
   def show_sex_symbol(is_male, show_text: false, short: false)
-    text = show_text ? sex_text(is_male, short: short) : ''
+    text = show_text ? sex_text(is_male, short: short) : ""
     if is_male
       %(<i class="fas fa-male"></i>#{text}).html_safe
     else
@@ -62,21 +62,21 @@ module ApplicationHelper
   end
 
   def sex_text(is_male, short: false)
-    text = '&nbsp;'
+    text = "&nbsp;"
     text + if short
-             is_male ? t('common.male_short') : t('common.female_short')
+             is_male ? t("common.male_short") : t("common.female_short")
            else
-             is_male ? t('common.male') : t('common.female')
+             is_male ? t("common.male") : t("common.female")
            end
   end
 
   def render_bool(value, render_false_value: true, with_color: true)
-    color = ''
+    color = ""
     if value
-      color = 'text-success' if with_color
+      color = "text-success" if with_color
       %(<i class="fas fa-check #{color}"></i>).html_safe
     else
-      color = 'text-danger' if with_color
+      color = "text-danger" if with_color
       %(<i class="fas fa-times #{color}"></i>).html_safe if render_false_value
     end
   end
@@ -89,7 +89,7 @@ module ApplicationHelper
     end
   end
 
-  def dim_zeros(number, custom_char_zero = '0')
+  def dim_zeros(number, custom_char_zero = "0")
     return number unless number&.zero?
 
     %(<span class="text-muted">#{custom_char_zero}</span>).html_safe
@@ -105,9 +105,9 @@ module ApplicationHelper
     amount  = paid.nil? ? 0 : paid
     pending = to_pay.nil? ? 0 : to_pay
     class_name = case amount <=> pending
-                 when 0 then 'text-success'
-                 when -1 then 'text-danger'
-                 when 1 then 'text-warning'
+                 when 0 then "text-success"
+                 when -1 then "text-danger"
+                 when 1 then "text-warning"
                  end
     # class_name = 'text-muted' if amount.zero?
 
@@ -127,7 +127,7 @@ module ApplicationHelper
     return unless bool
 
     check_box_html = %(<span class="fas fa-check text-success bool"></span>)
-    %(#{check_box_html}<span class="text-muted cost" style="display: none;">#{dim_zeros text, '-'}</span>).html_safe
+    %(#{check_box_html}<span class="text-muted cost" style="display: none;">#{dim_zeros text, "-"}</span>).html_safe
   end
 
   def hash_to_dots(hash)
@@ -141,6 +141,6 @@ module ApplicationHelper
   end
 
   def badge_class(bool)
-    bool ? 'info' : 'danger'
+    bool ? "info" : "danger"
   end
 end

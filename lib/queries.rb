@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
-# Stores all custon queries used in html reports
+# Stores all custom queries used in html reports
 module Queries
+  # @return [String]
   def self.people(event)
-    <<~SQL
+    <<~SQL.squish
       SELECT 'all' AS status, COUNT(1) AS total
         FROM registries r INNER JOIN
              guests g ON r.id = g.registry_id INNER JOIN
@@ -19,8 +20,9 @@ module Queries
     SQL
   end
 
+  # @return [String]
   def self.offerings(event)
-    <<~SQL
+    <<~SQL.squish
       WITH offerings AS (
             SELECT r.amount_offering AS offering,
                    r.amount_debt + r.amount_offering AS debt,
@@ -37,8 +39,9 @@ module Queries
     SQL
   end
 
+  # @return [String]
   def self.services(event)
-    <<~SQL
+    <<~SQL.squish
       SELECT 'all' AS status,
              sum(g.f_v1::int) AS f_v1, sum(g.f_v2::int) AS f_v2, sum(g.f_v3::int) AS f_v3,
              sum(g.f_s1::int) AS f_s1, sum(g.f_s2::int) AS f_s2, sum(g.f_s3::int) AS f_s3,
@@ -78,9 +81,9 @@ module Queries
     SQL
   end
 
-
+  # @return [String]
   def self.food_by_age_paid_status(event)
-    <<~SQL
+    <<~SQL.squish
       SELECT f.is_paid,
              f.age AS status,
              sum(f.f_v1) AS f_v1, sum(f.f_v2) AS f_v2, sum(f.f_v3) AS f_v3,
@@ -103,8 +106,9 @@ module Queries
     SQL
   end
 
+  # @return [String]
   def self.food_used_by_age(event)
-    <<~SQL
+    <<~SQL.squish
       SELECT f.age AS status,
              sum(f.fu_v1) AS f_v1, sum(f.fu_v2) AS f_v2, sum(f.fu_v3) AS f_v3,
              sum(f.fu_s1) AS f_s1, sum(f.fu_s2) AS f_s2, sum(f.fu_s3) AS f_s3,
@@ -125,9 +129,10 @@ module Queries
     SQL
   end
 
+  # @return [String]
   def self.lodging_by_age_sex(event)
-    <<~SQL
-      WITH lodging_stats AS ( 
+    <<~SQL.squish
+      WITH lodging_stats AS (
         SELECT (g.age >= (SELECT settings ->> 'adult_age' FROM events WHERE events.name = '#{event}')::int) AS is_adult,
                (r.amount_debt + r.amount_offering ) <= r.amount_paid AS is_paid,
                g.is_male, g.l_v, g.l_s, g.l_d, g.l_l
@@ -165,9 +170,10 @@ module Queries
   end
 
   # @deprecated Please use {#user_payments} instead
+  # @return [String]
   def self.pay_collectors(event)
     warn "[DEPRECATION] `pay_collectors` is deprecated.  Please use `user_payments` instead."
-    <<~SQL
+    <<~SQL.squish
       SELECT u.id,
              CONCAT(u.name ,' ', u.lastname) AS name,
              CONCAT(u.city, ', ', u.state) AS location,
@@ -182,8 +188,9 @@ module Queries
   end
 
   # Uses the new table to get more acurrate report
+  # @return [String]
   def self.user_payments(event)
-    <<~SQL
+    <<~SQL.squish
       WITH user_payments AS (
          SELECT u.id,
                 concat(u.name, ' ', u.lastname) AS name,
@@ -201,8 +208,9 @@ module Queries
     SQL
   end
 
+  # @return [String]
   def self.list_lodging(event)
-    <<~SQL
+    <<~SQL.squish
       SELECT *
         FROM (
               SELECT r.id,

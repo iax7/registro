@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'totals_helper'
+require "totals_helper"
 
 class CreateEventStatistics
   class << self

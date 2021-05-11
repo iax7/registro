@@ -38,12 +38,12 @@ class Guest < ApplicationRecord
                             greater_than_or_equal_to: 0 }
 
   def self.relations_to_show
-    visible_relations = relations.reject { |k| k == 'me' }
-    visible_relations.transform_keys { |k| I18n.t ".#{k}", scope: 'helpers.label.guest.relations' }
+    visible_relations = relations.reject { |k| k == "me" }
+    visible_relations.transform_keys { |k| I18n.t ".#{k}", scope: "helpers.label.guest.relations" }
   end
 
   def relation_t
-    I18n.t(".#{relation}", scope: 'helpers.label.guest.relations')
+    I18n.t(".#{relation}", scope: "helpers.label.guest.relations")
   end
 
   def full_name(is_last_first: true)

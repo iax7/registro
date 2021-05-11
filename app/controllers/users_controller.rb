@@ -33,7 +33,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         logger.debug "*** User #{@user.name} with id #{@user.id} was created!"
-        flash.notice = t('.notice')
+        flash.notice = t(".notice")
 
         # creating and setting current session active
         current_reg = @user.current || @user.registries.last
@@ -42,7 +42,7 @@ class UsersController < ApplicationController
         # Send Welcome Email
         UserMailer.welcome(@user).deliver_now
 
-        format.html { redirect_to registry_path(@user.current.id), notice: t('.notice') }
+        format.html { redirect_to registry_path(@user.current.id), notice: t(".notice") }
         format.json { render :show, status: :created, location: @user }
       else
         logger.fatal "*** Error creating the User. #{@user.errors.full_messages} ***"
@@ -59,7 +59,7 @@ class UsersController < ApplicationController
       if @user.update(user_params)
 
         # update_current_guest_with_relation_me(@user) MOVED TO MODEL
-        format.html { redirect_to registry_path(session[:reg_id]), notice: t('.notice') }
+        format.html { redirect_to registry_path(session[:reg_id]), notice: t(".notice") }
         format.json { render :show, status: :ok, location: @user }
       else
         logger.fatal "*** Error updating the User. #{@user.errors.full_messages} ***"
@@ -79,7 +79,7 @@ class UsersController < ApplicationController
 
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to users_url, notice: t('.notice') }
+      format.html { redirect_to users_url, notice: t(".notice") }
       format.json { head :no_content }
     end
   end
@@ -88,13 +88,13 @@ class UsersController < ApplicationController
   def payments
     @user_payments = Totals.user_payments(Event.current.name)
     @sum_user_payments = {
-      real: @user_payments.sum { |p| p['real'] },
-      courtesy: @user_payments.sum { |p| p['courtesy'] }
+      real: @user_payments.sum { |p| p["real"] },
+      courtesy: @user_payments.sum { |p| p["courtesy"] }
     }
 
     # Legacy
     @pay_collectors = Totals.pay_collectors(Event.current.name)
-    @sum_pay_collectors = @pay_collectors.sum { |p| p['amount'] }
+    @sum_pay_collectors = @pay_collectors.sum { |p| p["amount"] }
   end
 
   # GET /users/revoke_admins
@@ -102,7 +102,7 @@ class UsersController < ApplicationController
     User.where.not(id: 1).update_all(is_admin: false)
     logger.info("*** Revoked all user administrators by user_id: [#{session[:user_id]}] <--")
 
-    redirect_to users_url, notice: 'Revoked all administration access.'
+    redirect_to users_url, notice: "Revoked all administration access."
   end
 
   private

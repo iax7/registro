@@ -12,7 +12,7 @@ class User < ApplicationRecord
   has_secure_password
   has_many :registries
 
-  has_one :current, -> { where event_id: Event.current.id }, class_name: 'Registry'
+  has_one :current, -> { where event_id: Event.current.id }, class_name: "Registry"
 
   validates :name,
             :lastname,
@@ -42,7 +42,7 @@ class User < ApplicationRecord
             confirmation: true,
             on: :create
 
-  scope :find_by_email_hashed, ->(hash) { where 'md5(email) = ?', hash }
+  scope :find_by_email_hashed, ->(hash) { where "md5(email) = ?", hash }
 
   def age
     now = Time.now.utc.to_date
@@ -50,7 +50,7 @@ class User < ApplicationRecord
   end
 
   def location
-    country.present? ? %(#{city}, #{state}, #{country}) : 'N/A'
+    country.present? ? %(#{city}, #{state}, #{country}) : "N/A"
   end
 
   def full_name(is_last_first: true)
@@ -115,12 +115,12 @@ class User < ApplicationRecord
     common_attr = attributes.select do |key, _|
       guest_me.attribute_names.include?(key) unless attr_exceptions.include?(key)
     end
-    common_attr['age'] = age
+    common_attr["age"] = age
     guest_me.assign_attributes common_attr
     guest_me.save if guest_me.changed?
   end
 
   def user_is_adult
-    errors.add(:dob, 'Debes tener mas de 18 años') if !dob.nil? && age < 18
+    errors.add(:dob, "Debes tener mas de 18 años") if !dob.nil? && age < 18
   end
 end

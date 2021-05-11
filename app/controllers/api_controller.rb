@@ -11,7 +11,7 @@ class ApiController < ActionController::API
   # GET ping
   def ping
     response = {
-      response: 'PONG'
+      response: "PONG"
     }
 
     render json: response, status: :ok
@@ -25,7 +25,7 @@ class ApiController < ActionController::API
 
     response = {
       id: user.id,
-      status: 'ok'
+      status: "ok"
     }
 
     render json: response, status: :ok
@@ -36,7 +36,7 @@ class ApiController < ActionController::API
   # GET admin/:id(/:commit)
   def admin
     id = params[:id]
-    commit = params[:commit] == 'true'
+    commit = params[:commit] == "true"
 
     begin
       user = User.lock(true).find id
@@ -45,7 +45,7 @@ class ApiController < ActionController::API
       logger.info "*** User id #{user.id} (#{user.name}) was updated to administrador: #{user.is_admin}" if commit && user.save(validate: false)
     rescue StandardError => e
       logger.fail "*** Error while working with user id #{user.id} (#{user.name}) => #{e.message}"
-      render_error 'User not found'
+      render_error "User not found"
       return
     end
 
@@ -99,20 +99,20 @@ class ApiController < ActionController::API
       raise
     end
 
-    registry = Registry.includes(:user, :guests).order('guests.relation, guests.age desc').find registry_id
+    registry = Registry.includes(:user, :guests).order("guests.relation, guests.age desc").find registry_id
     unless registry.is_present
       registry.is_present = true
       registry.save
     end
 
-    registry.user.password_digest = ''
+    registry.user.password_digest = ""
     json_hash = registry.as_json(include: [:user, :guests],
                                  methods: %i[grand_total amount_remaining paid? totals counts])
-    json_hash['is_paid'] = registry.paid?
+    json_hash["is_paid"] = registry.paid?
     render json: json_hash.to_json,
            status: :ok
   rescue StandardError
-    render_error I18n.t('api.assist.not_found_error')
+    render_error I18n.t("api.assist.not_found_error")
   end
 
   # PUT food/:day/:time/:id
@@ -122,11 +122,11 @@ class ApiController < ActionController::API
     id = params[:id]
 
     unless day.match?(/^[vsdl]$/)
-      render_error I18n.t('api.food.day_error')
+      render_error I18n.t("api.food.day_error")
       return
     end
     unless time.match?(/^[123]$/)
-      render_error I18n.t('api.food.time_error')
+      render_error I18n.t("api.food.time_error")
       return
     end
 
@@ -147,14 +147,14 @@ class ApiController < ActionController::API
     available_count = req_count - used_count
 
     # Starts logic --------------------------------------
-    status = ''
+    status = ""
     if available_count > 0
       used_count += 1
       guest[used_field_name] = used_count
       guest.save
     else
       # Not enough food bought
-      status = I18n.t('api.food.consumed_error')
+      status = I18n.t("api.food.consumed_error")
     end
 
     used_sum = Guest.joins(:registry)
@@ -178,18 +178,18 @@ class ApiController < ActionController::API
       requested: req_count,
       used: used_count,
       is_adult: guest.adult?,
-      used_sum: '',
+      used_sum: "",
       status: e.message
     }
     render json: response, status: :ok
   rescue NotFoundError => e
     response = {
       id: id,
-      name: '-',
-      requested: '-',
-      used: '-',
+      name: "-",
+      requested: "-",
+      used: "-",
       is_adult: true,
-      used_sum: '',
+      used_sum: "",
       status: e.message
     }
     render json: response, status: :ok
@@ -208,14 +208,14 @@ class ApiController < ActionController::API
 
   # Error raised when the guest is not found
   class NotFoundError < StandardError
-    def initialize(msg = I18n.t('api.not_found_error'))
+    def initialize(msg = I18n.t("api.not_found_error"))
       super
     end
   end
 
   # Error raised when the food is unpaid
   class NotPaidError < StandardError
-    def initialize(msg = I18n.t('api.not_paid_error'))
+    def initialize(msg = I18n.t("api.not_paid_error"))
       super
     end
   end

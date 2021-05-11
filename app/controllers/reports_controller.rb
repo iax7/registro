@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'barby'
-require 'barby/barcode/code_128'
-require 'barby/outputter/png_outputter'
+require "barby"
+require "barby/barcode/code_128"
+require "barby/outputter/png_outputter"
 
 # Uses ThinReports to create the Badges
 class ReportsController < ApplicationController
@@ -19,13 +19,13 @@ class ReportsController < ApplicationController
 
     guests = []
     Registry.includes(:user,
-                      :guests).order('guests.id').where(event_id: Event.current.id, id: id).first.guests.each do |guest|
+                      :guests).order("guests.id").where(event_id: Event.current.id, id: id).first.guests.each do |guest|
       guests << digest_guest_data(guest)
     end
 
     send_data render_badge(guests),
-              filename: 'badge.pdf',
-              type: 'application/pdf',
+              filename: "badge.pdf",
+              type: "application/pdf",
               disposition: view_mode(is_downloaded)
   end
 
@@ -38,8 +38,8 @@ class ReportsController < ApplicationController
     end
 
     send_data render_badge_bulk(guests),
-              filename: 'badge_bulk.pdf',
-              type: 'application/pdf',
+              filename: "badge_bulk.pdf",
+              type: "application/pdf",
               disposition: view_mode(is_downloaded)
   end
 
@@ -48,12 +48,12 @@ class ReportsController < ApplicationController
   # @param is_downloaded [Boolean]
   # @return [String (frozen)]
   def view_mode(is_downloaded)
-    is_downloaded ? 'attachment' : 'inline'
+    is_downloaded ? "attachment" : "inline"
   end
 
   def render_badge(guests)
-    report_file = 'badge'
-    report_path = File.join(Rails.root, 'app', 'reports', "#{report_file}.tlf")
+    report_file = "badge"
+    report_path = File.join(Rails.root, "app", "reports", "#{report_file}.tlf")
     report = Thinreports::Report.new layout: report_path
 
     guests.each do |guest|
@@ -70,8 +70,8 @@ class ReportsController < ApplicationController
   end
 
   def render_badge_bulk(guests)
-    report_file = 'badge_bulk'
-    report_path = File.join(Rails.root, 'app', 'reports', "#{report_file}.tlf")
+    report_file = "badge_bulk"
+    report_path = File.join(Rails.root, "app", "reports", "#{report_file}.tlf")
     report = Thinreports::Report.new layout: report_path
 
     guests.in_groups_of(4) do |group|
@@ -109,8 +109,8 @@ class ReportsController < ApplicationController
   end
 
   def get_agekind_text(is_adult, is_male)
-    return '' if is_adult
+    return "" if is_adult
 
-    is_male ? 'Niño' : 'Niña'
+    is_male ? "Niño" : "Niña"
   end
 end

@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
     return if session[:user_id]
 
     session[:return_to] = request.fullpath
-    flash[:error] = t('application.confirm_logged_in.error')
+    flash[:error] = t("application.confirm_logged_in.error")
     redirect_to login_path
     # redirect_to prevents requested action from running
   end
@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
   def require_admin
     return if session[:is_admin]
 
-    flash[:error] = t('application.require_admin.error')
+    flash[:error] = t("application.require_admin.error")
     redirect_to start_path
   end
 end

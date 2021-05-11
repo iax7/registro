@@ -2,7 +2,7 @@
 
 # Wraps all the custom queries
 class Totals < ApplicationRecord
-  require 'queries'
+  require "queries"
 
   class << self
     def people(event_name)

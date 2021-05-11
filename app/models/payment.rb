@@ -17,10 +17,10 @@ class Payment < ApplicationRecord
   }
 
   def self.human_attribute_kinds
-    kinds.map { |k, v| [I18n.t(".#{k}", scope: 'helpers.label.payments.kinds'), v] }.to_h
+    kinds.map { |k, v| [I18n.t(".#{k}", scope: "helpers.label.payments.kinds"), v] }.to_h
   end
 
   def kind_t
-    I18n.t(".#{kind}", scope: 'helpers.label.payments.kinds')
+    I18n.t(".#{kind}", scope: "helpers.label.payments.kinds")
   end
 end

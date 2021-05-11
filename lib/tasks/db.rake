@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 namespace :db do
-  desc 'fill database with Fake data'
+  desc "fill database with Fake data"
   task populate: [:environment] do
-    raise 'You cannot run this in production' if Rails.env.production?
+    raise "You cannot run this in production" if Rails.env.production?
 
-    require 'faker'
+    require "faker"
     include Faker
 
     # Rake::Task['db:reset'].invoke
 
-    puts 'Creating 20 users...'
+    puts "Creating 20 users..."
     20.times do
       user = User.new do |u|
         password = Internet.password 6, 12
@@ -35,7 +35,7 @@ namespace :db do
 
       user.registries << reg
       user.save
-      puts "  #{user.id} -> Age: #{user.age}, Sex: #{user.is_male ? 'M' : 'F'}, Name: #{user.full_name false}"
+      puts "  #{user.id} -> Age: #{user.age}, Sex: #{user.is_male ? "M" : "F"}, Name: #{user.full_name false}"
     end
   end
 end

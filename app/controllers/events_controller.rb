@@ -18,8 +18,8 @@ class EventsController < ApplicationController
     return unless @event.nil?
 
     @events = Event.all
-    flash.now[:alert] = 'The event was not found'
-    render 'index'
+    flash.now[:alert] = "The event was not found"
+    render "index"
   end
 
   # GET /events/new
@@ -40,7 +40,7 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.save
-        format.html { redirect_to @event, notice: 'Event was successfully created.' }
+        format.html { redirect_to @event, notice: "Event was successfully created." }
         format.json { render :show, status: :created, location: @event }
       else
         format.html { render :new }
@@ -60,11 +60,11 @@ class EventsController < ApplicationController
     respond_to do |format|
       if @event.save
         # Update MemCache
-        Rails.configuration.appcache.write 'Event.current', @event
-        Rails.configuration.appcache.read 'Event.current'
+        Rails.configuration.appcache.write "Event.current", @event
+        Rails.configuration.appcache.read "Event.current"
         logger.info "*** Event: #{@event.name} changed. Event in cache was updated."
 
-        format.html { redirect_to @event, notice: 'Event was successfully updated.' }
+        format.html { redirect_to @event, notice: "Event was successfully updated." }
         format.json { render :show, status: :ok, location: @event }
       else
         format.html { render :edit }
@@ -78,14 +78,14 @@ class EventsController < ApplicationController
   def destroy
     @event.destroy
     respond_to do |format|
-      format.html { redirect_to events_url, notice: 'Event was successfully destroyed.' }
+      format.html { redirect_to events_url, notice: "Event was successfully destroyed." }
       format.json { head :no_content }
     end
   end
 
   # GET /events/1/calculate_statistics
   def calculate_statistics
-    require 'create_event_statistics'
+    require "create_event_statistics"
 
     event = Event.find params[:event_id]
     CreateEventStatistics.calculate event.name

@@ -32,10 +32,10 @@ class GuestsController < ApplicationController
 
     respond_to do |format|
       if @guest.save
-        format.html { redirect_to define_redirection_create_update, notice: t('.notice') }
+        format.html { redirect_to define_redirection_create_update, notice: t(".notice") }
         format.json { render :show, status: :created, location: @guest }
       else
-        flash.alert = t 'common.error_create'
+        flash.alert = t "common.error_create"
         format.html { render :new }
         format.json { render json: @guest.errors, status: :unprocessable_entity }
       end
@@ -47,10 +47,10 @@ class GuestsController < ApplicationController
   def update
     respond_to do |format|
       if @guest.update(guest_params)
-        format.html { redirect_to define_redirection_create_update, notice: t('.notice') }
+        format.html { redirect_to define_redirection_create_update, notice: t(".notice") }
         format.json { render :show, status: :ok, location: @guest }
       else
-        flash.alert = t 'common.error_update'
+        flash.alert = t "common.error_update"
         format.html { render :edit }
         format.json { render json: @guest.errors, status: :unprocessable_entity }
       end
@@ -62,7 +62,7 @@ class GuestsController < ApplicationController
   def destroy
     @guest.destroy
     respond_to do |format|
-      format.html { redirect_to start_path, notice: t('.notice') }
+      format.html { redirect_to start_path, notice: t(".notice") }
       format.json { head :no_content }
     end
   end

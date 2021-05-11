@@ -43,7 +43,7 @@ class Event < ApplicationRecord
                  :totals_food
 
   def self.current
-    Rails.configuration.appcache.fetch('Event.current', expires_in: 1.year) do
+    Rails.configuration.appcache.fetch("Event.current", expires_in: 1.year) do
       Event.find_or_create_by(name: Time.current.year.to_s)
     end
   end
@@ -89,22 +89,22 @@ class Event < ApplicationRecord
     self.totals_food ||= []
 
     # --- Settings
-    self.event_title      ||= 'My Title'
-    self.event_subtitle   ||= 'My Subtitle'
-    self.event_subtitle2  ||= 'My Subtitle2'
-    self.event_main_phone ||= '1234567890'
-    self.event_main_email ||= 'known@domain.com'
-    self.event_main_email_name    ||= 'Registration Team'
-    self.event_main_email_subject ||= 'Information'
+    self.event_title      ||= "My Title"
+    self.event_subtitle   ||= "My Subtitle"
+    self.event_subtitle2  ||= "My Subtitle2"
+    self.event_main_phone ||= "1234567890"
+    self.event_main_email ||= "known@domain.com"
+    self.event_main_email_name    ||= "Registration Team"
+    self.event_main_email_subject ||= "Information"
 
     self.registration_starts  ||= Time.now
     self.event_ends           ||= Time.new(Time.now.year, 12, 31)
 
-    self.address              ||= '<strong>Place Name</strong><br>Street #1400<br>CP 12345, City, State.'
-    self.maps_link            ||= 'https://www.google.com.mx/maps'
-    self.maps_document_link   ||= ''
-    self.weather_link         ||= ''
-    self.transport_map        ||= 'https://www.google.com.mx/maps'
+    self.address              ||= "<strong>Place Name</strong><br>Street #1400<br>CP 12345, City, State."
+    self.maps_link            ||= "https://www.google.com.mx/maps"
+    self.maps_document_link   ||= ""
+    self.weather_link         ||= ""
+    self.transport_map        ||= "https://www.google.com.mx/maps"
 
     self.adult_age            ||= 11
     self.event_full_price     ||= 100
@@ -121,20 +121,20 @@ class Event < ApplicationRecord
 
     self.paycollectors ||= [
       {
-        name: 'PayCollector1',
-        phone: '1234567890',
-        phone_type: 'mobile',
-        email: 'known@domain.com',
-        location: 'City, ST',
-        church: 'MyChurch1'
+        name: "PayCollector1",
+        phone: "1234567890",
+        phone_type: "mobile",
+        email: "known@domain.com",
+        location: "City, ST",
+        church: "MyChurch1"
       },
       {
-        name: 'PayCollector2',
-        phone: '1234567890',
-        phone_type: 'phone',
-        email: 'known@domain.com',
-        location: 'City2, ST2',
-        church: 'MyChurch2'
+        name: "PayCollector2",
+        phone: "1234567890",
+        phone_type: "phone",
+        email: "known@domain.com",
+        location: "City2, ST2",
+        church: "MyChurch2"
       }
     ]
   end

@@ -2,7 +2,7 @@
 
 # Access Location Autocomplete services
 class AutocompleteController < ApplicationController
-  require 'csc'
+  require "csc"
 
   def countries
     json = CSC.countries params[:string]

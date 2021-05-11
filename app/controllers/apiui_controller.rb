@@ -5,7 +5,7 @@ class ApiuiController < ApplicationController
   before_action :confirm_logged_in
   before_action :require_admin
 
-  layout 'apiui_base'
+  layout "apiui_base"
 
   def index
     @event = Event.current

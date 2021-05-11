@@ -11,14 +11,14 @@ class RegistriesController < ApplicationController
   # GET /registries.json
   def index
     # ORDER -------------------------------------------------------------
-    order = 'users.lastname, users.name, users.id'
+    order = "users.lastname, users.name, users.id"
     if params[:order].present?
       valid_columns = {
         users: User.column_names,
         registries: Registry.column_names,
         guests: Guest.column_names
       }.with_indifferent_access
-      table, column = params[:order].include?('.') ? params[:order].split('.') : [:registries, params[:order]]
+      table, column = params[:order].include?(".") ? params[:order].split(".") : [:registries, params[:order]]
 
       if valid_columns[table].include? column
         order = params[:order]
@@ -53,9 +53,9 @@ class RegistriesController < ApplicationController
     else
       # EXECUTE ------------------------------------------------------------
       reg = RegistrySearch.main_query
-      reg = reg.where('unaccent(users.name) ~* unaccent(?)', permitted[:name].downcase) if permitted[:name].present?
-      reg = reg.where('unaccent(users.lastname) ~* unaccent(?)', permitted[:lastname].downcase) if permitted[:lastname].present?
-      reg = reg.where('amount_debt + amount_offering <> amount_paid') if permitted[:is_unpaid].present?
+      reg = reg.where("unaccent(users.name) ~* unaccent(?)", permitted[:name].downcase) if permitted[:name].present?
+      reg = reg.where("unaccent(users.lastname) ~* unaccent(?)", permitted[:lastname].downcase) if permitted[:lastname].present?
+      reg = reg.where("amount_debt + amount_offering <> amount_paid") if permitted[:is_unpaid].present?
       qry = reg.order(order).where(filters).to_sql
 
       @registries = ActiveRecord::Base.connection.select_all(qry).to_hash
@@ -67,10 +67,10 @@ class RegistriesController < ApplicationController
       format.csv do
         send_data @users.to_csv,
                   filename: "registro-#{Date.today}.csv",
-                  disposition: 'attachment'
+                  disposition: "attachment"
       end
       format.xls do
-        response.headers['Content-Disposition'] = %(attachment; filename="registro-#{Date.today}.xls")
+        response.headers["Content-Disposition"] = %(attachment; filename="registro-#{Date.today}.xls")
       end
     end
   end
@@ -79,7 +79,7 @@ class RegistriesController < ApplicationController
   # GET /registries/1.json
   def show
     id = reg_id
-    @registry = Registry.includes(:user, :guests).order('guests.id').find id
+    @registry = Registry.includes(:user, :guests).order("guests.id").find id
     @event = Event.current
   end
 
@@ -103,7 +103,7 @@ class RegistriesController < ApplicationController
 
     respond_to do |format|
       if @registry.save
-        format.html { redirect_to @registry, notice: 'Registry was successfully created.' }
+        format.html { redirect_to @registry, notice: "Registry was successfully created." }
         format.json { render :show, status: :created, location: @registry }
       else
         format.html { render :new }
@@ -117,24 +117,24 @@ class RegistriesController < ApplicationController
   def update
     respond_to do |format|
       updated = nil
-      is_payment_update = params['registry']['paid_by'].present? && params['payment']['amount'].present?
+      is_payment_update = params["registry"]["paid_by"].present? && params["payment"]["amount"].present?
       if is_payment_update
         payment_permitted = params.require(:payment).permit(:amount, :kind).to_hash.symbolize_keys
         amount, kind = payment_permitted.values_at(:amount, :kind)
 
         registry_permitted = registry_params
-        registry_permitted['amount_paid'] = @registry.amount_paid + amount.to_i
+        registry_permitted["amount_paid"] = @registry.amount_paid + amount.to_i
 
         Registry.transaction do
           updated = @registry.update(registry_permitted)
-          create_payment(paid_by: registry_permitted['paid_by'], amount: amount, kind: kind)
+          create_payment(paid_by: registry_permitted["paid_by"], amount: amount, kind: kind)
         end
       else
         updated = @registry.update(registry_params)
       end
 
       if updated
-        format.html { redirect_to @registry, notice: 'Registry was successfully updated.' }
+        format.html { redirect_to @registry, notice: "Registry was successfully updated." }
         format.js
         format.json { render :show, status: :ok, location: @registry }
       else
@@ -149,7 +149,7 @@ class RegistriesController < ApplicationController
   def destroy
     @registry.destroy
     respond_to do |format|
-      format.html { redirect_to registries_url, notice: 'Registry was successfully destroyed.' }
+      format.html { redirect_to registries_url, notice: "Registry was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -157,16 +157,16 @@ class RegistriesController < ApplicationController
   def list_lodging
     @guests = Guest.includes(:registry => :user)
                    .where(registries: { event_id: Event.current.id })
-                   .where('l_v or l_s or l_d or l_l')
-                   .order('registry_id, relation, age desc')
+                   .where("l_v or l_s or l_d or l_l")
+                   .order("registry_id, relation, age desc")
                    .all
   end
 
   def list_transport
     @guests = Guest.includes(:registry => :user)
                    .where(registries: { event_id: Event.current.id })
-                   .where('t_v1 or t_v2 or t_s1 or t_s2 or t_d1 or t_d2 or t_l1 or t_l2')
-                   .order('guests.lastname')
+                   .where("t_v1 or t_v2 or t_s1 or t_s2 or t_d1 or t_d2 or t_l1 or t_l2")
+                   .order("guests.lastname")
                    .all
   end
 
@@ -194,7 +194,7 @@ class RegistriesController < ApplicationController
 
       @totals_food = event.totals_food.deep_symbolize_keys
     else
-      require 'totals_helper'
+      require "totals_helper"
 
       helper = TotalsHelper.new(Event.current.food_full_price, Event.current.food_half_price)
       foods = Totals.food_by_age_paid_status(Event.current.name)

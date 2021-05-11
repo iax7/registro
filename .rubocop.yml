@@ -17,3 +17,11 @@ AllCops:
     - log/**/*
     - node_modules/**/*
     - spec/*
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  Enabled: true
+  EnforcedStyle: double_quotes
