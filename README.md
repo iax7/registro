@@ -151,7 +151,7 @@ bundle update
 - [Security Map](docs/security.md)
 
 <!-- Links -->
-[ruby-badge]: https://img.shields.io/badge/ruby-3.0.1-blue?style=flat&logo=ruby&logoColor=CC342D&labelColor=white
+[ruby-badge]: https://img.shields.io/badge/ruby-3.0.2-blue?style=flat&logo=ruby&logoColor=CC342D&labelColor=white
 [ruby-url]: https://www.ruby-lang.org/en/
 [rails-badge]: https://img.shields.io/badge/rails-6.1-blue?style=flat&logo=ruby-on-rails&logoColor=CC0000&labelColor=white
 [rails-url]: https://rubyonrails.org/
