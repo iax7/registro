@@ -33,7 +33,7 @@ module ApplicationHelper
     text = "&nbsp;#{text}" unless text.nil?
     # Named Args
     style_text = %( style="#{style}") unless style.nil?
-    fa_icon = name.gsub(/fa-/, "")
+    fa_icon = name.gsub("fa-", "")
 
     %(<i class="fas fa-#{fa_icon} fa-fw #{class_name}"#{style_text} aria-hidden="true"></i>#{text}).html_safe
   end

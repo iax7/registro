@@ -105,7 +105,8 @@ class Guest < ApplicationRecord
     # -1 is Infant
     age_type = if    adult? then 1
                elsif child? then 0
-               else  -1
+               else
+                 -1
                end
 
     Event.current.costs_per_service service, age_type
