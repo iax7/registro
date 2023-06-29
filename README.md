@@ -5,6 +5,7 @@
 [![Rails][rails-badge]][rails-url]
 [![PostgreSQL][psql-badge]][psql-url]
 [![NodeJS][node-badge]][node-url]
+[![Conventional Commits][cc-img]][cc-url]
 
 This webapp was developed using the following tools, those are not required but
 can be a good baseline to start working in this project
@@ -30,9 +31,9 @@ sudo dnf group install -y "C Development Tools and Libraries"
 ```
 
 1. Ensure you have **Ruby** and **NodeJS** installed.
-1. Install bundler gem: `sudo gem install bundler`
-1. Install all gem dependencies: `bundle install`
-1. Edit the **secrets** variables
+2. Install bundler gem: `sudo gem install bundler`
+3. Install all gem dependencies: `bundle install`
+4. Edit the **secrets** variables
 
    - If you are starting over:
 
@@ -60,7 +61,7 @@ sudo dnf group install -y "C Development Tools and Libraries"
        password: xxxxxxxx
      ```
 
-1. Start **PostgreSQL** DB (with docker)
+5. Start **PostgreSQL** DB (with docker)
 
    ```bash
    docker run --name reg -p 5432:5432 \
@@ -80,19 +81,19 @@ sudo dnf group install -y "C Development Tools and Libraries"
    rails db:populate
    ```
 
-1. Install yarn dependencies:
+6. Install yarn dependencies:
 
    ```bash
    yarn install --check-files
    ```
 
-1. You should be ready to go. Run the project.
+7. You should be ready to go. Run the project.
 
    ```bash
    rails server
    ```
 
-1. You can login using admin account that was previously seed:
+8. You can login using admin account that was previously seed:
    > admin@domain.com / changeme
 
 ## Test
@@ -151,7 +152,7 @@ bundle update
 - [Security Map](docs/security.md)
 
 <!-- Links -->
-[ruby-badge]: https://img.shields.io/badge/ruby-3.0.2-blue?style=flat&logo=ruby&logoColor=CC342D&labelColor=white
+[ruby-badge]: https://img.shields.io/badge/ruby-3.2-blue?style=flat&logo=ruby&logoColor=CC342D&labelColor=white
 [ruby-url]: https://www.ruby-lang.org/en/
 [rails-badge]: https://img.shields.io/badge/rails-6.1-blue?style=flat&logo=ruby-on-rails&logoColor=CC0000&labelColor=white
 [rails-url]: https://rubyonrails.org/
@@ -159,3 +160,5 @@ bundle update
 [psql-url]: https://www.postgresql.org/download/
 [node-badge]: https://img.shields.io/badge/NodeJS-12-blue?style=flat&logo=node.js&logoColor=339933&labelColor=white
 [node-url]: https://nodejs.org/en/
+[cc-img]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=00&labelColor=fff
+[cc-url]: https://conventionalcommits.org
