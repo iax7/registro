@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.2.2"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", "~> 6.1.0"
+gem "rails", "~> 7.0.6", ">= 7.0.6"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 # Use Puma as the app server
@@ -73,6 +73,3 @@ gem "chunky_png", ">= 1.3.10"
 gem "haml", "~> 5.0"
 gem "thinreports-rails", ">= 0.4.0"
 gem "jwt", ">= 2.2.1"
-
-gem "newrelic_rpm"
-gem "scout_apm"

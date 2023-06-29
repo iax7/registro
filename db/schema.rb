@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_20_212201) do
-
+ActiveRecord::Schema[7.0].define(version: 2023_06_29_220302) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "plpgsql"
@@ -19,8 +18,8 @@ ActiveRecord::Schema.define(version: 2019_08_20_212201) do
 
   create_table "events", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.jsonb "settings", default: {}, null: false
     t.jsonb "statistics", default: {}, null: false
     t.index ["settings"], name: "index_events_on_settings", using: :gin
@@ -61,8 +60,8 @@ ActiveRecord::Schema.define(version: 2019_08_20_212201) do
     t.boolean "l_d", default: false, null: false
     t.boolean "l_l", default: false, null: false
     t.string "l_room"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "fu_v1", default: 0, null: false
     t.integer "fu_v2", default: 0, null: false
     t.integer "fu_v3", default: 0, null: false
@@ -95,8 +94,8 @@ ActiveRecord::Schema.define(version: 2019_08_20_212201) do
     t.bigint "user_id"
     t.integer "amount", null: false
     t.integer "kind", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["registry_id"], name: "index_payments_on_registry_id"
     t.index ["user_id"], name: "index_payments_on_user_id"
   end
@@ -111,8 +110,8 @@ ActiveRecord::Schema.define(version: 2019_08_20_212201) do
     t.integer "amount_debt"
     t.integer "amount_paid"
     t.integer "amount_offering"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "paid_by"
     t.index ["event_id"], name: "index_registries_on_event_id"
     t.index ["user_id"], name: "index_registries_on_user_id"
@@ -129,9 +128,9 @@ ActiveRecord::Schema.define(version: 2019_08_20_212201) do
     t.boolean "is_admin", default: false
     t.string "password_digest"
     t.string "password_reset_token"
-    t.datetime "password_reset_sent_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "password_reset_sent_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "country"
     t.string "state"
     t.string "city"
