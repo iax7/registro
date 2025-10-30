@@ -9,18 +9,18 @@
 
 ## Run Locally
 
-- Install [Mise](https://mise.jdx.dev/installing-mise.html) 
+- Install [Mise](https://mise.jdx.dev/installing-mise.html)
 - Install [System dependencies](https://github.com/rbenv/ruby-build/wiki)
 
     ```bash
     # Arch Linux Prerequisites
     sudo pacman -Sy --needed base-devel rust libffi libyaml openssl zlib \
                    postgresql-libs # PostgreSQL
-    
+
     # Ubuntu Prerequisites
     apt-get install build-essential autoconf libssl-dev libyaml-dev zlib1g-dev libffi-dev libgmp-dev rustc
     sudo apt-get install -y libpq-dev # PostgreSQL
-    
+
     # Fedora Prerequisites
     sudo dnf install -y autoconf gcc rust patch make bzip2 openssl-devel libyaml-devel libffi-devel readline-devel gdbm-devel ncurses-devel perl-FindBin
     ```
@@ -62,10 +62,11 @@
    docker run --name reg -p 5432:5432 \
           -v ~/dev/data/reg:/var/lib/postgresql/data \
           -e POSTGRES_PASSWORD=123456 -d postgres:13
-   
+
    # or using Podman
    podman run --name reg -p 5432:5432 -e POSTGRES_PASSWORD=123456 -d docker.io/library/postgres:18
    ```
+
    add in your `.env` file the following variables:
 
    ```bash
@@ -77,7 +78,7 @@
    ```bash
    rails db:create
    rails db:schema:load
-  
+
    rails db:seed
 
    # Optional - If you want to generate random data
@@ -93,11 +94,13 @@
 7. You should be ready to go. Run the project.
 
    ```bash
-   rails server
+   podman start reg && \
+   bin/rails server
    ```
 
 8. You can login using admin account that was previously seed:
-   > admin@domain.com / changeme
+
+   `admin@domain.com` / `changeme`
 
 ## Test
 
