@@ -43,7 +43,7 @@ class Event < ApplicationRecord
                  :totals_food
 
   def self.current
-    Rails.configuration.appcache.fetch("Event.current", expires_in: 3.months) do
+    Rails.cache.fetch("Event.current", expires_in: 3.months) do
       Event.find_or_create_by(name: Time.current.year.to_s)
     end
   end
@@ -56,6 +56,11 @@ class Event < ApplicationRecord
   end
 
   private
+
+  def update_cache
+    Rails.cache.write("Event.current_id", id)
+    Rails.cache.write("Event.current", self)
+  end
 
   def init
     @cost_hash = {

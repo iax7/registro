@@ -9,7 +9,7 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-    @events = Event.all
+    @events = Event.order(created_at: :desc)
   end
 
   # GET /events/1
@@ -59,9 +59,6 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.save
-        # Update MemCache
-        Rails.configuration.appcache.write "Event.current", @event
-        Rails.configuration.appcache.read "Event.current"
         logger.info "*** Event: #{@event.name} changed. Event in cache was updated."
 
         format.html { redirect_to @event, notice: "Event was successfully updated." }
