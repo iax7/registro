@@ -11,8 +11,8 @@
     </style>
   </head>
   <body>
-    <%= image_tag attachments['logo.jpg'].url, alt: @data.author %><br>
-    <h3><%= @data.event_title %></h3>
+    <%= image_tag attachments['logo.jpg'].url, alt: @data[:author] %><br>
+    <h3><%= @data[:event_title] %></h3>
     <hr>
     <%= yield %>
   </body>

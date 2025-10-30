@@ -1,7 +1,6 @@
 require_relative "boot"
 
 require "rails/all"
-require "ostruct" # TODO: remove after migrating from OpenStruct usage
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

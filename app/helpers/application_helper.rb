@@ -130,11 +130,6 @@ module ApplicationHelper
     %(#{check_box_html}<span class="text-muted cost" style="display: none;">#{dim_zeros text, "-"}</span>).html_safe
   end
 
-  def hash_to_dots(hash)
-    json_str = hash.to_json
-    JSON.parse(json_str, object_class: OpenStruct)
-  end
-
   def api_auth_base64
     auth = "#{Rails.application.credentials.api_user}:#{Rails.application.credentials.api_pass}"
     Base64.strict_encode64 auth
