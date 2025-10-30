@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Guest, type: :model do
-  fixtures :guests, :events
+  fixtures :events, :users, :registries, :guests
 
   let(:adult) do
     guests(:adult)

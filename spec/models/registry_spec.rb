@@ -3,11 +3,11 @@
 require "rails_helper"
 
 RSpec.describe Registry, type: :model do
-  fixtures :registries, :guests, :events
+  fixtures :events, :users, :registries, :guests
 
+  let(:event) { events(:one) }
   let(:not_paid) { registries(:not_paid) }
   let(:paid) { registries(:paid) }
-  let(:event) { events(:one) }
 
   before { allow(Event).to receive(:current).and_return(event) }
 
