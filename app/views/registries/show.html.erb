@@ -218,27 +218,26 @@
       <% end %>
 
       <div class="row">
-      <% @event.paycollectors.each_with_index do |paycollector, index|
-           p = OpenStruct.new paycollector
+      <% @event.paycollectors.each_with_index do |p, index|
            link_classes = 'btn btn-link m-0 p-0'
       %>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
           <address>
-            <strong class="lead"><%= p.name %></strong><br>
-            <%= link_to  fa_text(p.phone_type.to_sym) + ' ' + number_to_phone(p.phone, area_code: true),
-                         'tel:' + p.phone,
+            <strong class="lead"><%= p["name"] %></strong><br>
+            <%= link_to  fa_text(p["phone_type"].to_sym) + ' ' + number_to_phone(p["phone"], area_code: true),
+                         'tel:' + p["phone"],
                          class: link_classes %><br>
-            <% if defined? p.phone2 %>
-              <%= link_to  fa_text(p.phone2_type.to_sym) + number_to_phone(p.phone2, area_code: true),
-                           'tel:' + p.phone2,
+            <% if p["phone2"] %>
+              <%= link_to  fa_text(p["phone2_type"].to_sym) + number_to_phone(p["phone2"], area_code: true),
+                           'tel:' + p["phone2"],
                            class: link_classes %><br>
             <% end %>
-            <%= mail_to p.email,
+            <%= mail_to p["email"],
                         fa_text(:envelope, 'Email'),
                         subject: 'Pago de conferencia',
                         class: link_classes %><br>
-            <%= p.church %><br>
-            <strong><%= p.location %></strong>
+            <%= p["church"] %><br>
+            <strong><%= p["location"] %></strong>
           </address>
         </div>
       <% end %>
