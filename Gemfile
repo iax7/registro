@@ -1,9 +1,4 @@
-# frozen_string_literal: true
-
 source "https://rubygems.org"
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
-
-ruby "3.2.2"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "~> 7.0.6", ">= 7.0.6"
@@ -34,18 +29,15 @@ gem "bootsnap", ">= 1.4.4", require: false
 gem "rack-cors"
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
-
   gem "database_cleaner"
   gem "dotenv-rails"
   gem "faker"
-  gem "pry-byebug"
   gem "rails-controller-testing"
   gem "rspec-rails"
-  gem "rubocop", require: false
-  gem "rubocop-rails", require: false
-  gem "rubocop-rspec", require: false
+  gem "rubocop", "~> 1.81", ">= 1.81.6"
+  gem "rubocop-performance", "~> 1.26"
+  gem "rubocop-rails", "~> 2.33", ">= 2.33.4"
+  gem "rubocop-rspec", "~> 3.7"
   gem "code-scanning-rubocop", "~> 0.5"
   gem "simplecov", require: false
 end
@@ -63,9 +55,6 @@ group :test do
   # Easy installation and use of web drivers to run system tests with browsers
   gem "webdrivers"
 end
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Other Custom
 gem "barby", ">= 0.6.5"

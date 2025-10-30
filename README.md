@@ -7,31 +7,26 @@
 [![NodeJS][node-badge]][node-url]
 [![Conventional Commits][cc-img]][cc-url]
 
-This webapp was developed using the following tools, those are not required but
-can be a good baseline to start working in this project
-
-- OS: [Fedora](https://getfedora.org/) `32`
-- [rvm](https://rvm.io/)
-- [nvm](https://github.com/nvm-sh/nvm)
-
 ## Run Locally
 
-### Ubuntu 18.04 LTS Prerequisites
+- Install [Mise](https://mise.jdx.dev/installing-mise.html) 
+- Install [System dependencies](https://github.com/rbenv/ruby-build/wiki)
 
-```bash
-sudo apt-get install -y ruby build-essential patch ruby-dev zlib1g-dev liblzma-dev
-sudo apt-get install -y libpq-dev #PostgreSQL
-```
+    ```bash
+    # Arch Linux Prerequisites
+    sudo pacman -Sy --needed base-devel rust libffi libyaml openssl zlib \
+                   postgresql-libs # PostgreSQL
+    
+    # Ubuntu Prerequisites
+    apt-get install build-essential autoconf libssl-dev libyaml-dev zlib1g-dev libffi-dev libgmp-dev rustc
+    sudo apt-get install -y libpq-dev # PostgreSQL
+    
+    # Fedora Prerequisites
+    sudo dnf install -y autoconf gcc rust patch make bzip2 openssl-devel libyaml-devel libffi-devel readline-devel gdbm-devel ncurses-devel perl-FindBin
+    ```
 
-### Fedora 32 Prerequisites
-
-```bash
-sudo dnf install -y ruby ruby-devel gcc openssl-devel zlib-devel rpm-build libpq-devel g++
-sudo dnf group install -y "C Development Tools and Libraries"
-```
-
-1. Ensure you have **Ruby** and **NodeJS** installed.
-2. Install bundler gem: `sudo gem install bundler`
+1. Ensure you have **Ruby** and **NodeJS** (with `yarn`) installed. `mise install`
+2. Install bundler gem: `gem install bundler`
 3. Install all gem dependencies: `bundle install`
 4. Edit the **secrets** variables
 
@@ -67,6 +62,14 @@ sudo dnf group install -y "C Development Tools and Libraries"
    docker run --name reg -p 5432:5432 \
           -v ~/dev/data/reg:/var/lib/postgresql/data \
           -e POSTGRES_PASSWORD=123456 -d postgres:13
+   
+   # or using Podman
+   podman run --name reg -p 5432:5432 -e POSTGRES_PASSWORD=123456 -d docker.io/library/postgres:18
+   ```
+   add in your `.env` file the following variables:
+
+   ```bash
+   DATABASE_URL=postgresql://postgres:123456@localhost:5432
    ```
 
    1. Initialize the db:
@@ -101,7 +104,7 @@ sudo dnf group install -y "C Development Tools and Libraries"
 This project used RSPEC to run test. Set your environment first:
 
 ```bash
-rails db:migrate RAILS_ENV=test
+bin/rails db:setup RAILS_ENV=test
 ```
 
 Run tests using: `rspec`
@@ -152,11 +155,11 @@ bundle update
 - [Security Map](docs/security.md)
 
 <!-- Links -->
-[ruby-badge]: https://img.shields.io/badge/ruby-3.2-blue?style=flat&logo=ruby&logoColor=CC342D&labelColor=white
+[ruby-badge]: https://img.shields.io/badge/ruby-3.4-blue?style=flat&logo=ruby&logoColor=CC342D&labelColor=white
 [ruby-url]: https://www.ruby-lang.org/en/
 [rails-badge]: https://img.shields.io/badge/rails-7.0-blue?style=flat&logo=ruby-on-rails&logoColor=CC0000&labelColor=white
 [rails-url]: https://rubyonrails.org/
-[psql-badge]: https://img.shields.io/badge/PostgreSQL-15.0-blue?style=flat&logo=postgresql&logoColor=336791&labelColor=white
+[psql-badge]: https://img.shields.io/badge/PostgreSQL-18-blue?style=flat&logo=postgresql&logoColor=336791&labelColor=white
 [psql-url]: https://www.postgresql.org/download/
 [node-badge]: https://img.shields.io/badge/NodeJS-12-blue?style=flat&logo=node.js&logoColor=339933&labelColor=white
 [node-url]: https://nodejs.org/en/
