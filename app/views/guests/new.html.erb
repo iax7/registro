@@ -1,5 +1,5 @@
 <h1><%= t 'headline.new', model: t('activerecord.models.guest') %></h1>
-<% if @guest_history.size > 0 %>
+<% if @guest_history && @guest_history.size > 0 %>
   <div class="row justify-content-center">
     <table class="table table-sm" style="width: 450px;">
       <tr>

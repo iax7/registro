@@ -2,10 +2,14 @@
 
 # Event Model
 class Event < ApplicationRecord
+  # Initialize defaults after object built (new or loaded from DB)
   after_initialize :init
+  # Keep cache updated when record is changed
+  after_commit :update_cache
 
   has_many :registries
 
+  # Expose some commonly used keys for convenience (kept for compatibility)
   store_accessor :settings,
                  :event_title,
                  :event_subtitle,
@@ -48,11 +52,11 @@ class Event < ApplicationRecord
     end
   end
 
-  # @param service [Symbol] :assist, :food, :lodging, :transport
-  # @param age_type [Integer] 1 Adult, 0 Child, -1 Infant
+  # @param service [:assist | :food | :lodging | :transport]
+  # @param age_type [:adult | :child | :infant]
   # @return [Integer]
   def costs_per_service(service, age_type)
-    @cost_hash[service][age_type]
+    cost_hash.dig(service, age_type) || 0
   end
 
   private
@@ -62,36 +66,56 @@ class Event < ApplicationRecord
     Rails.cache.write("Event.current", self)
   end
 
-  def init
-    @cost_hash = {
+  # Build and return the cost lookup hash using current settings.
+  # Values are coerced to Integer via #to_i helper.
+  #
+  # @return [Hash{Symbol => Hash{Symbol => Integer}}]
+  def cost_hash
+    @cost_hash ||= {
       assist: {
-        1  => event_full_price,
-        0  => 0,
-        -1 => 0
+        adult: to_i(settings["event_full_price"]),
+        child: 0,
+        infant: 0
       },
       food: {
-        1  => food_full_price,
-        0  => food_half_price,
-        -1 => 0
+        adult: to_i(settings["food_full_price"]),
+        child: to_i(settings["food_half_price"]),
+        infant: 0
       },
       lodging: {
-        1  => lodging_full_price,
-        0  => lodging_half_price,
-        -1 => 0
+        adult: to_i(settings["lodging_full_price"]),
+        child: to_i(settings["lodging_half_price"]),
+        infant: 0
       },
       transport: {
-        1  => transport_full_price,
-        0  => transport_half_price,
-        -1 => 0
+        adult: to_i(settings["transport_full_price"]),
+        child: to_i(settings["transport_half_price"]),
+        infant: 0
       }
     }
+  end
 
-    # --- Statistics Totals
-    self.people      ||= []
-    self.offerings   ||= []
-    self.services    ||= []
-    self.lodging     ||= []
-    self.totals_food ||= []
+  # Coerce a value to integer safely (nil -> 0)
+  def to_i(value)
+    case value
+    when nil
+      0
+    when Integer
+      value
+    when String
+      value.to_i
+    else
+      value.respond_to?(:to_i) ? value.to_i : 0
+    end
+  end
+
+  def init
+    # --- Statistics Totals (ensure arrays exist)
+    statistics["people"]      ||= []
+    statistics["offerings"]   ||= []
+    statistics["services"]    ||= []
+    statistics["lodging"]     ||= []
+    statistics["totals_food"] ||= []
 
     # --- Settings
     self.event_title      ||= "My Title"

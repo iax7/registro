@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2023_06_29_220302) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_31_170353) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "plpgsql"
@@ -104,12 +104,12 @@ ActiveRecord::Schema[7.2].define(version: 2023_06_29_220302) do
     t.bigint "user_id"
     t.bigint "event_id"
     t.text "comments"
-    t.boolean "is_confirmed"
-    t.boolean "is_present"
-    t.boolean "is_notified"
-    t.integer "amount_debt"
-    t.integer "amount_paid"
-    t.integer "amount_offering"
+    t.boolean "is_confirmed", default: false, null: false
+    t.boolean "is_present", default: false, null: false
+    t.boolean "is_notified", default: false, null: false
+    t.integer "amount_debt", default: 0
+    t.integer "amount_paid", default: 0
+    t.integer "amount_offering", default: 0
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.bigint "paid_by"

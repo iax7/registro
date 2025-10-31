@@ -21,6 +21,7 @@ User.create(name: "Administrator",
             country: "MX",
             state: "ST",
             city: "City",
-            is_admin: true)
+            is_admin: true,
+            guest_history: [])
 
 puts "Admin user created. Login using: #{USER}/#{PASS}"

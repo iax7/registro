@@ -15,6 +15,13 @@ class Guest < ApplicationRecord
     other: 3
   }
 
+  # Regexes used to detect requested services on the Guest attributes
+  SERVICE_REGEXES = {
+    food: /^f_[vsdl]\d$/,
+    lodging: /^l_[vsdl]$/,
+    transport: /^t_[vsdl]\d$/
+  }.freeze
+
   validates :name,
             :lastname,
             :nick,
@@ -63,25 +70,19 @@ class Guest < ApplicationRecord
   end
 
   def assist_cost
-    costs_per_service :assist
+    costs_per_service(:assist)
   end
 
   def food_cost
-    food_attr = attributes.select { |k, _| k.to_s.match(/^f_[vsdl]\d$/) }
-    requested = food_attr.select { |_, v| v }
-    requested.size * costs_per_service(:food)
+    calculate_cost_by(:food)
   end
 
   def lodging_cost
-    lodging_attr = attributes.select { |k, _| k.to_s.match(/^l_[vsdl]$/) }
-    requested = lodging_attr.select { |_, v| v }
-    requested.size * costs_per_service(:lodging)
+    calculate_cost_by(:lodging)
   end
 
   def transport_cost
-    trans_attr = attributes.select { |k| k.to_s.match(/^t_[vsdl]\d$/) }
-    requested = trans_attr.select { |_, v| v }
-    requested.size * costs_per_service(:transport)
+    calculate_cost_by(:transport)
   end
 
   ##
@@ -100,19 +101,26 @@ class Guest < ApplicationRecord
   # @param [Symbol] service - possible values: :assist, :food, :lodging, :transport
   # @return [Integer] price assigned for the service
   def costs_per_service(service)
-    # 1 is Adult
-    # 0 is Child
-    # -1 is Infant
-    age_type = if    adult? then 1
-               elsif child? then 0
+    age_type = if adult? then :adult
+               elsif child? then :child
                else
-                 -1
+                 :infant
                end
 
     Event.current.costs_per_service service, age_type
   end
 
   private
+
+  # Calculates the total cost for a given service.
+  #
+  # Multiplies the number of times the service was requested by the cost per service.
+  #
+  # @param service [Symbol] The service for which to calculate the cost.
+  # @return [Integer] The total cost for the specified service.
+  def calculate_cost_by(service)
+    requested_count_by_service(service) * costs_per_service(service)
+  end
 
   def init
     self.relation ||= Guest.relations[:family]
@@ -176,6 +184,16 @@ class Guest < ApplicationRecord
     self.lastname = lastname.titleize.squish
     self.nick = nick.titleize.squish
     self.l_room = l_room&.squish
+  end
+
+  # Count how many attributes matching the given regex are truthy/selected.
+  # Uses Hash#count with key/value block parameters to avoid issues when a
+  # single block parameter would receive an array.
+  def requested_count_by_service(service)
+    regex = SERVICE_REGEXES[service]
+    return 0 unless regex
+
+    attributes.count { |k, v| k.match?(regex) && v }
   end
 
   # :nocov:

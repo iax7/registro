@@ -12,6 +12,23 @@ class Registry < ApplicationRecord
   scope :current, ->(user_id) { includes(:user, :guests).where(event_id: Event.current.id, user_id: user_id) }
   # scope :un_paid, -> { where('amount_debt + amount_offering <> amount_paid') }
 
+  attribute :is_confirmed, :boolean, default: false
+  attribute :is_present,   :boolean, default: false
+  attribute :is_notified,  :boolean, default: false
+
+  COUNT_KEYS = %i[f_v1 f_v2 f_v3
+                  f_s1 f_s2 f_s3
+                  f_d1 f_d2 f_d3
+                  f_l1 f_l2 f_l3
+                  t_v1 t_v2
+                  t_s1 t_s2
+                  t_d1 t_d2
+                  t_l1 t_l2
+                  l_v
+                  l_s
+                  l_d
+                  l_l].freeze
+
   def grand_total
     amount_debt + amount_offering
   end
@@ -37,14 +54,6 @@ class Registry < ApplicationRecord
   private
 
   def init
-    self.is_confirmed  ||= false
-    self.is_present    ||= false
-    self.is_notified   ||= false
-
-    self.amount_debt     ||= 0
-    self.amount_paid     ||= 0
-    self.amount_offering ||= 0
-
     @is_calculated = false
   end
 
@@ -64,25 +73,8 @@ class Registry < ApplicationRecord
   # This updates the amount_debt if changed from DB value
   ###
   def calculate
-    @totals = {
-      pregnant:  0,
-      medicated: 0,
-      assist:    0,
-      food:      0,
-      trans:     0,
-      lodging:   0,
-      total:     0
-    }
-    keys = %i[f_v1 f_v2 f_v3
-              f_s1 f_s2 f_s3
-              f_d1 f_d2 f_d3
-              f_l1 f_l2 f_l3
-              t_v1 t_v2
-              t_s1 t_s2
-              t_d1 t_d2
-              t_l1 t_l2
-              l_v l_s l_d l_l]
-    @counts = keys.index_with { |_key| 0 }.with_indifferent_access
+    @totals = Hash.new(0)
+    @counts = COUNT_KEYS.index_with { 0 }
 
     guests.each do |g|
       # Calculate *Totals*
@@ -95,8 +87,8 @@ class Registry < ApplicationRecord
       @totals[:total] += g.total
 
       # Calculate *Counts*
-      attr_true = g.attributes.select { |k, v| k.to_s.match(/^._\w\d?$/) && v }
-      attr_true.each { |k, _| @counts[k.to_sym] += 1 }
+      requested_services = COUNT_KEYS.select { |key| g.public_send(key) }
+      requested_services.each { |k| @counts[k] += 1 }
     end
     @is_calculated = true
 
