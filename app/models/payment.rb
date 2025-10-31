@@ -11,7 +11,7 @@ class Payment < ApplicationRecord
             numericality: { only_integer: true,
                             greater_than_or_equal_to: 0 }
 
-  enum kinds: {
+  enum :kinds, {
     money: 0,
     gift: 1
   }

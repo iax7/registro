@@ -8,7 +8,7 @@ class Guest < ApplicationRecord
 
   belongs_to :registry, optional: false
 
-  enum relation: {
+  enum :relation, {
     me: 0,
     family: 1,
     friend: 2,

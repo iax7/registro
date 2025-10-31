@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 module Reg
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.1
+    config.load_defaults 7.2
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
@@ -33,7 +33,7 @@ module Reg
     config.exceptions_app = routes
 
     config.app = config_for(:app).symbolize_keys
-    config.appcache = ActiveSupport::Cache::MemoryStore.new
+
     # Default main url, used specifically for mailer
     Rails.application.routes.default_url_options[:host] = config.app[:default_url]
   end
