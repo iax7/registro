@@ -1,0 +1,10 @@
+<div class="row" id="registryDiv">
+  <div class="<%= label_class %>"><strong><%= label :registry, :comments %>:</strong></div>
+  <div class="<%= input_class %>" id="regComments"><%= @registry.comments %></div>
+  <div class="<%= label_class %>"><strong><%= label :registry, :amount_offering %>:</strong></div>
+  <div class="<%= input_class %>" id="regOffering"><%= number_to_currency @registry.amount_offering, precision: 0 %></div>
+
+  <div class="col text-center mb-5">
+    <%= link_to fa_text(:edit, 'Editar comentarios/ofrenda'), edit_registry_path, class: 'btn btn-link', data: { turbo_stream: "edit_registry" } %>
+  </div>
+</div>

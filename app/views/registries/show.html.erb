@@ -159,16 +159,9 @@
 
 
 <%# ----------------------------------------------------------------------------------------- Extras --%>
-<div class="row" id="registryDiv">
-  <div class="<%= label_class %>"><strong><%= label :registry, :comments %>:</strong></div>
-  <div class="<%= input_class %>" id="regComments"><%= @registry.comments %></div>
-  <div class="<%= label_class %>"><strong><%= label :registry, :amount_offering %>:</strong></div>
-  <div class="<%= input_class %>" id="regOffering"><%= number_to_currency @registry.amount_offering, precision: 0 %></div>
-
-  <div class="col text-center mb-5">
-    <%= link_to fa_text(:edit, 'Editar comentarios/ofrenda'), edit_registry_path, class: 'btn btn-link', remote: true %>
-  </div>
-</div>
+<turbo-frame id="edit_registry">
+  <%= render partial: "user_modifiable", locals: { registry: @registry, label_class: label_class, input_class: input_class } %>
+</turbo-frame>
 
 <%# ----------------------------------------------------------------------------------------- Pago --%>
 <section id="payment" class="custom-section">
@@ -255,9 +248,9 @@
 <br>
 <br>
 <script>
-  $("#lnkPriceToggle").click( function() {
+  $("#lnkPriceToggle").click( function(e) {
+    e.preventDefault();
      $(".bool").toggle();
      $(".cost").toggle();
-     return false;
   });
 </script>

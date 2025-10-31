@@ -92,7 +92,7 @@ class RegistriesController < ApplicationController
   def edit
     respond_to do |format|
       format.html
-      format.js
+      format.turbo_stream
     end
   end
 
@@ -135,7 +135,7 @@ class RegistriesController < ApplicationController
 
       if updated
         format.html { redirect_to @registry, notice: "Registry was successfully updated." }
-        format.js
+        format.turbo_stream
         format.json { render :show, status: :ok, location: @registry }
       else
         format.html { render :edit }
@@ -207,7 +207,7 @@ class RegistriesController < ApplicationController
   def edit_payment
     @registry = Registry.find(params[:registry_id])
     respond_to do |format|
-      format.js
+      format.turbo_stream
     end
   end
 

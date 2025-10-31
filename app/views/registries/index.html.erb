@@ -162,7 +162,7 @@
         <td class="text-right">
           <%= link_to number_to_currency(r["grand_total"], precision: 0),
                       registry_edit_payment_url(r["registry_id"]),
-                      remote: true,
+                      data: { turbo_stream: "modal" },
                       class: 'btn btn-sm btn-info w-100 p-1 m-0' %>
         </td>
         <td class="text-right"><%= paid_format_colors r["amount_paid"], r["grand_total"] %></td>
@@ -172,6 +172,7 @@
     <% end %>
     </tbody>
   </table>
+  <turbo-frame id="modal"></turbo-frame>
 </div>
 
 <div class="row">

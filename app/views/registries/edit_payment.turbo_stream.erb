@@ -1,0 +1,6 @@
+<%= turbo_stream.update "modal" do %>
+  <%= render partial: "amount_paid", locals: { registry: @registry } %>
+  <script>
+    $("#mainModal").modal("show");
+  </script>
+<% end %>
