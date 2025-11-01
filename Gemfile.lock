@@ -127,7 +127,7 @@ GEM
       raabro (~> 1.4)
     globalid (1.3.0)
       activesupport (>= 6.1)
-    haml (6.4.0)
+    haml (7.0.1)
       temple (>= 0.8.2)
       thor
       tilt
@@ -409,7 +409,7 @@ DEPENDENCIES
   debug
   dotenv-rails
   faker
-  haml (~> 6.0)
+  haml (~> 7.0)
   jbuilder
   jsbundling-rails
   jwt (~> 3.1)

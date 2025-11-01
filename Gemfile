@@ -73,6 +73,6 @@ end
 # Other Custom
 gem "barby", ">= 0.7.0"
 gem "chunky_png", "~> 1.4"
-gem "haml", "~> 6.0"
+gem "haml", "~> 7.0"
 gem "thinreports-rails", "~> 0.5.0"
 gem "jwt", "~> 3.1"
