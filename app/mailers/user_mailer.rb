@@ -5,7 +5,7 @@ class UserMailer < ApplicationMailer
   def welcome(user)
     prepare_email user
     mail to: @data[:email_with_name],
-         subject: "#{@data.author} - Bienvenido a la #{@data[:event_title]}"
+         subject: "#{@data[:author]} - Bienvenido a la #{@data[:event_title]}"
   end
 
   def reset_password(user)
