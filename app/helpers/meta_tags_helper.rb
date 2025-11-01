@@ -4,7 +4,7 @@
 module MetaTagsHelper
   def meta_title
     title = content_for?(:meta_title) ? :meta_title : t("meta.title")
-    default = "#{title} - #{Rails.configuration.app[:author]}"
+    default = "#{title} - #{Rails.configuration.author}"
     content_for?(:meta_title) ? content_for(:meta_title) : default
   end
 

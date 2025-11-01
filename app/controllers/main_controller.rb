@@ -10,6 +10,6 @@ class MainController < ApplicationController
   end
 
   def letsencrypt
-    render plain: Rails.configuration.app[:letsencrypt]
+    render plain: Rails.configuration.letsencrypt
   end
 end

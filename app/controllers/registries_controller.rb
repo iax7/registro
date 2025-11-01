@@ -119,7 +119,7 @@ class RegistriesController < ApplicationController
       updated = nil
       is_payment_update = params["registry"]["paid_by"].present? && params["payment"]["amount"].present?
       if is_payment_update
-        payment_permitted = params.require(:payment).permit(:amount, :kind).to_hash.symbolize_keys
+        payment_permitted = params.expect(payment: [:amount, :kind]).to_hash.symbolize_keys
         amount, kind = payment_permitted.values_at(:amount, :kind)
 
         registry_permitted = registry_params
@@ -235,8 +235,8 @@ class RegistriesController < ApplicationController
       params[:registry].delete :type
     end
 
-    params.require(:registry).permit(:user_id, :event_id, :comments, :is_confirmed, :is_present,
-                                     :is_notified, :amount_debt, :amount_paid, :amount_offering, :paid_by)
+    params.expect(registry: %i[user_id event_id comments is_confirmed is_present
+                               is_notified amount_debt amount_paid amount_offering paid_by])
   end
 
   def create_payment(paid_by:, amount:, kind:)

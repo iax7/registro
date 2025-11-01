@@ -98,10 +98,7 @@ class EventsController < ApplicationController
     @event = Event.find_by(id: params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def event_params
-    params.require(:event).permit(:name,
-                                  :settings,
-                                  :statistics)
+    params.expect(event: [:name, :settings, :statistics])
   end
 end

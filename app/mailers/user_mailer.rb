@@ -24,8 +24,8 @@ class UserMailer < ApplicationMailer
 
   def prepare_email(user)
     @data = {
-      author: Rails.configuration.app[:author],
-      site_url: Rails.configuration.app[:site_url],
+      author: Rails.configuration.author,
+      site_url: Rails.configuration.site_url,
       event_name: Event.current.name,
       event_title: Event.current.event_title,
       user_id: user.id,

@@ -72,8 +72,7 @@ class PaymentsController < ApplicationController
     @payment = Payment.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def payment_params
-    params.require(:payment).permit(:registry_id, :user_id, :amount, :kind)
+    params.expect(payment: [:registry_id, :user_id, :amount, :kind])
   end
 end

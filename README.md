@@ -160,11 +160,11 @@ bundle update
 <!-- Links -->
 [ruby-badge]: https://img.shields.io/badge/ruby-3.4-blue?style=flat&logo=ruby&logoColor=CC342D&labelColor=white
 [ruby-url]: https://www.ruby-lang.org/en/
-[rails-badge]: https://img.shields.io/badge/rails-7.0-blue?style=flat&logo=ruby-on-rails&logoColor=CC0000&labelColor=white
+[rails-badge]: https://img.shields.io/badge/rails-8.0-blue?style=flat&logo=ruby-on-rails&logoColor=CC0000&labelColor=white
 [rails-url]: https://rubyonrails.org/
 [psql-badge]: https://img.shields.io/badge/PostgreSQL-18-blue?style=flat&logo=postgresql&logoColor=336791&labelColor=white
 [psql-url]: https://www.postgresql.org/download/
-[node-badge]: https://img.shields.io/badge/NodeJS-12-blue?style=flat&logo=node.js&logoColor=339933&labelColor=white
+[node-badge]: https://img.shields.io/badge/NodeJS-24-blue?style=flat&logo=node.js&logoColor=339933&labelColor=white
 [node-url]: https://nodejs.org/en/
 [cc-img]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=00&labelColor=fff
 [cc-url]: https://conventionalcommits.org

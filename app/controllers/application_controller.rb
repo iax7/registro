@@ -1,10 +1,7 @@
-# frozen_string_literal: true
-
-# Use this class to extend all the controllers
 class ApplicationController < ActionController::Base
-  # def default_url_options
-  #  { host: Rails.configuration.app[:site_url] || 'localhost:3000' }
-  # end
+  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
+  allow_browser versions: :modern
+
   protect_from_forgery with: :exception # ,  unless: -> { request.format.json? }
 
   helper_method :confirm_logged_in,

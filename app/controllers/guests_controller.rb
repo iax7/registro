@@ -95,30 +95,30 @@ class GuestsController < ApplicationController
       params[:guest][:registry_id] = session[:reg_id]
     end
 
-    params.require(:guest).permit(:registry_id,
-                                  :name, :lastname, :nick, :is_male, :age,
-                                  :relation, :is_pregnant, :is_medicated,
-                                  :f_v1, :f_v2, :f_v3,
-                                  :f_s1, :f_s2, :f_s3,
-                                  :f_d1, :f_d2, :f_d3,
-                                  :f_l1, :f_l2, :f_l3,
-                                  :t_v1, :t_v2,
-                                  :t_s1, :t_s2,
-                                  :t_d1, :t_d2,
-                                  :t_l1, :t_l2,
-                                  :l_v, :l_s, :l_d, :l_l,
-                                  :l_room,
-                                  :fu_v1, :fu_v2, :fu_v3,
-                                  :fu_s1, :fu_s2, :fu_s3,
-                                  :fu_d1, :fu_d2, :fu_d3,
-                                  :fu_l1, :fu_l2, :fu_l3,
-                                  :tu_v1, :tu_v2,
-                                  :tu_s1, :tu_s2,
-                                  :tu_d1, :tu_d2,
-                                  :tu_l1, :tu_l2,
-                                  :lu_v,
-                                  :lu_s,
-                                  :lu_d,
-                                  :lu_l)
+    params.expect(guest: %i[registry_id
+                            name lastname nick is_male age
+                            relation is_pregnant is_medicated
+                            f_v1 f_v2 f_v3
+                            f_s1 f_s2 f_s3
+                            f_d1 f_d2 f_d3
+                            f_l1 f_l2 f_l3
+                            t_v1 t_v2
+                            t_s1 t_s2
+                            t_d1 t_d2
+                            t_l1 t_l2
+                            l_v l_s l_d l_l
+                            l_room
+                            fu_v1 fu_v2 fu_v3
+                            fu_s1 fu_s2 fu_s3
+                            fu_d1 fu_d2 fu_d3
+                            fu_l1 fu_l2 fu_l3
+                            tu_v1 tu_v2
+                            tu_s1 tu_s2
+                            tu_d1 tu_d2
+                            tu_l1 tu_l2
+                            lu_v
+                            lu_s
+                            lu_d
+                            lu_l])
   end
 end
