@@ -3,12 +3,12 @@ name: "Rubocop"
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ "master" ]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ main, master ]
+    branches: [ "master" ]
   schedule:
-    - cron: '40 10 * * 6' # Every Saturday at 10:40 UTC
+    - cron: '42 4 * * 1' # Every Monday at 04:42 UTC
 
 jobs:
   rubocop:
@@ -18,14 +18,13 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v5
 
     # If running on a self-hosted runner, check it meets the requirements
     # listed at https://github.com/ruby/setup-ruby#using-self-hosted-runners
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.4.7
         bundler-cache: true
 
     - name: Install dependencies

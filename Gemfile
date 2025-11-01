@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.0.4"
+gem "rails", "~> 8.1.1"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use postgresql as the database for Active Record
@@ -49,9 +49,10 @@ group :development, :test do
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 
+  gem "code-scanning-rubocop", "~> 0.6.1"
   gem "dotenv-rails"
   gem "faker"
-  gem "rspec-rails", "~> 7.0"
+  gem "rspec-rails", "~> 8.0"
   gem "rubocop", "~> 1.81", ">= 1.81.6"
   gem "rubocop-performance", "~> 1.26"
   gem "rubocop-rails", "~> 2.33", ">= 2.33.4"
@@ -73,6 +74,6 @@ end
 # Other Custom
 gem "barby", ">= 0.7.0"
 gem "chunky_png", "~> 1.4"
-gem "haml", "~> 6.0"
+gem "haml", "~> 7.0"
 gem "thinreports-rails", "~> 0.5.0"
 gem "jwt", "~> 3.1"
