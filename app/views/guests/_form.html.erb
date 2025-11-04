@@ -123,7 +123,7 @@
     </div>
     <div class="row">
       <div class="col text-center">
-        <%= link_to fa_text(:check_square, 'Todos'), '#', id: 'f_all', class: 'btn btn-link' %>&nbsp;|&nbsp;
+        <%= link_to fa_text(:square_check, 'Todos'), '#', id: 'f_all', class: 'btn btn-link' %>&nbsp;|&nbsp;
         <%= link_to fa_text(:square, 'Ninguno'), '#', id: 'f_none', class: 'btn btn-link' %>
       </div>
     </div>
@@ -178,7 +178,7 @@
           <li>Salida del <span class="friday-text">Viernes</span> es a la <strong>1:00pm</strong> (13:00)</li>
           <li>Salida del <span class="saturday-text">Sábado</span> es a las <strong>8:00am</strong> (08:00)</li>
           <li>Ambas salidas parten de la gasolinera de Av Patria cruce con Av Colón
-            <%= link_to fa_text(:map_marker_alt, 'Mapa'), Event.current.transport_map,
+            <%= link_to fa_text(:location_dot, 'Mapa'), Event.current.transport_map,
                         class: 'btn btn-link m-0 p-0',
                         target: '_blank' %>
           </li>

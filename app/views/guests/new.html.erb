@@ -10,7 +10,7 @@
           <td><%= guest['name'] %></td>
           <td><%= guest['age'] %></td>
           <td style="width: 30%;">
-            <a href="#" class="btn btn-dark btn-sm guest-row" id="<%= guest['id'] %>"><%= fa_text :arrow_left %>&nbsp;Seleccionar</a>
+            <a href="#" class="btn btn-dark btn-sm guest-row" id="<%= guest['id'] %>"><%= fa_text :arrow_left_long %>&nbsp;Seleccionar</a>
             <input type="hidden" value="<%= guest.to_json %>" id="guest_<%= guest['id'] %>">
           </td>
         </tr>

@@ -35,7 +35,7 @@ module ApplicationHelper
     style_text = %( style="#{style}") unless style.nil?
     fa_icon = name.gsub("fa-", "")
 
-    %(<i class="fas fa-#{fa_icon} fa-fw #{class_name}"#{style_text} aria-hidden="true"></i>#{text}).html_safe
+    %(<i class="fa-solid fa-#{fa_icon} fa-fw #{class_name}"#{style_text} aria-hidden="true"></i>#{text}).html_safe
   end
 
   # NAV -----------------------------------------------------------
@@ -55,9 +55,9 @@ module ApplicationHelper
   def show_sex_symbol(is_male, show_text: false, short: false)
     text = show_text ? sex_text(is_male, short: short) : ""
     if is_male
-      %(<i class="fas fa-male"></i>#{text}).html_safe
+      %(<i class="fa-solid fa-male"></i>#{text}).html_safe
     else
-      %(<i class="fas fa-female female-color"></i>#{text}).html_safe
+      %(<i class="fa-solid fa-female female-color"></i>#{text}).html_safe
     end
   end
 
@@ -74,18 +74,18 @@ module ApplicationHelper
     color = ""
     if value
       color = "text-success" if with_color
-      %(<i class="fas fa-check #{color}"></i>).html_safe
+      %(<i class="fa-solid fa-check #{color}"></i>).html_safe
     else
       color = "text-danger" if with_color
-      %(<i class="fas fa-times #{color}"></i>).html_safe if render_false_value
+      %(<i class="fa-solid fa-times #{color}"></i>).html_safe if render_false_value
     end
   end
 
   def render_bool_reversed(is_true)
     if is_true
-      '<i class="fa fa-check-square-o text-danger"></i>'.html_safe
+      '<i class="fa-solid fa-check-square-o text-danger"></i>'.html_safe
     else
-      '<i class="fa fa-square-o text-success"></i>'.html_safe
+      '<i class="fa-solid fa-square-o text-success"></i>'.html_safe
     end
   end
 

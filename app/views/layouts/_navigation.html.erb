@@ -14,13 +14,13 @@
   <div class="collapse navbar-collapse" id="collapsibleNavbar">
     <%# *** Nav Links LEFT *** %>
     <ul class="navbar-nav me-auto">
-      <%= nav_li_link fa_text(:home, t('nav.home')), root_path %>
+      <%= nav_li_link fa_text(:house, t('nav.home')), root_path %>
       <% if session_active? %>
-        <%= nav_li_link fa_text(:user_circle, t('nav.mydata')), start_path %>
+        <%= nav_li_link fa_text(:circle_user, t('nav.mydata')), start_path %>
         <% if admin? %>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <%= fa_text :wrench, 'Admin.' %>
+              <%= fa_text :screwdriver_wrench, 'Admin.' %>
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <%= nav_dropdown_link fa_text(:users, 'Registros'), registries_path %>
@@ -32,7 +32,7 @@
               <div class="dropdown-divider"></div>
               <h6 class="dropdown-header">Sistema</h6>
               <%= nav_dropdown_link fa_text(:terminal, 'Cliente API'), apiui_index_path %>
-              <%= nav_dropdown_link fa_text(:cog, 'Evento'), Event.current %>
+              <%= nav_dropdown_link fa_text(:gear, 'Evento'), Event.current %>
             </div>
           </li>
         <% end%>
@@ -42,9 +42,9 @@
     <%# *** Nav Links RIGHT *** %>
     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
       <% if session_active? %>
-        <%= nav_li_link fa_text(:sign_out_alt, t('nav.logout')), logout_path %>
+        <%= nav_li_link fa_text(:right_from_bracket, t('nav.logout')), logout_path %>
       <% else %>
-        <%= nav_li_link fa_text(:sign_in_alt, t('nav.login')), login_path %>
+        <%= nav_li_link fa_text(:right_to_bracket, t('nav.login')), login_path %>
       <% end %>
     </ul>
   </div>
