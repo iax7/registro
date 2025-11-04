@@ -1,6 +1,10 @@
 <%= turbo_stream.update "modal" do %>
   <%= render partial: "amount_paid", locals: { registry: @registry } %>
   <script>
-    $("#mainModal").modal("show");
+    (function() {
+      const modalEl = document.getElementById('mainModal');
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    })();
   </script>
 <% end %>

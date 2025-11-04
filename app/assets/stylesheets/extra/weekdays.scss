@@ -3,11 +3,11 @@ $saturday: #5b9ebd;
 $sunday:   #f0ad4e;
 $monday:   #d9534f;
 
-.friday-bg   { background-color: $friday; }
-.saturday-bg { background-color: $saturday;}
-.sunday-bg   { background-color: $sunday;}
-.monday-bg   { background-color: $monday;}
-.friday-text   { color: $friday; }
-.saturday-text { color: $saturday; }
-.sunday-text   { color: $sunday; }
-.monday-text   { color: $monday; }
+.friday-bg   { background-color: $friday !important; }
+.saturday-bg { background-color: $saturday !important; }
+.sunday-bg   { background-color: $sunday !important; }
+.monday-bg   { background-color: $monday!important; }
+.friday-text   { color: $friday !important; }
+.saturday-text { color: $saturday !important; }
+.sunday-text   { color: $sunday !important; }
+.monday-text   { color: $monday !important; }

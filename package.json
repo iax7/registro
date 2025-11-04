@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "esbuild": "^0.25.11"
+    "esbuild": "^0.25.12"
   },
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets",
@@ -15,9 +15,9 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.20",
+    "@popperjs/core": "^2.11.8",
     "autoprefixer": "^10.4.21",
-    "bootstrap": "^4.6.2",
-    "popper.js": "^1.16.1",
+    "bootstrap": "^5.3.8",
     "jquery": "^3.7.1",
     "nodemon": "^3.1.10",
     "postcss": "^8.5.6",

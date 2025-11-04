@@ -23,7 +23,7 @@
         %th.text-center.monday-bg Cen
     %tbody
       -# Adultos ------------------------------------------------
-      %tr.text-right
+      %tr.text-end
         %td.col-xs-1
           %strong Adultos
         %td= dim_zeros count[:v1]
@@ -39,7 +39,7 @@
         %td= dim_zeros count[:l2]
         %td= dim_zeros count[:l3]
       -# Kids ------------------------------------------------
-      %tr.text-right
+      %tr.text-end
         %td.col-xs-1
           %strong Niños
         %td= dim_zeros count[:v1c]
@@ -55,7 +55,7 @@
         %td= dim_zeros count[:l2c]
         %td= dim_zeros count[:l3c]
       -# Suma ------------------------------------------------
-      %tr.text-right.table-secondary
+      %tr.text-end.table-secondary
         %td.col-xs-1
           %strong Suma
         %td= dim_zeros count[:v1] + count[:v1c]
@@ -72,7 +72,7 @@
         %td= dim_zeros count[:l3] + count[:l3c]
       -# Total ------------------------------------------------
       - if defined? money
-        %tr.text-right.table-success
+        %tr.text-end.table-success
           %td.col-xs-1
             %strong Total
           %td= number_to_currency money[:v1] + money[:v1c], precision: 0
@@ -90,7 +90,7 @@
       -# grandtotal -------------------------------------------
       - if defined? money_total
         %tr
-          %td.col-xs-1.text-right
+          %td.col-xs-1.text-end
             %strong Gran T.
           %td.text-center{ colspan: '12' }
             %strong= number_to_currency money_total, presicion: 0

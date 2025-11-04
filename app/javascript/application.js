@@ -5,21 +5,20 @@ import jQuery from "jquery"
 
 window.$ = window.jQuery = jQuery
 
-import Popper from "popper.js/dist/umd/popper";
-window.Popper = Popper;
-
 import * as bootstrap from "bootstrap"
+window.bootstrap = bootstrap
 
 document.addEventListener("turbo:load", () => {
-    // Bootstrap Tooltip fancy view
-    const tooltip_opt = {
+    // Bootstrap Tooltip
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl, {
         placement: "top"
-    }
-    $('[data-toggle="tooltip"]').tooltip(tooltip_opt)
+    }))
 
-    const popover_opt = {
+    // Bootstrap Popover
+    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl, {
         trigger: "hover",
         placement: "right"
-    }
-    $('[data-toggle="popover"]').popover(popover_opt)
+    }))
 })

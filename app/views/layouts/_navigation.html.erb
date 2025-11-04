@@ -5,7 +5,7 @@
       <img src="https://via.placeholder.com/232x60/2C3E50/FFFFFF.png?text=Logo" alt="Logo">
   </a>
   <%#-- Toggler/collapsibe Button --%>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar"
           aria-controls="collapsibleNavbar" aria-expanded="true" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -13,13 +13,13 @@
   <%#-- Navbar links --%>
   <div class="collapse navbar-collapse" id="collapsibleNavbar">
     <%# *** Nav Links LEFT *** %>
-    <ul class="navbar-nav mr-auto">
+    <ul class="navbar-nav me-auto">
       <%= nav_li_link fa_text(:home, t('nav.home')), root_path %>
       <% if session_active? %>
         <%= nav_li_link fa_text(:user_circle, t('nav.mydata')), start_path %>
         <% if admin? %>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <%= fa_text :wrench, 'Admin.' %>
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -40,7 +40,7 @@
 
     </ul>
     <%# *** Nav Links RIGHT *** %>
-    <ul class="nav navbar-nav navbar-right">
+    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
       <% if session_active? %>
         <%= nav_li_link fa_text(:sign_out_alt, t('nav.logout')), logout_path %>
       <% else %>

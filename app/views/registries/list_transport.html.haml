@@ -36,7 +36,7 @@
         %tr{ class: "text-center #{row_class}" }
           %td= guest.registry.id
           %td= guest.id
-          %td.text-left= guest.full_name
+          %td.text-start= guest.full_name
           %td= link_to number_to_phone(guest.registry.user.phone, area_code: true),
                   'tel:' + guest.registry.user.phone,
                   class: 'btn btn-link m-0 p-0'
@@ -50,7 +50,7 @@
           %td= render_bool guest.t_l1, render_false_value: false, with_color: false
           %td= render_bool guest.t_l2, render_false_value: false, with_color: false
       %tr.text-center.table-success
-        %td.text-right{ colspan: 5 }
+        %td.text-end{ colspan: 5 }
           %strong Suma:
         %td= totals[:v1]
         %td= totals[:v2]

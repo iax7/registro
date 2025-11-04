@@ -1,5 +1,5 @@
 <%
-  label_class = 'col-4 control-label text-right'
+  label_class = 'col-4 control-label text-end'
   input_class = 'col-8'
 %>
 <%# user Data %>
@@ -46,7 +46,7 @@
                 new_registry_guest_path(@registry),
                 class: 'btn btn-success' %>
   </span>
-  <span class="col text-right">
+  <span class="col text-end">
     <%= link_to 'Alternar precios/iconos',
                 '#',
                 class: 'btn btn-link',
@@ -56,29 +56,29 @@
 </div>
 <div class="table-responsive">
   <table class="table table-hover table-sm">
-    <thead class="thead-dark">
+    <thead class="table-primary">
     <tr class="text-center">
       <% if admin? %><th scope="col" rowspan="2">Id</th><% end %>
       <th scope="col" rowspan="2"></th>
       <th scope="col" rowspan="2">Nombre</th>
-      <th scope="col" rowspan="2" data-toggle="tooltip" title="Asistencia">As.</th>
+      <th scope="col" rowspan="2" data-bs-toggle="tooltip" title="Asistencia">As.</th>
       <th scope="col" colspan="8"><%= fa_text :utensils %> Comida</th>
-      <th scope="col" rowspan="2" data-toggle="tooltip" title="Hospedaje"><%= fa_text :bed %></th>
+      <th scope="col" rowspan="2" data-bs-toggle="tooltip" title="Hospedaje"><%= fa_text :bed %></th>
       <th scope="col" colspan="3"><%= fa_text :bus %> Transporte</th>
       <th scope="col" rowspan="2">Costo</th>
     </tr>
-    <tr class="text-center bg-dark">
-      <th class="friday-text"   data-toggle="tooltip" title="Cena">V3</th>
-      <th class="saturday-text" data-toggle="tooltip" title="Desayuno">S1</th>
-      <th class="saturday-text" data-toggle="tooltip" title="Comida">S2</th>
-      <th class="saturday-text" data-toggle="tooltip" title="Cena">S3</th>
-      <th class="sunday-text"   data-toggle="tooltip" title="Desayuno">D1</th>
-      <th class="sunday-text"   data-toggle="tooltip" title="Comida">D2</th>
-      <th class="sunday-text"   data-toggle="tooltip" title="Cena">D3</th>
-      <th class="monday-text"   data-toggle="tooltip" title="Desayuno">L1</th>
-      <th data-toggle="tooltip" title="Viernes Ida">V<%= fa_text :arrow_up, class_name: 'text-info' %></th>
-      <th data-toggle="tooltip" title="Sábado Ida">S<%= fa_text :arrow_up, class_name: 'text-info' %></th>
-      <th data-toggle="tooltip" title="Lunes Regreso">L<%= fa_text :arrow_down, class_name: 'text-danger' %></th>
+    <tr class="text-center">
+      <th class="friday-text"   data-bs-toggle="tooltip" title="Cena">V3</th>
+      <th class="saturday-text" data-bs-toggle="tooltip" title="Desayuno">S1</th>
+      <th class="saturday-text" data-bs-toggle="tooltip" title="Comida">S2</th>
+      <th class="saturday-text" data-bs-toggle="tooltip" title="Cena">S3</th>
+      <th class="sunday-text"   data-bs-toggle="tooltip" title="Desayuno">D1</th>
+      <th class="sunday-text"   data-bs-toggle="tooltip" title="Comida">D2</th>
+      <th class="sunday-text"   data-bs-toggle="tooltip" title="Cena">D3</th>
+      <th class="monday-text"   data-bs-toggle="tooltip" title="Desayuno">L1</th>
+      <th data-bs-toggle="tooltip" title="Viernes Ida">V<%= fa_text :arrow_up, class_name: 'text-info' %></th>
+      <th data-bs-toggle="tooltip" title="Sábado Ida">S<%= fa_text :arrow_up, class_name: 'text-info' %></th>
+      <th data-bs-toggle="tooltip" title="Lunes Regreso">L<%= fa_text :arrow_down, class_name: 'text-danger' %></th>
     </tr>
     </thead>
     <tfoot>
@@ -90,7 +90,7 @@
         <th colspan="8"><%= number_to_currency @registry.totals[:food],    precision: 0 %></th>
         <th rowspan="1"><%= number_to_currency @registry.totals[:lodging], precision: 0 %></th>
         <th colspan="3"><%= number_to_currency @registry.totals[:trans],   precision: 0 %></th>
-        <th rowspan="2" class="text-right"><%= number_to_currency @registry.totals[:total], precision: 0 %></th>
+        <th rowspan="2" class="text-end"><%= number_to_currency @registry.totals[:total], precision: 0 %></th>
       </tr>
       <% if false %>
       <tr class="text-center">
@@ -113,23 +113,21 @@
     <% @registry.guests.each do |g| %>
       <tr class="text-center">
         <% if admin? %><td><%= g.id %></td><% end %>
-        <td class="text-left">
+        <td class="text-start">
           <div class="btn-group">
             <%= link_to fa_text(:edit),
                         edit_registry_guest_path(@registry.id, g),
                         class: 'btn btn-primary btn-sm',
-                        data: { toggle: "tooltip" },
+                        data: { bs_toggle: "tooltip" },
                         title: "Editar" %>
             <%= link_to fa_text(:trash),
                         registry_guest_path(@registry.id, g),
-                        method: :delete,
-                        data: {confirm: '¿estás seguro?', toggle: "tooltip"},
-                        rel: 'nofollow',
+                        data: { turbo_method: :delete, turbo_confirm: '¿estás seguro?', bs_toggle: "tooltip" },
                         class: 'btn btn-danger btn-sm',
                         title: "Borrar" unless g.me? %>
           </div>
         </td>
-        <td class="d-flex justify-content-between align-items-center <%= 'female-color-darker' if g.female? %>">
+        <td class="<%= 'female-color-darker' if g.female? %>">
           <%= g.me? ? fa_text(:user, t('common.me')) : g.nick %>
           <%# span class="badge badge-primary badge-pill"><%= g.age ></span%>
         </td>
@@ -150,7 +148,7 @@
         <td><%= icon_cost_render g.t_s1, g.costs_per_service(:transport) %></td>
         <td class="border-right"><%= icon_cost_render g.t_l2, g.costs_per_service(:transport) %></td>
         <%# Total %>
-        <td class="text-right"><%= number_to_currency g.total, precision: 0 %></td>
+        <td class="text-end"><%= number_to_currency g.total, precision: 0 %></td>
       </tr>
     <% end %>
     </tbody>
@@ -187,19 +185,19 @@
           </p>
         </div>
         <br>
-          <table class='table table-sm borderless h4'>
+          <table class='table table-sm table-borderless h4'>
             <tr>
-              <td class="text-right w-50 border-0">Gran Total:</td>
-              <td class="w-50 border-0 text-monospace" id="lbl_grand_total"><%= dim_zeros_currency @registry.grand_total, decimals: 0 %></td>
+              <td class="text-end w-50">Gran Total:</td>
+              <td class="w-50 font-monospace" id="lbl_grand_total"><%= dim_zeros_currency @registry.grand_total, decimals: 0 %></td>
             </tr>
             <% if @registry.amount_paid > 0 %>
               <tr>
-                <td class="text-right w-50 border-0">Abonado:</td>
-                <td class="w-50 border-0 text-monospace text-primary" id="lbl_paid"><%= dim_zeros_currency @registry.amount_paid, decimals: 0 %></td>
+                <td class="text-end w-50">Abonado:</td>
+                <td class="w-50 font-monospace text-primary" id="lbl_paid"><%= dim_zeros_currency @registry.amount_paid, decimals: 0 %></td>
               </tr>
               <tr>
-                <td class="text-right w-50 border-0">Saldo:</td>
-                <td class="w-50 border-0 text-monospace text-danger" id="lbl_remaining"><%= dim_zeros_currency @registry.amount_remaining, decimals: 0 %></td>
+                <td class="text-end w-50">Saldo:</td>
+                <td class="w-50 font-monospace text-danger" id="lbl_remaining"><%= dim_zeros_currency @registry.amount_remaining, decimals: 0 %></td>
               </tr>
             <% end %>
           </table>

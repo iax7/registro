@@ -2,7 +2,7 @@
 <% content_for :top do %>
   <nav id="navAPIClient" class="navbar navbar-expand-sm navbar-dark bg-primary">
     <%= link_to fa_text(:home), start_path, class: 'navbar-brand' %>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navapi" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navapi" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -11,37 +11,37 @@
       <ul class="navbar-nav">
         <li class="nav-item"><a href="#" class="nav-link" data-remote="true" id="lnkAssistance">Asistencia</a></li>
         <li class="nav-item dropdown" id="mnuFood">
-          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Comidas</a>
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Comidas</a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li class="dropdown-header">Viernes</li>
+            <li><h6 class="dropdown-header">Viernes</h6></li>
             <li><a class="dropdown-item" href="#" data-remote="true" id="lnkV3">Cena</a></li>
-            <li role="separator" class="dropdown-divider"></li>
-            <li class="dropdown-header">Sabado</li>
+            <li><hr class="dropdown-divider"></li>
+            <li><h6 class="dropdown-header">Sábado</h6></li>
             <li><a class="dropdown-item" href="#" data-remote="true" id="lnkS1">Desayuno</a></li>
             <li><a class="dropdown-item" href="#" data-remote="true" id="lnkS2">Comida</a></li>
             <li><a class="dropdown-item" href="#" data-remote="true" id="lnkS3">Cena</a></li>
-            <li role="separator" class="dropdown-divider"></li>
-            <li class="dropdown-header">Domingo</li>
+            <li><hr class="dropdown-divider"></li>
+            <li><h6 class="dropdown-header">Domingo</h6></li>
             <li><a class="dropdown-item" href="#" data-remote="true" id="lnkD1">Desayuno</a></li>
             <li><a class="dropdown-item" href="#" data-remote="true" id="lnkD2">Comida</a></li>
             <li><a class="dropdown-item" href="#" data-remote="true" id="lnkD3">Cena</a></li>
-            <li role="separator" class="dropdown-divider"></li>
-            <li class="dropdown-header">Lunes</li>
+            <li><hr class="dropdown-divider"></li>
+            <li><h6 class="dropdown-header">Lunes</h6></li>
             <li><a class="dropdown-item" href="#" data-remote="true" id="lnkL1">Desayuno</a></li>
           </ul>
         </li>
         <li class="nav-item"><a href="#" class="nav-link" data-remote="true" id="lnkPing">Ping</a></li>
       </ul>
-      <span class="form-inline">
-        <%= text_field_tag 'id', nil, placeholder: 'Id', autocomplete: false, class: 'form-control mr-1' %>
-        <%= button_tag 'Aceptar', id: 'btnSend', class: 'btn btn-info my-2' %>
-        <label id="lblLastId" class="navbar-text ml-2"></label>
-      </span>
+      <div class="d-flex align-items-center">
+        <%= text_field_tag 'id', nil, placeholder: 'Id', autocomplete: false, class: 'form-control me-2' %>
+        <%= button_tag 'Aceptar', id: 'btnSend', class: 'btn btn-info' %>
+        <label id="lblLastId" class="navbar-text ms-2 mb-0"></label>
+      </div>
     </div><!-- /.navbar-collapse -->
   </nav>
 
   <div class="top-banner d-flex justify-content-between align-items-center">
-    <h1 class="ml-3">Asistencia</h1>
+    <h1 class="ms-3">Asistencia</h1>
     <%= image_tag 'spinners/ring.gif', id: 'spinner', style: 'display: none;' %>
   </div>
 <% end %>
@@ -68,25 +68,25 @@
       <div class="col-1"><h2><i class="fa fa-users"></i></h2></div>
       <div class="col-11 table-responsive">
         <table class="table table-striped table-2hover table-sm" id="tblGuest">
-          <thead>
+          <thead class="table-primary">
             <tr class="text-center">
               <th>Id</th>
               <th>Seudónimo</th>
               <th width="60">Edad</th>
               <th class="border-right">Relación</th>
-              <th class="friday-text"   data-toggle="tooltip" title="Cena">V3</th>
-              <th class="saturday-text" data-toggle="tooltip" title="Desayuno">S1</th>
-              <th class="saturday-text" data-toggle="tooltip" title="Comida">S2</th>
-              <th class="saturday-text" data-toggle="tooltip" title="Cena">S3</th>
-              <th class="sunday-text"   data-toggle="tooltip" title="Desayuno">D1</th>
-              <th class="sunday-text"   data-toggle="tooltip" title="Comida">D2</th>
-              <th class="sunday-text"   data-toggle="tooltip" title="Cena">D3</th>
-              <th class="monday-text"   data-toggle="tooltip" title="Desayuno">L1</th>
-              <th data-toggle="tooltip" title="Viernes Ida" class="border-left">V</th>
-              <th data-toggle="tooltip" title="Sábado Ida">S</th>
-              <th data-toggle="tooltip" title="Lunes Regreso">L</th>
-              <th data-toggle="tooltip" title="Hospedaje" class="border-left"><%= fa_text :bed %></th>
-              <th data-toggle="tooltip" title="Cuarto"><%= fa_text :person_booth %></th>
+              <th class="friday-text"   data-bs-toggle="tooltip" title="Cena">V3</th>
+              <th class="saturday-text" data-bs-toggle="tooltip" title="Desayuno">S1</th>
+              <th class="saturday-text" data-bs-toggle="tooltip" title="Comida">S2</th>
+              <th class="saturday-text" data-bs-toggle="tooltip" title="Cena">S3</th>
+              <th class="sunday-text"   data-bs-toggle="tooltip" title="Desayuno">D1</th>
+              <th class="sunday-text"   data-bs-toggle="tooltip" title="Comida">D2</th>
+              <th class="sunday-text"   data-bs-toggle="tooltip" title="Cena">D3</th>
+              <th class="monday-text"   data-bs-toggle="tooltip" title="Desayuno">L1</th>
+              <th data-bs-toggle="tooltip" title="Viernes Ida" class="border-left">V</th>
+              <th data-bs-toggle="tooltip" title="Sábado Ida">S</th>
+              <th data-bs-toggle="tooltip" title="Lunes Regreso">L</th>
+              <th data-bs-toggle="tooltip" title="Hospedaje" class="border-left"><%= fa_text :bed %></th>
+              <th data-bs-toggle="tooltip" title="Cuarto"><%= fa_text :person_booth %></th>
             </tr>
           </thead>
           <tfoot>
@@ -119,16 +119,16 @@
       <div class="col-1"><h2><i class="fas fa-credit-card"></i></h2></div>
       <div class="col-11">
         <div class="row">
-          <div class="col-6 text-right"><h4 class="fix-h2">Gran Total:</h4></div>
-          <div class="col-3 text-right"><h4 class="fix-h2 text-monospace" id="lblPay1"></h4></div>
+          <div class="col-6 text-end"><h4 class="fix-h2">Gran Total:</h4></div>
+          <div class="col-3 text-end"><h4 class="fix-h2 font-monospace" id="lblPay1"></h4></div>
         </div>
         <div class="row">
-          <div class="col-6 text-right"><h4 class="fix-h2">Cantidad Pagada:</h4></div>
-          <div class="col-3 text-right"><h4 class="fix-h2 text-monospace" id="lblPay2"></h4></div>
+          <div class="col-6 text-end"><h4 class="fix-h2">Cantidad Pagada:</h4></div>
+          <div class="col-3 text-end"><h4 class="fix-h2 font-monospace" id="lblPay2"></h4></div>
         </div>
         <div class="row">
-          <div class="col-6 text-right"><h4 class="fix-h2">Total a Pagar:</h4></div>
-          <div class="col-3 text-right"><h4 class="fix-h2 text-monospace" id="lblPay3"></h4></div>
+          <div class="col-6 text-end"><h4 class="fix-h2">Total a Pagar:</h4></div>
+          <div class="col-3 text-end"><h4 class="fix-h2 font-monospace" id="lblPay3"></h4></div>
         </div>
       </div>
     </div>
@@ -136,20 +136,20 @@
 
   <div id="divFood" style="display: none;">
     <div class="row">
-      <div class="col-4 text-right"><h2>Nombre: </h2></div>
+      <div class="col-4 text-end"><h2>Nombre: </h2></div>
       <div class="col-8"><h2><strong id="lblNickname"></strong>&nbsp;<i class="fas fa-child" id="childIcon"></i></h2></div>
     </div>
     <div class="row">
-      <div class="col-4 text-right"><h2 id="lblFoodAction">lblFoodAction</h2></div>
+      <div class="col-4 text-end"><h2 id="lblFoodAction">lblFoodAction</h2></div>
       <div class="col-8"><h2><strong id="lblTotal"></strong></h2></div>
     </div>
     <div class="row">
-      <div class="col-4 text-right"><h2>Usados: </h2></div>
+      <div class="col-4 text-end"><h2>Usados: </h2></div>
       <div class="col-8"><h2><strong id="lblConsumed"></strong></h2></div>
     </div>
     <hr>
     <div class="row">
-      <div class="col-10 text-right"><h2>Personas en Comedor: </h2></div>
+      <div class="col-10 text-end"><h2>Personas en Comedor: </h2></div>
       <div class="col-2"><h2>
         <strong id="lblNumIn"></strong>
         <span class="fas fa-warning text-danger" id="imgWarning" style="display: none;"></span></h2>
@@ -158,13 +158,17 @@
   </div>
 </div>
 
-<div id="data" class="text-monospace"></div>
+<div id="data" class="font-monospace"></div>
 <%= audio_tag 'notify.mp3', autoplay: false, controls: false, id: 'mp3Notify' %>
 
 <style>
   #navAPIClient {
-    padding-bottom: 2px;
-    padding-top: 2px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+  }
+  #lblLastId {
+    min-width: 200px;
+    white-space: nowrap;
   }
   .top-banner {
     background: white;
@@ -323,7 +327,7 @@
 
         //Render new Data
         $('#divAssistance').show();
-        let badge_html = $('<span class="badge badge-secondary"></span>').text(registry.user.id);
+        let badge_html = $('<span class="badge bg-secondary"></span>').text(registry.user.id);
         let name_html = $('<span></span>').text('  ' + registry.user.name + ' ' + registry.user.lastname);
         $('#lblName').append(badge_html, name_html);
         $('#lblChurchCity').text( registry.user.city + ', ' + registry.user.state );
@@ -337,7 +341,7 @@
             let age = registry.guests[index].age;
             row.className = 'text-center';
             if ( age <= <%= @event.adult_age %> ) {
-                row.className += " bg-primary text-white";
+                row.className += " table-primary";
             }
 
             row.insertCell(0).innerHTML = registry.guests[index].id;
@@ -430,7 +434,6 @@
     }
 
     $(
-        setLinkAction('lnkAssistance'),
         $('#navAPIClient li a').not('.dropdown-toggle').click( function() {
             hideAll();
             // Hide Bootstrap sub-Menu
@@ -452,7 +455,6 @@
             $(this).blur();
             return false;
         }),
-        hideAll(),
         $(document).keypress(function(e) {
             // enter
             if(e.which == 13) {
@@ -526,4 +528,18 @@
             });
         })
     );
+
+    // Initialize page on load
+    $(document).ready(function() {
+        setLinkAction('lnkAssistance');
+        hideAll();
+
+        // Initialize Bootstrap 5 components
+        document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(function(el) {
+            new bootstrap.Dropdown(el);
+        });
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
+            new bootstrap.Tooltip(el);
+        });
+    });
 </script>

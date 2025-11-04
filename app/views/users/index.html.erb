@@ -10,7 +10,7 @@
       <th>Nick</th>
       <th>Contact</th>
       <th>Age/DOB</th>
-      <th data-toggle="tooltip" title="Is Administrator">A.</th>
+      <th data-bs-toggle="tooltip" title="Is Administrator">A.</th>
       <th></th>
     </tr>
     </thead>
@@ -34,7 +34,7 @@
                         class: 'btn btn-link m-0 p-0',
                         data: { toggle: "tooltip" },
                         title: user.email %></td>
-        <td><span data-toggle="tooltip" title="<%= user.dob %>" class="d-block d-lg-none"><%= user.age %></span>
+        <td><span data-bs-toggle="tooltip" title="<%= user.dob %>" class="d-block d-lg-none"><%= user.age %></span>
             <span class="d-none d-lg-block d-xl-block"><%= user.dob %></span>
         </td>
         <td><%= render_bool user.is_admin, render_false_value: false %></td>

@@ -43,7 +43,7 @@ module ApplicationHelper
     active_class = current_page?(link_path) ? "active" : ""
 
     tag.li(class: "nav-item #{active_class}") do
-      link_to text, link_path, class: "nav-link"
+      link_to text, link_path, class: "nav-link px-3"
     end
   end
 

@@ -3,43 +3,41 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="mainModalLabel">
-          <span class="badge badge-info"><%= registry.user_id %></span>&nbsp;
+          <span class="badge bg-info"><%= registry.user_id %></span>&nbsp;
           <%= registry.user.full_name(is_last_first: false) %>
         </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 
         <%= form_with model: registry, data: { turbo_frame: "modal" } do |form| %>
           <%= form.hidden_field :paid_by, value: session_id %>
           <div class="row">
-            <div class="col-5 text-right"><strong>Servicios:</strong></div>
+            <div class="col-5 text-end"><strong>Servicios:</strong></div>
             <div class="col-7"><%= dim_zeros_currency registry.amount_debt %></div>
           </div>
           <div class="row">
-            <div class="col-5 text-right"><strong>Ofrenda:</strong></div>
+            <div class="col-5 text-end"><strong>Ofrenda:</strong></div>
             <div class="col-7"><%= dim_zeros_currency registry.amount_offering %></div>
           </div>
           <hr>
           <div class="row">
-            <div class="col-5 text-right"><strong>Gran Total:</strong></div>
+            <div class="col-5 text-end"><strong>Gran Total:</strong></div>
             <h5 class="col-7"><strong><%= dim_zeros_currency registry.grand_total %></strong></h5>
           </div>
           <div class="row">
-            <div class="col-5 text-right"><strong>Pagado:</strong></div>
+            <div class="col-5 text-end"><strong>Pagado:</strong></div>
             <div class="col-7"><%= paid_format_colors registry.amount_paid, registry.grand_total %></div>
           </div>
           <br>
           <div class="row">
-            <div class="col-5 text-right"><strong>Diferencia:</strong></div>
+            <div class="col-5 text-end"><strong>Diferencia:</strong></div>
             <div class="col-7">
               <%= dim_zeros_currency(registry.amount_remaining) %></div>
           </div>
 
           <div class="form-group row mb-0 align-items-center">
-            <div class="col-5 text-right">
+            <div class="col-5 text-end">
               <strong><%= form.label :amount_paid %>:</strong>
             </div>
             <div class="col-7">
@@ -54,7 +52,7 @@
           </div>
 
           <div class="form-group row mb-0">
-            <div class="col-5 text-right">
+            <div class="col-5 text-end">
               <strong><%= form.label :kind %>:</strong>
             </div>
             <div class="col-7">
@@ -66,9 +64,9 @@
           <br>
 
           <div class="form-group row">
-            <div class="col text-right">
+            <div class="col text-end">
                 <%= form.submit 'Aceptar', class: 'btn btn-primary' %>
-                <%= form.button 'Cancelar', class: 'btn btn-outline-secondary', data: {dismiss: 'modal'} %>
+                <%= form.button 'Cancelar', class: 'btn btn-outline-secondary', data: { bs_dismiss: 'modal' } %>
             </div>
           </div>
         <% end %>
@@ -85,24 +83,32 @@
     </div>
   </div>
 <script>
-  $('#link_total').click(function(){
-    $('#payment_amount').val('<%= registry.amount_remaining %>');
-    return false; // prevents modal to close
-  });
-  $("#mainModal").on('hidden.bs.modal', function () {
-      $("#modal").html("");
-  });
+  (function() {
+    $('#link_total').click(function(){
+      $('#payment_amount').val('<%= registry.amount_remaining %>');
+      return false; // prevents modal to close
+    });
+
+    const mainModalEl = document.getElementById('mainModal');
+    if (mainModalEl) {
+      mainModalEl.addEventListener('hidden.bs.modal', function () {
+        $("#modal").html("");
+      });
+    }
 
     // Cierra el modal antes de enviar el formulario
-  document.addEventListener("submit", function(e) {
-    if (e.target.closest("#mainModal")) {
-      $("#mainModal").modal("hide");
-      setTimeout(function() {
-        $(".modal-backdrop").remove();
-        $("body").removeClass("modal-open");
-      }, 300); // espera a que Bootstrap termine la animación
-    }
-  }, { capture: true });
-
+    document.addEventListener("submit", function(e) {
+      if (e.target.closest("#mainModal")) {
+        const modal = bootstrap.Modal.getInstance(mainModalEl);
+        if (modal) {
+          modal.hide();
+        }
+        setTimeout(function() {
+          $(".modal-backdrop").remove();
+          $("body").removeClass("modal-open");
+        }, 300); // espera a que Bootstrap termine la animación
+      }
+    }, { capture: true });
+  })();
 </script>
 </div>

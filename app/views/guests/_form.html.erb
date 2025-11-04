@@ -1,6 +1,6 @@
 <%
-  form_grp_class = 'form-group row'
-  label_class = 'col-sm-4 col-form-label text-sm-right'
+  form_grp_class = 'mb-3 row'
+  label_class = 'col-sm-4 col-form-label text-sm-end'
   div_input_class = 'col-sm-6'
   input_class = 'form-control'
 %>
@@ -53,9 +53,12 @@
     <div class="<%= form_grp_class %>">
       <%= form.label :is_male, class: label_class %>
       <div class="<%= div_input_class %>">
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label class="btn btn-light <%= 'active' if @guest.is_male   %>"><%= form.radio_button :is_male, true %><%= show_sex_symbol true %> <%= t 'common.male' %></label>
-          <label class="btn btn-light <%= 'active' if @guest.female? %>"><%= form.radio_button :is_male, false %><%= show_sex_symbol false %> <%= t 'common.female' %></label>
+        <div class="btn-group" role="group">
+          <input type="radio" class="btn-check" name="guest[is_male]" id="guest_is_male_true" value="true" autocomplete="off" <%= 'checked' if @guest.is_male %>>
+          <label class="btn btn-outline-primary" for="guest_is_male_true"><%= show_sex_symbol true %> <%= t 'common.male' %></label>
+
+          <input type="radio" class="btn-check" name="guest[is_male]" id="guest_is_male_false" value="false" autocomplete="off" <%= 'checked' if @guest.female? %>>
+          <label class="btn btn-outline-primary" for="guest_is_male_false"><%= show_sex_symbol false %> <%= t 'common.female' %></label>
         </div>
       </div>
     </div>
@@ -65,18 +68,18 @@
     <div class="<%= form_grp_class %>">
       <%= form.label :is_pregnant, class: label_class %>
       <div class="<%= div_input_class %>">
-        <span class="row" style="margin-left: 0px;">
+        <div class="d-flex align-items-center">
           <%= render 'components/checkbox', form: form, field: :is_pregnant %>
-          <h4 class="text-muted"
+          <h4 class="text-muted ms-3 mb-0"
               tabindex="0"
-              data-toggle="popover"
-              data-placement="right"
-              data-trigger="focus"
+              data-bs-toggle="popover"
+              data-bs-placement="right"
+              data-bs-trigger="hover focus"
               title="¿Embarazada?"
-              data-content="¿Asistirás a las conferencias embarazada y requieres condiciones y cuidados especiales?">
+              data-bs-content="¿Asistirás a las conferencias embarazada y requieres condiciones y cuidados especiales?">
             <%= fa_text :question_circle, style: 'vertical-align: middle;' %>
           </h4>
-        </span>
+        </div>
       </div>
     </div>
   <% end %>
@@ -84,25 +87,25 @@
   <div class="<%= form_grp_class %>">
     <%= form.label :is_medicated, class: label_class %>
     <div class="<%= div_input_class %>">
-      <span class="row" style="margin-left: 0px;">
+      <div class="d-flex align-items-center">
         <%= render 'components/checkbox', form: form, field: :is_medicated %>
-        <h4 class="text-muted"
+        <h4 class="text-muted ms-3 mb-0"
             tabindex="0"
-            data-toggle="popover"
-            data-placement="right"
-            data-trigger="focus"
+            data-bs-toggle="popover"
+            data-bs-placement="right"
+            data-bs-trigger="hover focus"
             title="¿Medicado?"
-            data-content="¿estás tomando algún medicamento y requieres condiciones y cuidados especiales debido a esto?">
+            data-bs-content="¿estás tomando algún medicamento y requieres condiciones y cuidados especiales debido a esto?">
           <%= fa_text :question_circle, style: 'vertical-align: middle;' %>
         </h4>
-      </span>
+      </div>
     </div>
   </div>
   <%# FOOD --------------------------------------------------------------------------------------%>
   <section id="foodSection" class="pt-3 pb-3">
     <div class="text-center">
       <h2><%= fa_text :utensils %> <%= form.label :food %>
-        <a class="text-info" data-toggle="collapse" href="#collapseFood" role="button" aria-expanded="false" aria-controls="collapseFood">
+        <a class="text-info" data-bs-toggle="collapse" href="#collapseFood" role="button" aria-expanded="false" aria-controls="collapseFood">
           <%= fa_text :question_circle %>
         </a>
       </h2>
@@ -127,13 +130,13 @@
     <div class="row">
       <div class="col">
         <div class="<%= form_grp_class %>">
-          <%= form.label 'Viernes', class: label_class + ' friday-text font-weight-bold' %>
+          <%= form.label 'Viernes', class: label_class + ' friday-text fw-bold' %>
           <div class="<%= div_input_class %> row">
             <%= render 'components/checkbox', form: form, model: :guest, field: :f_v3 %>
           </div>
         </div>
         <div class="<%= form_grp_class %>">
-          <%= form.label 'Sábado', class: label_class + ' saturday-text font-weight-bold' %>
+          <%= form.label 'Sábado', class: label_class + ' saturday-text fw-bold' %>
           <div class="<%= div_input_class %> row">
             <%= render 'components/checkbox', form: form, model: :guest, field: :f_s1 %>
             <%= render 'components/checkbox', form: form, model: :guest, field: :f_s2 %>
@@ -141,7 +144,7 @@
           </div>
         </div>
         <div class="<%= form_grp_class %>">
-          <%= form.label 'Domingo', class: label_class + ' sunday-text font-weight-bold' %>
+          <%= form.label 'Domingo', class: label_class + ' sunday-text fw-bold' %>
           <div class="<%= div_input_class %> row">
             <%= render 'components/checkbox', form: form, model: :guest, field: :f_d1 %>
             <%= render 'components/checkbox', form: form, model: :guest, field: :f_d2 %>
@@ -149,7 +152,7 @@
           </div>
         </div>
         <div class="<%= form_grp_class %>">
-          <%= form.label 'Lunes', class: label_class + ' monday-text font-weight-bold' %>
+          <%= form.label 'Lunes', class: label_class + ' monday-text fw-bold' %>
           <div class="<%= div_input_class %> row">
             <%= render 'components/checkbox', form: form, model: :guest, field: :f_l1 %>
           </div>
@@ -161,7 +164,7 @@
   <section id="transportSection" class="pb-3">
     <div class="text-center">
       <h2><%= fa_text :bus %> <%= form.label :transport %>
-        <a class="text-info" data-toggle="collapse" href="#collapseTransport" role="button" aria-expanded="false" aria-controls="collapseTransport">
+        <a class="text-info" data-bs-toggle="collapse" href="#collapseTransport" role="button" aria-expanded="false" aria-controls="collapseTransport">
           <%= fa_text :question_circle %>
         </a>
       </h2>
@@ -186,7 +189,7 @@
     <div class="row">
       <div class="col">
         <div class="<%= form_grp_class %>">
-          <%= form.label 'Viaje', class: label_class + ' font-weight-bold' %>
+          <%= form.label 'Viaje', class: label_class + ' fw-bold' %>
           <div class="<%= div_input_class %> row">
             <%= render 'components/checkbox', form: form, model: :guest, field: :t_v1 %>
             <%= render 'components/checkbox', form: form, model: :guest, field: :t_s1 %>
@@ -200,7 +203,7 @@
   <section id="lodgingSection">
     <div class="text-center">
       <h2><%= fa_text :bed %> <%= form.label :lodging %>
-        <a class="text-info" data-toggle="collapse" href="#collapseLodging" role="button" aria-expanded="false" aria-controls="collapseLodging">
+        <a class="text-info" data-bs-toggle="collapse" href="#collapseLodging" role="button" aria-expanded="false" aria-controls="collapseLodging">
           <%= fa_text :question_circle %>
         </a>
       </h2>
@@ -220,7 +223,7 @@
     <div class="row">
       <div class="col">
         <div class="<%= form_grp_class %>">
-          <%= form.label 'Estadía', class: label_class + ' font-weight-bold' %>
+          <%= form.label 'Estadía', class: label_class + ' fw-bold' %>
           <div class="<%= div_input_class %> row">
             <%= render 'components/checkbox', form: form, model: :guest, field: :l_v %>
           </div>
@@ -231,7 +234,7 @@
       <div class="row">
         <div class="col">
           <div class="<%= form_grp_class %>">
-            <%= form.label 'Habitación', class: label_class + ' font-weight-bold' %>
+            <%= form.label 'Habitación', class: label_class + ' fw-bold' %>
             <div class="<%= div_input_class %>">
               <%= form.text_field :l_room, class: input_class + ' col-3' %>
             </div>
@@ -268,6 +271,7 @@
      $("#foodSection").find(":checkbox").prop('checked', false);
      return false;
   });
+  // Fills historical guest to recreate again
   $(".guest-row").click(function(eventData) {
       id = eventData.target.id;
       data = JSON.parse($('#guest_' + id)[0].value);
@@ -278,9 +282,9 @@
       $('#user_nick').val(data.nick);
       $('#user_age').val(data.age + 1);
       if (data.is_male)
-          $('#guest_is_male_true').parent()[0].click();
+        $('#guest_is_male_true').prop('checked', true).trigger('change');
       else
-          $('#guest_is_male_false').parent()[0].click();
+        $('#guest_is_male_false').prop('checked', true).trigger('change');
 
       $('#row_' + id).hide(1000);
 

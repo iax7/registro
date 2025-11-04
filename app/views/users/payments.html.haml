@@ -13,20 +13,20 @@
     %tbody
       - @user_payments.each do |p|
         %tr
-          %td.text-right= p['id']
+          %td.text-end= p['id']
           %td= p['name']
           %td= p['location']
-          %td.text-right.text-monospace.h5= number_to_currency p['real'], precision: 0, unit: ''
-          %td.text-right.text-monospace.h5= number_to_currency p['courtesy'], precision: 0, unit: ''
+          %td.text-end.text-monospace.h5= number_to_currency p['real'], precision: 0, unit: ''
+          %td.text-end.text-monospace.h5= number_to_currency p['courtesy'], precision: 0, unit: ''
     %tfoot
       %tr.table-info
         %td.border-0
         %td.border-0
-        %td.text-right.border-0
+        %td.text-end.border-0
           %strong Total:
-        %td.text-right
+        %td.text-end
           %strong.text-monospace.h5= number_to_currency @sum_user_payments[:real], precision: 0
-        %td.text-right
+        %td.text-end
           %strong.text-monospace.h5= number_to_currency @sum_user_payments[:courtesy], precision: 0
 
   -# OLD TABLE
@@ -46,15 +46,15 @@
       %tbody
         - @pay_collectors.each do |p|
           %tr
-            %td.text-right= p['id']
+            %td.text-end= p['id']
             %td= p['name']
             %td= p['location']
-            %td.text-right.text-monospace.h5= number_to_currency p['amount'], precision: 0, unit: ''
+            %td.text-end.text-monospace.h5= number_to_currency p['amount'], precision: 0, unit: ''
       %tfoot
         %tr
           %td.border-0
           %td.border-0
-          %td.text-right.border-0
+          %td.text-end.border-0
             %strong Total:
-          %td.text-right
+          %td.text-end
             %strong.text-monospace.h5= number_to_currency @sum_pay_collectors, precision: 0

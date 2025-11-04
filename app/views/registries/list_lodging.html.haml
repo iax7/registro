@@ -30,14 +30,14 @@
         - row_class = guest.registry.paid? ? '' : 'table-warning'
         - paid_with_no_room_class = (guest.registry.paid? && guest.l_room.blank?) ? 'bg-danger' : ''
         %tr{ class: "text-center #{row_class}" }
-          %td.text-right= index
-          %td.text-right
+          %td.text-end= index
+          %td.text-end
             %strong= guest.registry.id
-          %td.text-right= guest.id
-          %td.text-left{ style: "#{name_style}" }= make_bold(full_name, skip: !guest.me?)
+          %td.text-end= guest.id
+          %td.text-start{ style: "#{name_style}" }= make_bold(full_name, skip: !guest.me?)
           %td.text-center
             = show_sex_symbol guest.is_male, show_text: true, short: true
-          %td.text-right= guest.age
+          %td.text-end= guest.age
           %td= guest.relation_t
           %td= guest.registry.user.location if guest.me?
           %td{ class: "#{paid_with_no_room_class}"}= guest.l_room

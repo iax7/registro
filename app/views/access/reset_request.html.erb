@@ -3,8 +3,8 @@
 <h2 class="text-center">Recuperar Contraseña</h2>
 <hr>
 <%
-  form_grp_class = 'form-group form-row justify-content-center'
-  label_class = 'sr-only'
+  form_grp_class = 'mb-3 row justify-content-center'
+  label_class = 'visually-hidden'
   div_input_class = 'col-sm-5'
   input_class = 'form-control'
 %>
@@ -14,9 +14,7 @@
     <%= label :user, :password, class: label_class %>
     <div class="<%= div_input_class %>">
       <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="envelope-addon"><%= fa_text :envelope %></span>
-        </div>
+        <span class="input-group-text" id="envelope-addon"><%= fa_text :envelope %></span>
         <%= email_field_tag :email, '', placeholder: 'Email', class: input_class, required: true %>
       </div>
     </div>
@@ -25,7 +23,7 @@
 
   <div class="<%= form_grp_class %>">
     <div class="<%= div_input_class %>">
-      <%= submit_tag 'Aceptar', data: { disable_with: 'Procesando...' }, class: 'btn btn-sm btn-primary btn-block' %>
+      <%= submit_tag 'Aceptar', data: { disable_with: 'Procesando...' }, class: 'btn btn-sm btn-primary w-100' %>
     </div>
   </div>
 <% end %>

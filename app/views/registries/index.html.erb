@@ -2,7 +2,7 @@
 <h2>Registros</h2>
 
 <h4>
-  <a role="button" data-toggle="collapse" href="#collapseSearch" aria-expanded="false" aria-controls="collapseSearch">
+  <a role="button" data-bs-toggle="collapse" href="#collapseSearch" aria-expanded="false" aria-controls="collapseSearch">
     <%= fa_text :search, 'Filtros' %>
   </a>
 </h4>
@@ -10,60 +10,62 @@
 <div id="collapseSearch" class="collapse<%= classes %>">
   <div class="card card-body">
     <%= form_tag registries_path, method: 'get', id: 'searchForm' do %>
-      <div class="form-row">
-        <div class="form-group">
-          <%= label_tag 'Id', nil, class: 'sr-only' %>
+      <div class="row g-2 mb-3">
+        <div class="col-auto">
+          <%= label_tag 'Id', nil, class: 'visually-hidden' %>
           <%= number_field_tag 'user_id', params[:user_id], min: 1, max: 999999, placeholder: 'Id', class: 'form-control',
-                               data: { toggle: 'tooltip',
-                                       placement: 'top' },
+                               data: { bs_toggle: 'tooltip',
+                                       bs_placement: 'top' },
                                title: 'Id de Registro' %>
         </div>
-        <div class="form-group">
-          <%= label_tag 'guest_id', nil, class: 'sr-only' %>
+        <div class="col-auto">
+          <%= label_tag 'guest_id', nil, class: 'visually-hidden' %>
           <%= number_field_tag 'guest_id', params[:guest_id], min: 1, max: 999999, placeholder: 'Id Gafete', class: 'form-control',
-                                data: { toggle: 'tooltip',
-                                        placement: 'top' },
+                                data: { bs_toggle: 'tooltip',
+                                        bs_placement: 'top' },
                                 title: 'Id Gafete' %>
         </div>
-        <div class="form-group">
-          <%= label_tag 'Nombre', nil, class: 'sr-only' %>
+        <div class="col-auto">
+          <%= label_tag 'Nombre', nil, class: 'visually-hidden' %>
           <%= text_field_tag 'name', params[:name], placeholder: 'Nombre', class: 'form-control' %>
         </div>
-        <div class="form-group">
-          <%= label_tag 'Apellido', nil, class: 'sr-only' %>
+        <div class="col-auto">
+          <%= label_tag 'Apellido', nil, class: 'visually-hidden' %>
           <%= text_field_tag 'lastname', params[:lastname], placeholder: 'Apellido', class: 'form-control' %>
         </div>
-        <div class="form-group">
-          <%= label_tag 'Cobrado por: (ID)', nil, class: 'sr-only' %>
+        <div class="col-auto">
+          <%= label_tag 'Cobrado por: (ID)', nil, class: 'visually-hidden' %>
           <%= number_field_tag 'paid_by', params[:paid_by], min: 1, max: 999999, placeholder: 'Cobrado por Id', class: 'form-control',
-                               data: { toggle: 'tooltip',
-                                       placement: 'top' },
+                               data: { bs_toggle: 'tooltip',
+                                       bs_placement: 'top' },
                                title: 'Cobrado por Id'%>
         </div>
-        <div class="form-group">
-          <%= label_tag 'Es Administrador', nil, class: 'sr-only' %>
+        <div class="col-auto">
+          <%= label_tag 'Es Administrador', nil, class: 'visually-hidden' %>
           <%= check_box_tag 'is_admin',
                             params[:is_admin],
                             params[:is_admin],
-                            class: 'form-control app-big-checkbox',
-                            data: { toggle: 'tooltip',
-                                    placement: 'top' },
+                            class: 'form-check-input app-big-checkbox',
+                            data: { bs_toggle: 'tooltip',
+                                    bs_placement: 'top' },
                             title: 'Administradores' %>
         </div>
-        <div class="form-group">
-          <%= label_tag 'No Pagados', nil, class: 'sr-only' %>
+        <div class="col-auto">
+          <%= label_tag 'No Pagados', nil, class: 'visually-hidden' %>
           <%= check_box_tag 'is_unpaid',
                             params[:is_unpaid],
                             params[:is_unpaid],
-                            class: 'form-control app-big-checkbox',
-                            data: { toggle: 'tooltip',
-                                    placement: 'top' },
+                            class: 'form-check-input app-big-checkbox',
+                            data: { bs_toggle: 'tooltip',
+                                    bs_placement: 'top' },
                             title: 'No Pagados' %>
         </div>
       </div>
-      <div class="form-row">
-        <%= submit_tag 'Buscar', name: nil, data: { disable_with: 'Procesando...' }, class: 'btn btn-primary' %>
-        <%= button_tag 'Limpiar', id: 'reset', class: 'btn btn-link' %>
+      <div class="row">
+        <div class="col-auto">
+          <%= submit_tag 'Buscar', name: nil, data: { disable_with: 'Procesando...' }, class: 'btn btn-primary' %>
+          <%= button_tag 'Limpiar', id: 'reset', class: 'btn btn-link' %>
+        </div>
       </div>
     <% end %>
   </div>
@@ -76,27 +78,27 @@
     <tr>
       <th>Id</th>
       <th>Nombre</th>
-      <th data-toggle="tooltip" title="Sexo">S</th>
-      <th data-toggle="tooltip" title="Edad">E</th>
-      <th data-toggle="tooltip" title="Datos extras">Notas</th>
-      <th data-toggle="tooltip" title="Enviar Email">E</th>
-      <th data-toggle="tooltip" title="Gafet"><%= fa_text :id_badge %></th>
-      <th data-toggle="tooltip" title="Núm Personas"><%= fa_text :users %></th>
-      <th data-toggle="tooltip" title="Cena Viernes" class="friday-bg">V3</th>
-      <th data-toggle="tooltip" title="Desayuno Sábado" class="saturday-bg">S1</th>
-      <th data-toggle="tooltip" title="Comida Sábado" class="saturday-bg">S2</th>
-      <th data-toggle="tooltip" title="Cena Sábado" class="saturday-bg">S3</th>
-      <th data-toggle="tooltip" title="Desayuno Domingo" class="sunday-bg">D1</th>
-      <th data-toggle="tooltip" title="Comida Domingo" class="sunday-bg">D2</th>
-      <th data-toggle="tooltip" title="Cena Domingo" class="sunday-bg">D3</th>
-      <th data-toggle="tooltip" title="Desayuno Lunes" class="monday-bg">L1</th>
-      <th data-toggle="tooltip" title="Hospedaje" ><%= fa_text :bed %></th>
-      <th data-toggle="tooltip" title="Viernes Ida" class="friday-text"><%= fa_text :bus %></th>
-      <th data-toggle="tooltip" title="Sábado Ida" class="saturday-text"><%= fa_text :bus %></th>
-      <th data-toggle="tooltip" title="Lunes Regreso" class="monday-text"><%= fa_text :bus %></th>
+      <th data-bs-toggle="tooltip" title="Sexo">S</th>
+      <th data-bs-toggle="tooltip" title="Edad">E</th>
+      <th data-bs-toggle="tooltip" title="Datos extras">Notas</th>
+      <th data-bs-toggle="tooltip" title="Enviar Email">E</th>
+      <th data-bs-toggle="tooltip" title="Gafet"><%= fa_text :id_badge %></th>
+      <th data-bs-toggle="tooltip" title="Núm Personas"><%= fa_text :users %></th>
+      <th data-bs-toggle="tooltip" title="Cena Viernes" class="friday-bg">V3</th>
+      <th data-bs-toggle="tooltip" title="Desayuno Sábado" class="saturday-bg">S1</th>
+      <th data-bs-toggle="tooltip" title="Comida Sábado" class="saturday-bg">S2</th>
+      <th data-bs-toggle="tooltip" title="Cena Sábado" class="saturday-bg">S3</th>
+      <th data-bs-toggle="tooltip" title="Desayuno Domingo" class="sunday-bg">D1</th>
+      <th data-bs-toggle="tooltip" title="Comida Domingo" class="sunday-bg">D2</th>
+      <th data-bs-toggle="tooltip" title="Cena Domingo" class="sunday-bg">D3</th>
+      <th data-bs-toggle="tooltip" title="Desayuno Lunes" class="monday-bg">L1</th>
+      <th data-bs-toggle="tooltip" title="Hospedaje" ><%= fa_text :bed %></th>
+      <th data-bs-toggle="tooltip" title="Viernes Ida" class="friday-text"><%= fa_text :bus %></th>
+      <th data-bs-toggle="tooltip" title="Sábado Ida" class="saturday-text"><%= fa_text :bus %></th>
+      <th data-bs-toggle="tooltip" title="Lunes Regreso" class="monday-text"><%= fa_text :bus %></th>
       <th>Costo</th>
       <th>Pagado</th>
-      <th data-toggle="tooltip" title="Se Presentó">P</th>
+      <th data-bs-toggle="tooltip" title="Se Presentó">P</th>
       <th></th>
     </tr>
     </thead>
@@ -104,11 +106,11 @@
     <tbody>
     <% @registries.each do |r| %>
       <tr class="text-center" id="row_<%= r["id"] %>">
-        <td class="text-right">
+        <td class="text-end">
           <%= link_to r["id"],
                       url_for(controller: 'registries', action: 'show', id: r["id"]),
                       class: 'btn btn_link m-0 p-0' %></td>
-        <td class="text-left">
+        <td class="text-start">
           <%= r["full_name"] %>&nbsp;
           <%= fa_text :asterisk, class_name: 'text-warning' if r["is_admin"] %>
         </td>
@@ -118,7 +120,7 @@
           <%= fa_text(:prescription_bottle_alt) if r["medicated"] > 0 %>
           <%= fa_text(:child) if r["pregnancy"] > 0 %>
           <% if r["comments"].present? %>
-            <span data-toggle="popover"
+            <span data-bs-toggle="popover"
                   data-placement="right"
                   data-trigger="hover focus"
                   title="Comentarios"
@@ -130,7 +132,7 @@
         <td><%= mail_to r["email"], fa_text(:envelope), class: 'btn btn_link m-0 p-0' %></td>
         <td><%= link_to fa_text(:print), badge_path(r["id"], format: 'pdf'), class: 'btn btn_link m-0 p-0' %></td>
         <td class="border-right">
-          <span data-toggle="popover"
+          <span data-bs-toggle="popover"
                 data-html="true"
                 data-placement="right"
                 data-container="body"
@@ -149,7 +151,7 @@
         <td><%= dim_zeros r["f_d3"], '-' %></td>
         <td><%= dim_zeros r["f_l1"], '-' %></td>
         <td class="border-left border-right">
-          <span data-toggle="popover"
+          <span data-bs-toggle="popover"
                 data-placement="right"
                 data-trigger="hover focus"
                 data-content="<%= r["l_rooms"] %>">
@@ -159,13 +161,13 @@
         <td><%= dim_zeros r["t_v1"], '-' %></td>
         <td><%= dim_zeros r["t_s1"], '-' %></td>
         <td><%= dim_zeros r["t_l2"], '-' %></td>
-        <td class="text-right">
+        <td class="text-end">
           <%= link_to number_to_currency(r["grand_total"], precision: 0),
                       registry_edit_payment_url(r["registry_id"]),
                       data: { turbo_stream: "modal" },
                       class: 'btn btn-sm btn-info w-100 p-1 m-0' %>
         </td>
-        <td class="text-right"><%= paid_format_colors r["amount_paid"], r["grand_total"] %></td>
+        <td class="text-end"><%= paid_format_colors r["amount_paid"], r["grand_total"] %></td>
         <td><%= render_bool r["is_present"], render_false_value: false, with_color: false %></td>
         <td></td>
       </tr>
@@ -181,11 +183,11 @@
     <h4>La búsqueda no encontró registros.</h4>
   </div>
   <% else %>
-  <div class="col-3 text-right">Registros: </div>
+  <div class="col-3 text-end">Registros: </div>
   <div class="col-9"><%= @registries.size %></div>
 </div>
 <div class="row">
-  <div class="col-3 text-right">Descargar: </div>
+  <div class="col-3 text-end">Descargar: </div>
   <div class="col-9">
     <%#= link_to fa_text(:file),
                 'users_path(format: :csv, params: @filters)',

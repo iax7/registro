@@ -1,6 +1,6 @@
-$grid-gutter-width: 14px;
-$enable-gradients: false;
-$enable-shadows: true;
+// Note: @import is deprecated in Dart Sass 3.0, but Bootstrap 5.3.x still uses it internally.
+// We need to wait for Bootstrap 6 (or a future 5.x update) that uses @use/@forward.
+// The deprecation warnings are from Bootstrap's internal code, not ours.
 
 @import "theme/variables";
 @import "bootstrap/scss/bootstrap";
@@ -16,7 +16,7 @@ $enable-shadows: true;
 }
 
 .female-color-darker {
-    color: fuchsia;
+    color: fuchsia !important;
 }
 
 .app-navbar-bottom-shadow {

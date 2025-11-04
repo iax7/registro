@@ -18,7 +18,7 @@
           <div class="btn-group">
             <%= link_to fa_text(:eye), event, class: 'btn btn-primary btn-sm' %>
             <%= link_to fa_text(:edit), edit_event_path(event), class: 'btn btn-primary btn-sm' %>
-            <%= link_to fa_text(:trash), event, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %>
+            <%= link_to fa_text(:trash), event, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %>
           </div>
         </td>
       </tr>
@@ -29,5 +29,5 @@
 <%= link_to 'New Event', new_event_path, class: 'btn btn-link' %>
 
 <br>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mainModal">Small modal</button>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mainModal">Small modal</button>
 <%= render 'layouts/modal', layout: false, locals: {title: 'Hola'} %>

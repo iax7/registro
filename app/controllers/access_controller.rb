@@ -46,8 +46,9 @@ class AccessController < ApplicationController
       end
     else
       # Incorrect Password
-      flash.now.alert = t('.invalid')
-      render 'access/login'
+      # Return a redirect so Turbo/form handlers don't error (Turbo expects a redirect after form POST)
+      flash[:alert] = t('.invalid')
+      redirect_to login_path, status: :see_other
     end
   end
 

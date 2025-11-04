@@ -1,6 +1,6 @@
 <%
-  form_grp_class = 'form-group row'
-  label_class = 'col-sm-4 col-form-label text-sm-right'
+  form_grp_class = 'mb-3 row'
+  label_class = 'col-sm-4 col-form-label text-sm-end'
   div_input_class = 'col-sm-6'
   input_class = 'form-control'
 %>
@@ -37,9 +37,12 @@
   <div class="<%= form_grp_class %>">
     <%= form.label :is_male, class: label_class %>
     <div class="<%= div_input_class %>">
-      <div class="btn-group btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-light <%= 'active' if  @user.is_male %>"><%= form.radio_button :is_male, true  %><%= show_sex_symbol true %>&nbsp;<%= t 'common.male' %></label>
-        <label class="btn btn-light <%= 'active' if !@user.is_male %>"><%= form.radio_button :is_male, false %><%= show_sex_symbol false %>&nbsp;<%= t 'common.female' %></label>
+      <div class="btn-group" role="group">
+        <input type="radio" class="btn-check" name="user[is_male]" id="user_is_male_true" value="true" autocomplete="off" <%= 'checked' if @user.is_male %>>
+        <label class="btn btn-outline-primary" for="user_is_male_true"><%= show_sex_symbol true %>&nbsp;<%= t 'common.male' %></label>
+
+        <input type="radio" class="btn-check" name="user[is_male]" id="user_is_male_false" value="false" autocomplete="off" <%= 'checked' if !@user.is_male %>>
+        <label class="btn btn-outline-primary" for="user_is_male_false"><%= show_sex_symbol false %>&nbsp;<%= t 'common.female' %></label>
       </div>
     </div>
   </div>
@@ -95,9 +98,7 @@
       <div class="<%= div_input_class %>">
         <div class="input-group add-on">
           <%= form.password_field :password_confirmation, id: :user_password_confirmation, class: 'form-control' %>
-          <div class="input-group-append" id="appended">
-            <span class="input-group-text bg-white"><i class="fas fa-circle" id="pwd_icon"></i></span>
-          </div>
+          <span class="input-group-text bg-white" id="appended"><i class="fas fa-circle" id="pwd_icon"></i></span>
         </div>
       </div>
     </div>
