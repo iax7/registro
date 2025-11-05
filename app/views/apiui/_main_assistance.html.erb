@@ -1,0 +1,76 @@
+<div id="divAssistance" style="display: none;">
+  <div class="row" id="divPerson">
+    <div class="col-xs-12">
+      <h1 class="text-center fix-h2 text-info" id="lblName"></h1>
+      <h3 class="text-center fix-h2" id="lblChurchCity"></h3>
+    </div>
+  </div>
+  <div class="row" id="divGuests">
+    <div class="col-1"><h2><i class="fa-solid fa-users"></i></h2></div>
+    <div class="col-11 table-responsive">
+      <table class="table table-striped table-2hover table-sm" id="tblGuest">
+        <thead class="table-primary">
+          <tr class="text-center">
+            <th>Id</th>
+            <th>Seudónimo</th>
+            <th width="60">Edad</th>
+            <th class="border-right">Relación</th>
+            <th class="friday-text"   data-bs-toggle="tooltip" title="Cena">V3</th>
+            <th class="saturday-text" data-bs-toggle="tooltip" title="Desayuno">S1</th>
+            <th class="saturday-text" data-bs-toggle="tooltip" title="Comida">S2</th>
+            <th class="saturday-text" data-bs-toggle="tooltip" title="Cena">S3</th>
+            <th class="sunday-text"   data-bs-toggle="tooltip" title="Desayuno">D1</th>
+            <th class="sunday-text"   data-bs-toggle="tooltip" title="Comida">D2</th>
+            <th class="sunday-text"   data-bs-toggle="tooltip" title="Cena">D3</th>
+            <th class="monday-text"   data-bs-toggle="tooltip" title="Desayuno">L1</th>
+            <th data-bs-toggle="tooltip" title="Viernes Ida" class="border-left">V</th>
+            <th data-bs-toggle="tooltip" title="Sábado Ida">S</th>
+            <th data-bs-toggle="tooltip" title="Lunes Regreso">L</th>
+            <th data-bs-toggle="tooltip" title="Hospedaje" class="border-left"><%= fa_text :bed %></th>
+            <th data-bs-toggle="tooltip" title="Cuarto"><%= fa_text :person_booth %></th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr class="text-center">
+            <td></td>
+            <td id="guest_tot"></td>
+            <td></td>
+            <td></td>
+            <td id="f_v3_tot"></td>
+            <td id="f_s1_tot"></td>
+            <td id="f_s2_tot"></td>
+            <td id="f_s3_tot"></td>
+            <td id="f_d1_tot"></td>
+            <td id="f_d2_tot"></td>
+            <td id="f_d3_tot"></td>
+            <td id="f_l1_tot"></td>
+            <td id="t_v1_tot"></td>
+            <td id="t_s1_tot"></td>
+            <td id="t_l2_tot"></td>
+            <td id="l_v_tot"></td>
+            <td id="l_room_tot"></td>
+          </tr>
+        </tfoot>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row" id="divPay">
+    <div class="col-1"><h2><i class="fa-solid fa-credit-card"></i></h2></div>
+    <div class="col-11">
+      <div class="row">
+        <div class="col-6 text-end"><h4 class="fix-h2">Gran Total:</h4></div>
+        <div class="col-3 text-end"><h4 class="fix-h2 font-monospace" id="lblPay1"></h4></div>
+      </div>
+      <div class="row">
+        <div class="col-6 text-end"><h4 class="fix-h2">Cantidad Pagada:</h4></div>
+        <div class="col-3 text-end"><h4 class="fix-h2 font-monospace" id="lblPay2"></h4></div>
+      </div>
+      <div class="row">
+        <div class="col-6 text-end"><h4 class="fix-h2">Total a Pagar:</h4></div>
+        <div class="col-3 text-end"><h4 class="fix-h2 font-monospace" id="lblPay3"></h4></div>
+      </div>
+    </div>
+  </div>
+</div>

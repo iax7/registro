@@ -5,9 +5,8 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <%#= favicon_link_tag 'favicon.ico' %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-  <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
 
     <%# FontAwesome 6 %>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -15,13 +14,6 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
-    <%=  yield :top if content_for?(:top) %>
-    <div class="container">
-      <%= yield %>
-    </div>
-    <br>
-    <footer style="margin-top: 15px;">
-      <div></div>
-    </footer>
+    <%= yield %>
   </body>
 </html>

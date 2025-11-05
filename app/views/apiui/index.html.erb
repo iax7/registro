@@ -1,545 +1,406 @@
 <% content_for :title, 'API Client' %>
-<% content_for :top do %>
-  <nav id="navAPIClient" class="navbar navbar-expand-sm navbar-dark bg-primary">
-    <%= link_to fa_text(:house), start_path, class: 'navbar-brand' %>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navapi" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="navapi">
-      <ul class="navbar-nav">
-        <li class="nav-item"><a href="#" class="nav-link" data-remote="true" id="lnkAssistance">Asistencia</a></li>
-        <li class="nav-item dropdown" id="mnuFood">
-          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Comidas</a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><h6 class="dropdown-header">Viernes</h6></li>
-            <li><a class="dropdown-item" href="#" data-remote="true" id="lnkV3">Cena</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><h6 class="dropdown-header">Sábado</h6></li>
-            <li><a class="dropdown-item" href="#" data-remote="true" id="lnkS1">Desayuno</a></li>
-            <li><a class="dropdown-item" href="#" data-remote="true" id="lnkS2">Comida</a></li>
-            <li><a class="dropdown-item" href="#" data-remote="true" id="lnkS3">Cena</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><h6 class="dropdown-header">Domingo</h6></li>
-            <li><a class="dropdown-item" href="#" data-remote="true" id="lnkD1">Desayuno</a></li>
-            <li><a class="dropdown-item" href="#" data-remote="true" id="lnkD2">Comida</a></li>
-            <li><a class="dropdown-item" href="#" data-remote="true" id="lnkD3">Cena</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><h6 class="dropdown-header">Lunes</h6></li>
-            <li><a class="dropdown-item" href="#" data-remote="true" id="lnkL1">Desayuno</a></li>
-          </ul>
-        </li>
-        <li class="nav-item"><a href="#" class="nav-link" data-remote="true" id="lnkPing">Ping</a></li>
-      </ul>
-      <div class="d-flex align-items-center">
-        <%= text_field_tag 'id', nil, placeholder: 'Id', autocomplete: false, class: 'form-control me-2' %>
-        <%= button_tag 'Aceptar', id: 'btnSend', class: 'btn btn-info' %>
-        <label id="lblLastId" class="navbar-text ms-2 mb-0"></label>
-      </div>
-    </div><!-- /.navbar-collapse -->
-  </nav>
+<%= render 'top_navbar' %>
+<%= render 'top_banner' %>
 
-  <div class="top-banner d-flex justify-content-between align-items-center">
-    <h1 class="ms-3">Asistencia</h1>
-    <%= image_tag 'spinners/ring.gif', id: 'spinner', style: 'display: none;' %>
+<div class="container">
+  <div id="divError" style="display: none;" class="alert error-bg" role="alert">
+    <h2>
+      <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> Error<br><br>
+      <span></span>
+    </h2>
+    <code class="font-monospace"></code>
+    <a href="#" id="lnkPerson" style="visibility: hidden;">Ver registro...</a>
   </div>
-<% end %>
-<%# ----------------------------------------------------------------------%>
 
-<div id="divError" style="display: none;" class="alert error-bg" role="alert">
-  <h2>
-    <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> Error<br><br>
-    <span></span>
-  </h2>
-  <code class="font-monospace"></code>
-  <a href="#" id="lnkPerson" style="visibility: hidden;">Ver registro...</a>
+  <div id="divMain" style="display: none;">
+    <%= render 'main_assistance' %>
+    <%= render 'main_food' %>
+  </div>
+
+  <div id="data" class="font-monospace"></div>
+  <%= audio_tag 'notify.mp3', autoplay: false, controls: false, id: 'mp3Notify' %>
+
+  <style>
+    #navAPIClient {
+      padding-bottom: 8px;
+      padding-top: 8px;
+    }
+    #lblLastId {
+      min-width: 200px;
+      white-space: nowrap;
+    }
+    .top-banner {
+      background: white;
+      color: #000;
+      height: 80px;
+      margin-bottom: 15px;
+    }
+    .fix-h2 {
+      margin-top: 5px !important;
+      margin-bottom: 5px !important;
+    }
+    .error-bg {
+      background-color: #9c0f00;
+      color: #ffffff;
+    }
+  </style>
+  <script>
+      /**
+       * Number.prototype.format(n, x)
+       *
+       * @param integer n: length of decimal
+       * @param integer x: length of sections
+       */
+      Number.prototype.format = function(n, x) {
+          var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+          return '$ ' + this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+      };
+
+      function hideAll() {
+          $('#spinner').hide();
+          $('#divError').hide();
+          $('#divMain').hide();
+          $('#divAssistance').hide();
+          $('#divFood').hide();
+      }
+
+      function play() {
+          var audio = $('#mp3Notify')[0];
+          audio.play();
+      }
+
+      function dimZero(value, zeroValue = '-') {
+          if (value == 0 ) {
+              return '<span class="text-muted">' + zeroValue + '</span>'
+          }
+          else {
+              return '<strong>' + value + '</strong>';
+          }
+      }
+
+      function renderBool(value) {
+          if (value) {
+              return '<i class="fa-solid fa-check text-success"></i>'
+          } else {
+              return ''
+          }
+      }
+
+      function showError(error) {
+          $('#divMain').hide();
+          $('#divError code').text('');
+          $('#divError h2 span').text('');
+          if (error.length > 100) {
+              $('#divError code').text(error);
+          } else {
+              $('#divError h2 span').text(error);
+          }
+          $('#divError').show();
+          $('body').addClass('error-bg');
+
+          var id = $('#lblLastId').find('strong').text();
+          $('#lnkPerson').attr("href", location.protocol+'//'+location.host + "/people/" + id);
+      }
+
+      function toggleSpinner() {
+          $('#spinner').toggle();
+      }
+
+      function resetStyle() {
+          $('body').removeClass('error-bg');
+      }
+
+      function setLinkAction(lnkId) {
+          resetStyle();
+          var text;
+          var bg_color = '#FFFFFF';
+          var fri_color = '#5cb85c';
+          var sat_color = '#5bc0de';
+          var sun_color = '#f0ad4e';
+          var mon_color = '#d9534f';
+          switch(lnkId) {
+              case 'lnkAssistance':
+                  bg_color = '#F0F0F0'; setData('PUT', '/api/v1/assist', renderAssistance); text = 'Asistencia'; break;
+              case 'lnkV3':
+                  bg_color = fri_color; setData('PUT', '/api/v1/food/v/3', renderFood); text = 'Cena Viernes'; break;
+              case 'lnkS1':
+                  bg_color = sat_color; setData('PUT', '/api/v1/food/s/1', renderFood); text = 'Desayuno Sábado'; break;
+              case 'lnkS2':
+                  bg_color = sat_color; setData('PUT', '/api/v1/food/s/2', renderFood); text = 'Comida Sábado'; break;
+              case 'lnkS3':
+                  bg_color = sat_color; setData('PUT', '/api/v1/food/s/3', renderFood); text = 'Cena Sábado'; break;
+              case 'lnkD1':
+                  bg_color = sun_color; setData('PUT', '/api/v1/food/d/1', renderFood); text = 'Desayuno Domingo'; break;
+              case 'lnkD2':
+                  bg_color = sun_color; setData('PUT', '/api/v1/food/d/2', renderFood); text = 'Comida Domingo'; break;
+              case 'lnkD3':
+                  bg_color = sun_color; setData('PUT', '/api/v1/food/d/3', renderFood); text = 'Cena Domingo'; break;
+              case 'lnkL1':
+                  bg_color = mon_color; setData('PUT', '/api/v1/food/l/1', renderFood); text = 'Desayuno Lunes'; break;
+              case 'lnkPing':
+                  bg_color = '#F0F0F0'; setData('GET', '/api/v1/ping', renderPing); text = 'Ping'; break;
+          }
+          var top_banner = $('.top-banner');
+          top_banner.css('background-color', bg_color);
+          $('.top-banner h1').text(text);
+      }
+
+      function debug(obj) {
+          let div = $('#data');
+          try {
+              div.text( JSON.stringify(obj) );
+          } catch(err) {
+              div.text( 'Error: ' + err + '\n' + obj );
+          }
+      }
+
+      function setData(rest_action, url, fcn_handler) {
+          var data_div = $('#data')[0];
+          jQuery.data( data_div, "api", {
+              type: rest_action,
+              url: url,
+              handler: fcn_handler
+          });
+      }
+      function getData() {
+          var data_div = $('#data')[0];
+          return jQuery.data( data_div, "api");
+      }
+
+      function setLastId(id) {
+          $('#lblLastId').html('Id Leído:&nbsp;&nbsp;<strong>' + id + '</strong>');
+      }
+
+      function renderAssistance(registry) {
+          // Clear Form
+          $('#lblName').text('');
+          $('#lblChurchCity').text('');
+          //Guests
+          $('#tblGuest tbody tr').remove();
+          //Pay
+          $('#divPay table tbody td').not('.col-1').text('');
+
+          if (!registry.is_paid) {
+              $('body').addClass('error-bg');
+          }
+
+          //Render new Data
+          $('#divAssistance').show();
+          let badge_html = $('<span class="badge bg-secondary"></span>').text(registry.user.id);
+          let name_html = $('<span></span>').text('  ' + registry.user.name + ' ' + registry.user.lastname);
+          $('#lblName').append(badge_html, name_html);
+          $('#lblChurchCity').text( registry.user.city + ', ' + registry.user.state );
+          //Guests
+          if (registry.guests.length < 1) {
+              registry.guests.push({nick: '-', age: '-', relation: '-'})
+          }
+          let table = $("#tblGuest tbody")[0];
+          for (index = 0; index < registry.guests.length; index++) {
+              let row = table.insertRow(table.rows.length);
+              let age = registry.guests[index].age;
+              row.className = 'text-center';
+              if ( age <= <%= @event.adult_age %> ) {
+                  row.className += " table-primary";
+              }
+
+              row.insertCell(0).innerHTML = registry.guests[index].id;
+              row.insertCell(1).innerHTML = registry.guests[index].nick;
+              row.insertCell(2).innerHTML = age;
+              rel = row.insertCell(3); rel.className = 'border-right';
+              rel.innerHTML = registry.guests[index].relation;
+              row.insertCell(4).innerHTML  = renderBool(registry.guests[index].f_v3);
+              row.insertCell(5).innerHTML  = renderBool(registry.guests[index].f_s1);
+              row.insertCell(6).innerHTML  = renderBool(registry.guests[index].f_s2);
+              row.insertCell(7).innerHTML  = renderBool(registry.guests[index].f_s3);
+              row.insertCell(8).innerHTML  = renderBool(registry.guests[index].f_d1);
+              row.insertCell(9).innerHTML  = renderBool(registry.guests[index].f_d2);
+              row.insertCell(10).innerHTML = renderBool(registry.guests[index].f_d3);
+              row.insertCell(11).innerHTML = renderBool(registry.guests[index].f_l1);
+              trans = row.insertCell(12); trans.className = 'border-left';
+              trans.innerHTML = renderBool(registry.guests[index].t_v1);
+              row.insertCell(13).innerHTML = renderBool(registry.guests[index].t_s1);
+              row.insertCell(14).innerHTML = renderBool(registry.guests[index].t_l2);
+              lod = row.insertCell(15); lod.className = 'border-left';
+              lod.innerHTML = renderBool(registry.guests[index].l_v);
+              row.insertCell(16).innerHTML = registry.guests[index].l_room;
+          }
+          // Footer
+          $("#guest_tot").text(registry.guests.length);
+          $("#f_v3_tot").text(registry.counts.f_v3);
+          $("#f_s1_tot").text(registry.counts.f_s1);
+          $("#f_s2_tot").text(registry.counts.f_s2);
+          $("#f_s3_tot").text(registry.counts.f_s3);
+          $("#f_d1_tot").text(registry.counts.f_d1);
+          $("#f_d2_tot").text(registry.counts.f_d2);
+          $("#f_d3_tot").text(registry.counts.f_d3);
+          $("#f_l1_tot").text(registry.counts.f_l1);
+          $("#t_v1_tot").text(registry.counts.t_v1);
+          $("#t_s1_tot").text(registry.counts.t_s1);
+          $("#t_l2_tot").text(registry.counts.t_l2);
+          $("#l_v_tot").text( registry.counts.l_v);
+          //debug(registry);
+
+          //Pay
+          $('#lblPay1').text( registry.grand_total.format(2) );
+          $('#lblPay2').text( registry.amount_paid.format(2) ).addClass('text-success');
+          $('#lblPay3').text( registry.amount_remaining.format(2) );
+      }
+      function renderFood(food) {
+          $('#divFood').show();
+          $('#lblFoodAction').text('Comprados:');
+          let lblTotal    = $('#divFood #lblTotal');
+          let lblConsumed = $('#divFood #lblConsumed');
+          let lblTipo     = $('#divFood #lblTipo');
+          let lblNumIn    = $('#divFood #lblNumIn');
+          let lblNickname = $('#divFood #lblNickname');
+          let imgWarning  = $('#divFood #imgWarning');
+          let imgChild    = $('#childIcon');
+
+          lblTotal.text(    food.requested );
+          lblConsumed.text( food.used );
+          lblNumIn.text(    food.used_sum );
+          lblNickname.text( food.name );
+          if( food.is_adult ) {
+              imgChild.hide();
+          } else {
+              imgChild.show();
+          }
+
+          if( food.foodtype == 'Niño' ) {
+              lblTipo.text(food.foodtype);
+          } else {
+              lblTipo.text('');
+          }
+
+          if( food.status == '' ) {
+              // No Errors, continue
+              if (food.count_real >= food.max_people_time && food.count_real < food.max_people_time + 10) {
+                  //Number of people is greater than expected
+                  imgWarning.show();
+                  play(); //Play Sound
+              } else {
+                  imgWarning.hide();
+              }
+          } else {
+              showError(food.status);
+              $('#lblFoodAction').text('Solicitados:');
+              $('#divMain').show();
+          }
+
+      }
+      function renderPing(ping) {
+          alert(ping.response);
+      }
+
+      $(
+          $('#navAPIClient li a').not('.dropdown-toggle').click( function() {
+              hideAll();
+              // Hide Bootstrap sub-Menu
+              $(".dropdown-menu,.dropdown").removeClass("show");
+                //$('.dropdown.open .dropdown-toggle').dropdown('toggle'); BS 3
+              var elementId = $( this ).attr('id');
+              setLinkAction(elementId);
+              // Remove class Active to all links
+              $(".navbar-nav").find(".active").removeClass("active");
+              // Sets active link
+              $(this).parent().addClass("active");
+              $(this).addClass("active");
+              var count_mnu = $('#mnuFood [class="active"]').length;
+              if (count_mnu > 0) {
+                  $('#mnuFood').addClass('active')
+              }
+
+              // prevents bootstrap link keep selected http://jsfiddle.net/Uqzqy/1/
+              $(this).blur();
+              return false;
+          }),
+          $(document).keypress(function(e) {
+              // enter
+              if(e.which == 13) {
+                  $('#btnSend').click();
+              }
+              // Numbers [0-9] and - sets focus
+              var is_number = (e.which >= 48 && e.which <= 57);
+              var is_minus = (e.which == 45);
+              if (is_number || is_minus) {
+                  var has_focus = $('#id').is(":focus")
+                  if ( !has_focus )
+                      $('#id').focus();
+              }
+              //debug(e.which);
+          }),
+          $('#btnSend').click( function(e) {
+              toggleSpinner();
+              resetStyle();
+              var api_action = getData();
+              var final_url = api_action.url;
+
+              var is_id_req = (api_action.type != 'GET' );
+              var id = $('#id').val();
+              if( id == '' && is_id_req ){
+                  showError('Escribe un ID primero.');
+                  toggleSpinner();
+                  return false;
+              }
+              if ( is_id_req) {
+                  final_url += "/" + id;
+              }
+
+              $.ajax({
+                  type: api_action.type,
+                  url: final_url,
+                  dataType: "json",
+                  headers: {
+                      "Authorization": "Basic <%= api_auth_base64 %>"
+                  },
+                  success: function (result) {
+                      $('#divError').hide();
+                      $('#divMain').show();
+
+                      //debug(result);
+                      api_action.handler(result);
+                  },
+                  error: function (request, status, error) {
+                      let text = request.responseText;
+                      let error_msg;
+                      if ( text == '' ) {
+                          error_msg = error;
+                      } else {
+                          try {
+                              json = JSON.parse(text);
+                              error_msg = json.status;
+                          } catch(e) {
+                              error_msg = text;
+                          }
+                      }
+
+                      setLastId(id);
+                      showError(error_msg);
+                  },
+                  complete: function(jqXHR, textStatus) {
+                      setLastId(id);
+                      txtId = $('#id');
+                      txtId.val('');
+                      toggleSpinner();
+                      txtId.focus();
+                  }
+              });
+          })
+      );
+
+      // Initialize page on load
+      $(document).ready(function() {
+          setLinkAction('lnkAssistance');
+          hideAll();
+
+          // Initialize Bootstrap 5 components
+          document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(function(el) {
+              new bootstrap.Dropdown(el);
+          });
+          document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
+              new bootstrap.Tooltip(el);
+          });
+      });
+  </script>
 </div>
-
-<div id="divMain" style="display: none;">
-  <div id="divAssistance" style="display: none;">
-    <div class="row" id="divPerson">
-      <div class="col-xs-12">
-        <h1 class="text-center fix-h2 text-info" id="lblName"></h1>
-        <h3 class="text-center fix-h2" id="lblChurchCity"></h3>
-      </div>
-    </div>
-    <div class="row" id="divGuests">
-      <div class="col-1"><h2><i class="fa-solid fa-users"></i></h2></div>
-      <div class="col-11 table-responsive">
-        <table class="table table-striped table-2hover table-sm" id="tblGuest">
-          <thead class="table-primary">
-            <tr class="text-center">
-              <th>Id</th>
-              <th>Seudónimo</th>
-              <th width="60">Edad</th>
-              <th class="border-right">Relación</th>
-              <th class="friday-text"   data-bs-toggle="tooltip" title="Cena">V3</th>
-              <th class="saturday-text" data-bs-toggle="tooltip" title="Desayuno">S1</th>
-              <th class="saturday-text" data-bs-toggle="tooltip" title="Comida">S2</th>
-              <th class="saturday-text" data-bs-toggle="tooltip" title="Cena">S3</th>
-              <th class="sunday-text"   data-bs-toggle="tooltip" title="Desayuno">D1</th>
-              <th class="sunday-text"   data-bs-toggle="tooltip" title="Comida">D2</th>
-              <th class="sunday-text"   data-bs-toggle="tooltip" title="Cena">D3</th>
-              <th class="monday-text"   data-bs-toggle="tooltip" title="Desayuno">L1</th>
-              <th data-bs-toggle="tooltip" title="Viernes Ida" class="border-left">V</th>
-              <th data-bs-toggle="tooltip" title="Sábado Ida">S</th>
-              <th data-bs-toggle="tooltip" title="Lunes Regreso">L</th>
-              <th data-bs-toggle="tooltip" title="Hospedaje" class="border-left"><%= fa_text :bed %></th>
-              <th data-bs-toggle="tooltip" title="Cuarto"><%= fa_text :person_booth %></th>
-            </tr>
-          </thead>
-          <tfoot>
-            <tr class="text-center">
-              <td></td>
-              <td id="guest_tot"></td>
-              <td></td>
-              <td></td>
-              <td id="f_v3_tot"></td>
-              <td id="f_s1_tot"></td>
-              <td id="f_s2_tot"></td>
-              <td id="f_s3_tot"></td>
-              <td id="f_d1_tot"></td>
-              <td id="f_d2_tot"></td>
-              <td id="f_d3_tot"></td>
-              <td id="f_l1_tot"></td>
-              <td id="t_v1_tot"></td>
-              <td id="t_s1_tot"></td>
-              <td id="t_l2_tot"></td>
-              <td id="l_v_tot"></td>
-              <td id="l_room_tot"></td>
-            </tr>
-          </tfoot>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="row" id="divPay">
-      <div class="col-1"><h2><i class="fa-solid fa-credit-card"></i></h2></div>
-      <div class="col-11">
-        <div class="row">
-          <div class="col-6 text-end"><h4 class="fix-h2">Gran Total:</h4></div>
-          <div class="col-3 text-end"><h4 class="fix-h2 font-monospace" id="lblPay1"></h4></div>
-        </div>
-        <div class="row">
-          <div class="col-6 text-end"><h4 class="fix-h2">Cantidad Pagada:</h4></div>
-          <div class="col-3 text-end"><h4 class="fix-h2 font-monospace" id="lblPay2"></h4></div>
-        </div>
-        <div class="row">
-          <div class="col-6 text-end"><h4 class="fix-h2">Total a Pagar:</h4></div>
-          <div class="col-3 text-end"><h4 class="fix-h2 font-monospace" id="lblPay3"></h4></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="divFood" style="display: none;">
-    <div class="row">
-      <div class="col-4 text-end"><h2>Nombre: </h2></div>
-      <div class="col-8"><h2><strong id="lblNickname"></strong>&nbsp;<i class="fa-solid fa-child" id="childIcon"></i></h2></div>
-    </div>
-    <div class="row">
-      <div class="col-4 text-end"><h2 id="lblFoodAction">lblFoodAction</h2></div>
-      <div class="col-8"><h2><strong id="lblTotal"></strong></h2></div>
-    </div>
-    <div class="row">
-      <div class="col-4 text-end"><h2>Usados: </h2></div>
-      <div class="col-8"><h2><strong id="lblConsumed"></strong></h2></div>
-    </div>
-    <hr>
-    <div class="row">
-      <div class="col-10 text-end"><h2>Personas en Comedor: </h2></div>
-      <div class="col-2"><h2>
-        <strong id="lblNumIn"></strong>
-        <span class="fa-solid fa-triangle-exclamation text-danger" id="imgWarning" style="display: none;"></span></h2>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="data" class="font-monospace"></div>
-<%= audio_tag 'notify.mp3', autoplay: false, controls: false, id: 'mp3Notify' %>
-
-<style>
-  #navAPIClient {
-    padding-bottom: 8px;
-    padding-top: 8px;
-  }
-  #lblLastId {
-    min-width: 200px;
-    white-space: nowrap;
-  }
-  .top-banner {
-    background: white;
-    color: #000;
-    height: 80px;
-    margin-bottom: 15px;
-  }
-  .fix-h2 {
-    margin-top: 5px !important;
-    margin-bottom: 5px !important;
-  }
-  .error-bg {
-    background-color: #9c0f00;
-    color: #ffffff;
-  }
-</style>
-<script>
-    /**
-     * Number.prototype.format(n, x)
-     *
-     * @param integer n: length of decimal
-     * @param integer x: length of sections
-     */
-    Number.prototype.format = function(n, x) {
-        var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
-        return '$ ' + this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
-    };
-
-    function hideAll() {
-        $('#spinner').hide();
-        $('#divError').hide();
-        $('#divMain').hide();
-        $('#divAssistance').hide();
-        $('#divFood').hide();
-    }
-
-    function play() {
-        var audio = $('#mp3Notify')[0];
-        audio.play();
-    }
-
-    function dimZero(value, zeroValue = '-') {
-        if (value == 0 ) {
-            return '<span class="text-muted">' + zeroValue + '</span>'
-        }
-        else {
-            return '<strong>' + value + '</strong>';
-        }
-    }
-
-    function renderBool(value) {
-        if (value) {
-            return '<i class="fa-solid fa-check text-success"></i>'
-        } else {
-            return ''
-        }
-    }
-
-    function showError(error) {
-        $('#divMain').hide();
-        $('#divError code').text('');
-        $('#divError h2 span').text('');
-        if (error.length > 100) {
-            $('#divError code').text(error);
-        } else {
-            $('#divError h2 span').text(error);
-        }
-        $('#divError').show();
-        $('body').addClass('error-bg');
-
-        var id = $('#lblLastId').find('strong').text();
-        $('#lnkPerson').attr("href", location.protocol+'//'+location.host + "/people/" + id);
-    }
-
-    function toggleSpinner() {
-        $('#spinner').toggle();
-    }
-
-    function resetStyle() {
-        $('body').removeClass('error-bg');
-    }
-
-    function setLinkAction(lnkId) {
-        resetStyle();
-        var text;
-        var bg_color = '#FFFFFF';
-        var fri_color = '#5cb85c';
-        var sat_color = '#5bc0de';
-        var sun_color = '#f0ad4e';
-        var mon_color = '#d9534f';
-        switch(lnkId) {
-            case 'lnkAssistance':
-                bg_color = '#F0F0F0'; setData('PUT', '/api/v1/assist', renderAssistance); text = 'Asistencia'; break;
-            case 'lnkV3':
-                bg_color = fri_color; setData('PUT', '/api/v1/food/v/3', renderFood); text = 'Cena Viernes'; break;
-            case 'lnkS1':
-                bg_color = sat_color; setData('PUT', '/api/v1/food/s/1', renderFood); text = 'Desayuno Sábado'; break;
-            case 'lnkS2':
-                bg_color = sat_color; setData('PUT', '/api/v1/food/s/2', renderFood); text = 'Comida Sábado'; break;
-            case 'lnkS3':
-                bg_color = sat_color; setData('PUT', '/api/v1/food/s/3', renderFood); text = 'Cena Sábado'; break;
-            case 'lnkD1':
-                bg_color = sun_color; setData('PUT', '/api/v1/food/d/1', renderFood); text = 'Desayuno Domingo'; break;
-            case 'lnkD2':
-                bg_color = sun_color; setData('PUT', '/api/v1/food/d/2', renderFood); text = 'Comida Domingo'; break;
-            case 'lnkD3':
-                bg_color = sun_color; setData('PUT', '/api/v1/food/d/3', renderFood); text = 'Cena Domingo'; break;
-            case 'lnkL1':
-                bg_color = mon_color; setData('PUT', '/api/v1/food/l/1', renderFood); text = 'Desayuno Lunes'; break;
-            case 'lnkPing':
-                bg_color = '#F0F0F0'; setData('GET', '/api/v1/ping', renderPing); text = 'Ping'; break;
-        }
-        var top_banner = $('.top-banner');
-        top_banner.css('background-color', bg_color);
-        $('.top-banner h1').text(text);
-    }
-
-    function debug(obj) {
-        let div = $('#data');
-        try {
-            div.text( JSON.stringify(obj) );
-        } catch(err) {
-            div.text( 'Error: ' + err + '\n' + obj );
-        }
-    }
-
-    function setData(rest_action, url, fcn_handler) {
-        var data_div = $('#data')[0];
-        jQuery.data( data_div, "api", {
-            type: rest_action,
-            url: url,
-            handler: fcn_handler
-        });
-    }
-    function getData() {
-        var data_div = $('#data')[0];
-        return jQuery.data( data_div, "api");
-    }
-
-    function setLastId(id) {
-        $('#lblLastId').html('Id Leído:&nbsp;&nbsp;<strong>' + id + '</strong>');
-    }
-
-    function renderAssistance(registry) {
-        // Clear Form
-        $('#lblName').text('');
-        $('#lblChurchCity').text('');
-        //Guests
-        $('#tblGuest tbody tr').remove();
-        //Pay
-        $('#divPay table tbody td').not('.col-1').text('');
-
-        if (!registry.is_paid) {
-            $('body').addClass('error-bg');
-        }
-
-        //Render new Data
-        $('#divAssistance').show();
-        let badge_html = $('<span class="badge bg-secondary"></span>').text(registry.user.id);
-        let name_html = $('<span></span>').text('  ' + registry.user.name + ' ' + registry.user.lastname);
-        $('#lblName').append(badge_html, name_html);
-        $('#lblChurchCity').text( registry.user.city + ', ' + registry.user.state );
-        //Guests
-        if (registry.guests.length < 1) {
-            registry.guests.push({nick: '-', age: '-', relation: '-'})
-        }
-        let table = $("#tblGuest tbody")[0];
-        for (index = 0; index < registry.guests.length; index++) {
-            let row = table.insertRow(table.rows.length);
-            let age = registry.guests[index].age;
-            row.className = 'text-center';
-            if ( age <= <%= @event.adult_age %> ) {
-                row.className += " table-primary";
-            }
-
-            row.insertCell(0).innerHTML = registry.guests[index].id;
-            row.insertCell(1).innerHTML = registry.guests[index].nick;
-            row.insertCell(2).innerHTML = age;
-            rel = row.insertCell(3); rel.className = 'border-right';
-            rel.innerHTML = registry.guests[index].relation;
-            row.insertCell(4).innerHTML  = renderBool(registry.guests[index].f_v3);
-            row.insertCell(5).innerHTML  = renderBool(registry.guests[index].f_s1);
-            row.insertCell(6).innerHTML  = renderBool(registry.guests[index].f_s2);
-            row.insertCell(7).innerHTML  = renderBool(registry.guests[index].f_s3);
-            row.insertCell(8).innerHTML  = renderBool(registry.guests[index].f_d1);
-            row.insertCell(9).innerHTML  = renderBool(registry.guests[index].f_d2);
-            row.insertCell(10).innerHTML = renderBool(registry.guests[index].f_d3);
-            row.insertCell(11).innerHTML = renderBool(registry.guests[index].f_l1);
-            trans = row.insertCell(12); trans.className = 'border-left';
-            trans.innerHTML = renderBool(registry.guests[index].t_v1);
-            row.insertCell(13).innerHTML = renderBool(registry.guests[index].t_s1);
-            row.insertCell(14).innerHTML = renderBool(registry.guests[index].t_l2);
-            lod = row.insertCell(15); lod.className = 'border-left';
-            lod.innerHTML = renderBool(registry.guests[index].l_v);
-            row.insertCell(16).innerHTML = registry.guests[index].l_room;
-        }
-        // Footer
-        $("#guest_tot").text(registry.guests.length);
-        $("#f_v3_tot").text(registry.counts.f_v3);
-        $("#f_s1_tot").text(registry.counts.f_s1);
-        $("#f_s2_tot").text(registry.counts.f_s2);
-        $("#f_s3_tot").text(registry.counts.f_s3);
-        $("#f_d1_tot").text(registry.counts.f_d1);
-        $("#f_d2_tot").text(registry.counts.f_d2);
-        $("#f_d3_tot").text(registry.counts.f_d3);
-        $("#f_l1_tot").text(registry.counts.f_l1);
-        $("#t_v1_tot").text(registry.counts.t_v1);
-        $("#t_s1_tot").text(registry.counts.t_s1);
-        $("#t_l2_tot").text(registry.counts.t_l2);
-        $("#l_v_tot").text( registry.counts.l_v);
-        //debug(registry);
-
-        //Pay
-        $('#lblPay1').text( registry.grand_total.format(2) );
-        $('#lblPay2').text( registry.amount_paid.format(2) ).addClass('text-success');
-        $('#lblPay3').text( registry.amount_remaining.format(2) );
-    }
-    function renderFood(food) {
-        $('#divFood').show();
-        $('#lblFoodAction').text('Comprados:');
-        let lblTotal    = $('#divFood #lblTotal');
-        let lblConsumed = $('#divFood #lblConsumed');
-        let lblTipo     = $('#divFood #lblTipo');
-        let lblNumIn    = $('#divFood #lblNumIn');
-        let lblNickname = $('#divFood #lblNickname');
-        let imgWarning  = $('#divFood #imgWarning');
-        let imgChild    = $('#childIcon');
-
-        lblTotal.text(    food.requested );
-        lblConsumed.text( food.used );
-        lblNumIn.text(    food.used_sum );
-        lblNickname.text( food.name );
-        if( food.is_adult ) {
-            imgChild.hide();
-        } else {
-            imgChild.show();
-        }
-
-        if( food.foodtype == 'Niño' ) {
-            lblTipo.text(food.foodtype);
-        } else {
-            lblTipo.text('');
-        }
-
-        if( food.status == '' ) {
-            // No Errors, continue
-            if (food.count_real >= food.max_people_time && food.count_real < food.max_people_time + 10) {
-                //Number of people is greater than expected
-                imgWarning.show();
-                play(); //Play Sound
-            } else {
-                imgWarning.hide();
-            }
-        } else {
-            showError(food.status);
-            $('#lblFoodAction').text('Solicitados:');
-            $('#divMain').show();
-        }
-
-    }
-    function renderPing(ping) {
-        alert(ping.response);
-    }
-
-    $(
-        $('#navAPIClient li a').not('.dropdown-toggle').click( function() {
-            hideAll();
-            // Hide Bootstrap sub-Menu
-            $(".dropdown-menu,.dropdown").removeClass("show");
-              //$('.dropdown.open .dropdown-toggle').dropdown('toggle'); BS 3
-            var elementId = $( this ).attr('id');
-            setLinkAction(elementId);
-            // Remove class Active to all links
-            $(".navbar-nav").find(".active").removeClass("active");
-            // Sets active link
-            $(this).parent().addClass("active");
-            $(this).addClass("active");
-            var count_mnu = $('#mnuFood [class="active"]').length;
-            if (count_mnu > 0) {
-                $('#mnuFood').addClass('active')
-            }
-
-            // prevents bootstrap link keep selected http://jsfiddle.net/Uqzqy/1/
-            $(this).blur();
-            return false;
-        }),
-        $(document).keypress(function(e) {
-            // enter
-            if(e.which == 13) {
-                $('#btnSend').click();
-            }
-            // Numbers [0-9] and - sets focus
-            var is_number = (e.which >= 48 && e.which <= 57);
-            var is_minus = (e.which == 45);
-            if (is_number || is_minus) {
-                var has_focus = $('#id').is(":focus")
-                if ( !has_focus )
-                    $('#id').focus();
-            }
-            //debug(e.which);
-        }),
-        $('#btnSend').click( function(e) {
-            toggleSpinner();
-            resetStyle();
-            var api_action = getData();
-            var final_url = api_action.url;
-
-            var is_id_req = (api_action.type != 'GET' );
-            var id = $('#id').val();
-            if( id == '' && is_id_req ){
-                showError('Escribe un ID primero.');
-                toggleSpinner();
-                return false;
-            }
-            if ( is_id_req) {
-                final_url += "/" + id;
-            }
-
-            $.ajax({
-                type: api_action.type,
-                url: final_url,
-                dataType: "json",
-                headers: {
-                    "Authorization": "Basic <%= api_auth_base64 %>"
-                },
-                success: function (result) {
-                    $('#divError').hide();
-                    $('#divMain').show();
-
-                    //debug(result);
-                    api_action.handler(result);
-                },
-                error: function (request, status, error) {
-                    let text = request.responseText;
-                    let error_msg;
-                    if ( text == '' ) {
-                        error_msg = error;
-                    } else {
-                        try {
-                            json = JSON.parse(text);
-                            error_msg = json.status;
-                        } catch(e) {
-                            error_msg = text;
-                        }
-                    }
-
-                    setLastId(id);
-                    showError(error_msg);
-                },
-                complete: function(jqXHR, textStatus) {
-                    setLastId(id);
-                    txtId = $('#id');
-                    txtId.val('');
-                    toggleSpinner();
-                    txtId.focus();
-                }
-            });
-        })
-    );
-
-    // Initialize page on load
-    $(document).ready(function() {
-        setLinkAction('lnkAssistance');
-        hideAll();
-
-        // Initialize Bootstrap 5 components
-        document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(function(el) {
-            new bootstrap.Dropdown(el);
-        });
-        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
-            new bootstrap.Tooltip(el);
-        });
-    });
-</script>
