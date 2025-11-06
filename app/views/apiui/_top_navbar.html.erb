@@ -6,33 +6,33 @@
 
   <div class="collapse navbar-collapse" id="navapi">
     <ul class="navbar-nav">
-      <li class="nav-item"><a href="#" class="nav-link" data-remote="true" id="lnkAssistance" data-action="click->api#selectOption" data-api-option-param="Asst">Asistencia</a></li>
+      <li class="nav-item"><a href="#" class="nav-link" data-remote="true" id="lnkAssistance" data-action="click->api#selectOption:prevent" data-api-option-param="Asst">Asistencia</a></li>
       <li class="nav-item dropdown" id="mnuFood">
         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Comidas</a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
           <li><h6 class="dropdown-header">Viernes</h6></li>
-          <li><a class="dropdown-item" href="#" data-remote="true" id="lnkV3" data-action="click->api#selectOption" data-api-option-param="F_V3">Cena</a></li>
+          <li><a class="dropdown-item" href="#" data-remote="true" id="lnkV3" data-action="click->api#selectOption:prevent" data-api-option-param="F_V3">Cena</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><h6 class="dropdown-header">Sábado</h6></li>
-          <li><a class="dropdown-item" href="#" data-remote="true" id="lnkS1" data-action="click->api#selectOption" data-api-option-param="F_S1">Desayuno</a></li>
-          <li><a class="dropdown-item" href="#" data-remote="true" id="lnkS2" data-action="click->api#selectOption" data-api-option-param="F_S2">Comida</a></li>
-          <li><a class="dropdown-item" href="#" data-remote="true" id="lnkS3" data-action="click->api#selectOption" data-api-option-param="F_S3">Cena</a></li>
+          <li><a class="dropdown-item" href="#" data-remote="true" id="lnkS1" data-action="click->api#selectOption:prevent" data-api-option-param="F_S1">Desayuno</a></li>
+          <li><a class="dropdown-item" href="#" data-remote="true" id="lnkS2" data-action="click->api#selectOption:prevent" data-api-option-param="F_S2">Comida</a></li>
+          <li><a class="dropdown-item" href="#" data-remote="true" id="lnkS3" data-action="click->api#selectOption:prevent" data-api-option-param="F_S3">Cena</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><h6 class="dropdown-header">Domingo</h6></li>
-          <li><a class="dropdown-item" href="#" data-remote="true" id="lnkD1" data-action="click->api#selectOption" data-api-option-param="F_D1">Desayuno</a></li>
-          <li><a class="dropdown-item" href="#" data-remote="true" id="lnkD2" data-action="click->api#selectOption" data-api-option-param="F_D2">Comida</a></li>
-          <li><a class="dropdown-item" href="#" data-remote="true" id="lnkD3" data-action="click->api#selectOption" data-api-option-param="F_D3">Cena</a></li>
+          <li><a class="dropdown-item" href="#" data-remote="true" id="lnkD1" data-action="click->api#selectOption:prevent" data-api-option-param="F_D1">Desayuno</a></li>
+          <li><a class="dropdown-item" href="#" data-remote="true" id="lnkD2" data-action="click->api#selectOption:prevent" data-api-option-param="F_D2">Comida</a></li>
+          <li><a class="dropdown-item" href="#" data-remote="true" id="lnkD3" data-action="click->api#selectOption:prevent" data-api-option-param="F_D3">Cena</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><h6 class="dropdown-header">Lunes</h6></li>
-          <li><a class="dropdown-item" href="#" data-remote="true" id="lnkL1" data-action="click->api#selectOption" data-api-option-param="F_L1">Desayuno</a></li>
+          <li><a class="dropdown-item" href="#" data-remote="true" id="lnkL1" data-action="click->api#selectOption:prevent" data-api-option-param="F_L1">Desayuno</a></li>
         </ul>
       </li>
-      <li class="nav-item"><a href="#" class="nav-link" data-remote="true" id="lnkPing" data-action="click->api#selectOption" data-api-option-param="Ping">Ping</a></li>
+      <li class="nav-item"><a href="#" class="nav-link" data-remote="true" id="lnkPing" data-action="click->api#selectOption:prevent" data-api-option-param="Ping">Ping</a></li>
     </ul>
     <div class="d-flex align-items-center">
       <%= text_field_tag 'id', nil, placeholder: 'Id', autocomplete: false, class: 'form-control me-2', data: { api_target: "id" } %>
       <%= button_tag 'Aceptar', id: 'btnSend', class: 'btn btn-info', data: { action: "click->api#submit" } %>
-      <label id="lblLastId" class="navbar-text ms-2 mb-0"></label>
+      <label id="lblLastId" class="navbar-text ms-2 mb-0" data-api-target="lastId"></label>
     </div>
   </div>
 </nav>

@@ -13,7 +13,7 @@
 
     <%= csrf_meta_tags %>
   </head>
-  <body>
+  <body data-controller="api" data-api-creds-value="<%= api_auth_base64 %>">
     <%= yield %>
   </body>
 </html>

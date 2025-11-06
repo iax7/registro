@@ -1,18 +1,10 @@
 <% content_for :title, 'API Client' %>
 
-<div data-controller="api" data-api-creds-value="<%= api_auth_base64 %>">
 <%= render 'top_navbar' %>
 <%= render 'top_banner' %>
-</div>
 
 <div class="container">
-  <div id="divError" style="display: none;" class="alert error-bg" role="alert">
-    <h2>
-      <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> Error<br><br>
-      <span></span>
-    </h2>
-    <code class="font-monospace"></code>
-    <a href="#" id="lnkPerson" style="visibility: hidden;">Ver registro...</a>
+  <div id="divError" style="display: none;" class="alert error-bg" role="alert" data-api-target="error">
   </div>
 
   <div id="divMain" style="display: none;">
@@ -20,7 +12,7 @@
     <%= render 'main_food' %>
   </div>
 
-  <div id="data" class="font-monospace"></div>
+  <pre><code data-api-target="debug"></code></pre>
   <%= audio_tag 'notify.mp3', autoplay: false, controls: false, id: 'mp3Notify' %>
 
   <style>
@@ -105,46 +97,6 @@
           $('#lnkPerson').attr("href", location.protocol+'//'+location.host + "/people/" + id);
       }
 
-      function toggleSpinner() {
-          $('#spinner').toggle();
-      }
-
-      function resetStyle() {
-          $('body').removeClass('error-bg');
-      }
-
-      function setLinkAction(lnkId) {
-          resetStyle();
-          var text;
-          var bg_color = '#FFFFFF';
-          var fri_color = '#5cb85c';
-          var sat_color = '#5bc0de';
-          var sun_color = '#f0ad4e';
-          var mon_color = '#d9534f';
-          switch(lnkId) {
-              case 'lnkAssistance':
-                  setData('PUT', '/api/v1/assist', renderAssistance); break;
-              case 'lnkV3':
-                  setData('PUT', '/api/v1/food/v/3', renderFood); break;
-              case 'lnkS1':
-                  setData('PUT', '/api/v1/food/s/1', renderFood); break;
-              case 'lnkS2':
-                  setData('PUT', '/api/v1/food/s/2', renderFood); break;
-              case 'lnkS3':
-                  setData('PUT', '/api/v1/food/s/3', renderFood); break;
-              case 'lnkD1':
-                  setData('PUT', '/api/v1/food/d/1', renderFood); break;
-              case 'lnkD2':
-                  setData('PUT', '/api/v1/food/d/2', renderFood); break;
-              case 'lnkD3':
-                  setData('PUT', '/api/v1/food/d/3', renderFood); break;
-              case 'lnkL1':
-                  setData('PUT', '/api/v1/food/l/1', renderFood); break;
-              case 'lnkPing':
-                  setData('GET', '/api/v1/ping', renderPing); break;
-          }
-      }
-
       function debug(obj) {
           let div = $('#data');
           try {
@@ -154,18 +106,7 @@
           }
       }
 
-      function setData(rest_action, url, fcn_handler) {
-          var data_div = $('#data')[0];
-          jQuery.data( data_div, "api", {
-              type: rest_action,
-              url: url,
-              handler: fcn_handler
-          });
-      }
-      function getData() {
-          var data_div = $('#data')[0];
-          return jQuery.data( data_div, "api");
-      }
+
 
       function setLastId(id) {
           $('#lblLastId').html('Id Leído:&nbsp;&nbsp;<strong>' + id + '</strong>');
@@ -293,13 +234,13 @@
       }
 
       $(
-          $('#navAPIClient li a').not('.dropdown-toggle').click( function() {
+          $('#navAPIClient li a XXX').not('.dropdown-toggle').click( function() {
               hideAll();
               // Hide Bootstrap sub-Menu
               $(".dropdown-menu,.dropdown").removeClass("show");
                 //$('.dropdown.open .dropdown-toggle').dropdown('toggle'); BS 3
               var elementId = $( this ).attr('id');
-              setLinkAction(elementId);
+              //setLinkAction(elementId);
               // Remove class Active to all links
               $(".navbar-nav").find(".active").removeClass("active");
               // Sets active link
@@ -329,9 +270,9 @@
               }
               //debug(e.which);
           }),
-          $('#btnSend').click( function(e) {
-              toggleSpinner();
-              resetStyle();
+          $('#btnSend XX').click( function(e) {
+              //toggleSpinner();
+              //resetStyle();
               var api_action = getData();
               var final_url = api_action.url;
 
@@ -339,7 +280,7 @@
               var id = $('#id').val();
               if( id == '' && is_id_req ){
                   showError('Escribe un ID primero.');
-                  toggleSpinner();
+                  //toggleSpinner();
                   return false;
               }
               if ( is_id_req) {
@@ -381,7 +322,7 @@
                       setLastId(id);
                       txtId = $('#id');
                       txtId.val('');
-                      toggleSpinner();
+                      //toggleSpinner();
                       txtId.focus();
                   }
               });
@@ -390,7 +331,6 @@
 
       // Initialize page on load
       $(document).ready(function() {
-          setLinkAction('lnkAssistance');
           hideAll();
 
           // Initialize Bootstrap 5 components
