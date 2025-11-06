@@ -1,4 +1,4 @@
-<div class="top-banner d-flex justify-content-between align-items-center">
-  <h1 class="ms-3">Asistencia</h1>
-  <%= image_tag 'spinners/ring.gif' , id: 'spinner' , style: 'display: none;' %>
+<div class="top-banner d-flex justify-content-between align-items-center" data-api-target="banner">
+  <h1 class="ms-3" data-api-target="bannerTitle">Asistencia</h1>
+  <%= image_tag 'spinners/ring.gif' , id: 'spinner' , style: 'display: none;', data: { api_target: "bannerSpinner" } %>
 </div>

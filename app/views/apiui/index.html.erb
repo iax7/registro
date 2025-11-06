@@ -1,7 +1,9 @@
 <% content_for :title, 'API Client' %>
 
+<div data-controller="api" data-api-creds-value="<%= api_auth_base64 %>">
 <%= render 'top_navbar' %>
 <%= render 'top_banner' %>
+</div>
 
 <div class="container">
   <div id="divError" style="display: none;" class="alert error-bg" role="alert">
@@ -121,29 +123,26 @@
           var mon_color = '#d9534f';
           switch(lnkId) {
               case 'lnkAssistance':
-                  bg_color = '#F0F0F0'; setData('PUT', '/api/v1/assist', renderAssistance); text = 'Asistencia'; break;
+                  setData('PUT', '/api/v1/assist', renderAssistance); break;
               case 'lnkV3':
-                  bg_color = fri_color; setData('PUT', '/api/v1/food/v/3', renderFood); text = 'Cena Viernes'; break;
+                  setData('PUT', '/api/v1/food/v/3', renderFood); break;
               case 'lnkS1':
-                  bg_color = sat_color; setData('PUT', '/api/v1/food/s/1', renderFood); text = 'Desayuno Sábado'; break;
+                  setData('PUT', '/api/v1/food/s/1', renderFood); break;
               case 'lnkS2':
-                  bg_color = sat_color; setData('PUT', '/api/v1/food/s/2', renderFood); text = 'Comida Sábado'; break;
+                  setData('PUT', '/api/v1/food/s/2', renderFood); break;
               case 'lnkS3':
-                  bg_color = sat_color; setData('PUT', '/api/v1/food/s/3', renderFood); text = 'Cena Sábado'; break;
+                  setData('PUT', '/api/v1/food/s/3', renderFood); break;
               case 'lnkD1':
-                  bg_color = sun_color; setData('PUT', '/api/v1/food/d/1', renderFood); text = 'Desayuno Domingo'; break;
+                  setData('PUT', '/api/v1/food/d/1', renderFood); break;
               case 'lnkD2':
-                  bg_color = sun_color; setData('PUT', '/api/v1/food/d/2', renderFood); text = 'Comida Domingo'; break;
+                  setData('PUT', '/api/v1/food/d/2', renderFood); break;
               case 'lnkD3':
-                  bg_color = sun_color; setData('PUT', '/api/v1/food/d/3', renderFood); text = 'Cena Domingo'; break;
+                  setData('PUT', '/api/v1/food/d/3', renderFood); break;
               case 'lnkL1':
-                  bg_color = mon_color; setData('PUT', '/api/v1/food/l/1', renderFood); text = 'Desayuno Lunes'; break;
+                  setData('PUT', '/api/v1/food/l/1', renderFood); break;
               case 'lnkPing':
-                  bg_color = '#F0F0F0'; setData('GET', '/api/v1/ping', renderPing); text = 'Ping'; break;
+                  setData('GET', '/api/v1/ping', renderPing); break;
           }
-          var top_banner = $('.top-banner');
-          top_banner.css('background-color', bg_color);
-          $('.top-banner h1').text(text);
       }
 
       function debug(obj) {
