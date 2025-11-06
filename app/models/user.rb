@@ -12,7 +12,7 @@ class User < ApplicationRecord
   has_secure_password
   has_many :registries
 
-  has_one :current, -> { where event_id: Event.current.id }, class_name: "Registry"
+  has_one :current, -> { where(event_id: Event.current.id) }, class_name: "Registry"
 
   validates :name,
             :lastname,
@@ -57,11 +57,6 @@ class User < ApplicationRecord
     is_last_first ? "#{lastname}, #{name}" : "#{name} #{lastname}"
   end
 
-  # password reset ----------------------------------------
-  # TODO: Implement Rails 5 has_secure_token
-  # migration: t.token :reset_token
-  # user.reset_token; user.regenerate_reset_token
-  # has_secure_token(:reset_token)
   def set_password_reset
     self.password_reset_token = SecureRandom.urlsafe_base64
     self.password_reset_sent_at = Time.zone.now

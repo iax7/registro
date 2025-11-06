@@ -121,10 +121,10 @@
           <%= fa_text(:child) if r["pregnancy"] > 0 %>
           <% if r["comments"].present? %>
             <span data-bs-toggle="popover"
-                  data-placement="right"
-                  data-trigger="hover focus"
+                  data-bs-placement="right"
+                  data-bs-trigger="hover focus"
                   title="Comentarios"
-                  data-content="<%= r["comments"] %>">
+                  data-bs-content="<%= r["comments"] %>">
               <%= fa_text(:comment_dots) if r["comments"].present? %>
             </span>
           <% end %>
@@ -133,12 +133,12 @@
         <td><%= link_to fa_text(:print), badge_path(r["id"], format: 'pdf'), class: 'btn btn_link m-0 p-0' %></td>
         <td class="border-right">
           <span data-bs-toggle="popover"
-                data-html="true"
-                data-placement="right"
-                data-container="body"
-                data-trigger="hover focus"
+                data-bs-html="true"
+                data-bs-placement="right"
+                data-bs-container="body"
+                data-bs-trigger="hover focus"
                 title="Personas"
-                data-content="<%= r["formated_ids"] %>">
+                data-bs-content="<%= r["formated_ids"] %>">
             <strong><%= dim_zeros r["num"] , '-' %></strong>
           </span>
         </td>
@@ -152,9 +152,9 @@
         <td><%= dim_zeros r["f_l1"], '-' %></td>
         <td class="border-left border-right">
           <span data-bs-toggle="popover"
-                data-placement="right"
-                data-trigger="hover focus"
-                data-content="<%= r["l_rooms"] %>">
+                data-bs-placement="right"
+                data-bs-trigger="hover focus"
+                data-bs-content="<%= r["l_rooms"] %>">
             <%= dim_zeros r["l_v"] , '-' %>
           </span>
         </td>
