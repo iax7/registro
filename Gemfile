@@ -55,7 +55,7 @@ group :development, :test do
   gem "rspec-rails", "~> 8.0"
   gem "rubocop", "~> 1.81", ">= 1.81.6"
   gem "rubocop-performance", "~> 1.26"
-  gem "rubocop-rails", "~> 2.33", ">= 2.33.4"
+  gem "rubocop-rails", "~> 2.34"
   gem "rubocop-rspec", "~> 3.7"
   gem "simplecov", require: false
 end
