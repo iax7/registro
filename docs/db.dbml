@@ -1,0 +1,146 @@
+Table events {
+  id bigint [pk, not null]
+  name string
+  created_at datetime [not null]
+  updated_at datetime [not null]
+  settings jsonb [not null, default: "{}"]
+  statistics jsonb [not null, default: "{}"]
+}
+
+Table guests {
+  id bigint [pk, not null]
+  registry_id bigint [ref: > registries.id]
+  name string [not null]
+  lastname string [not null]
+  nick string [not null]
+  is_male boolean [not null]
+  age int [not null]
+  relation int
+  is_pregnant boolean [not null, default: false]
+  is_medicated boolean [not null, default: false]
+
+  f_v1 boolean [not null, default: false]
+  f_v2 boolean [not null, default: false]
+  f_v3 boolean [not null, default: false]
+  f_s1 boolean [not null, default: false]
+  f_s2 boolean [not null, default: false]
+  f_s3 boolean [not null, default: false]
+  f_d1 boolean [not null, default: false]
+  f_d2 boolean [not null, default: false]
+  f_d3 boolean [not null, default: false]
+  f_l1 boolean [not null, default: false]
+  f_l2 boolean [not null, default: false]
+  f_l3 boolean [not null, default: false]
+
+  t_v1 boolean [not null, default: false]
+  t_v2 boolean [not null, default: false]
+  t_s1 boolean [not null, default: false]
+  t_s2 boolean [not null, default: false]
+  t_d1 boolean [not null, default: false]
+  t_d2 boolean [not null, default: false]
+  t_l1 boolean [not null, default: false]
+  t_l2 boolean [not null, default: false]
+
+  l_v boolean [not null, default: false]
+  l_s boolean [not null, default: false]
+  l_d boolean [not null, default: false]
+  l_l boolean [not null, default: false]
+  l_room string
+
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  fu_v1 int [not null, default: 0]
+  fu_v2 int [not null, default: 0]
+  fu_v3 int [not null, default: 0]
+  fu_s1 int [not null, default: 0]
+  fu_s2 int [not null, default: 0]
+  fu_s3 int [not null, default: 0]
+  fu_d1 int [not null, default: 0]
+  fu_d2 int [not null, default: 0]
+  fu_d3 int [not null, default: 0]
+  fu_l1 int [not null, default: 0]
+  fu_l2 int [not null, default: 0]
+  fu_l3 int [not null, default: 0]
+
+  tu_v1 int [not null, default: 0]
+  tu_v2 int [not null, default: 0]
+  tu_s1 int [not null, default: 0]
+  tu_s2 int [not null, default: 0]
+  tu_d1 int [not null, default: 0]
+  tu_d2 int [not null, default: 0]
+  tu_l1 int [not null, default: 0]
+  tu_l2 int [not null, default: 0]
+
+  lu_v int [not null, default: 0]
+  lu_s int [not null, default: 0]
+  lu_d int [not null, default: 0]
+  lu_l int [not null, default: 0]
+
+  Indexes {
+    registry_id
+  }
+}
+
+Table payments {
+  id bigint [pk, not null]
+  registry_id bigint [ref: > registries.id]
+  user_id bigint [ref: > users.id]
+  amount int [not null]
+  kind int [not null, default: 0]
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  Indexes {
+    registry_id
+    user_id
+  }
+}
+
+Table registries {
+  id bigint [pk, not null]
+  user_id bigint [ref: > users.id]
+  event_id bigint [ref: > events.id]
+  comments text
+  is_confirmed boolean [not null, default: false]
+  is_present boolean [not null, default: false]
+  is_notified boolean [not null, default: false]
+  amount_debt int [default: 0]
+  amount_paid int [default: 0]
+  amount_offering int [default: 0]
+  created_at datetime [not null]
+  updated_at datetime [not null]
+  paid_by bigint
+
+  Indexes {
+    user_id
+    event_id
+  }
+}
+
+Table users {
+  id bigint [pk, not null]
+  name string
+  lastname string
+  nick string
+  is_male boolean [not null, default: true]
+  dob date
+  email string [not null]
+  phone string
+  is_admin boolean [default: false]
+  password_digest string
+  password_reset_token string
+  password_reset_sent_at datetime
+  created_at datetime [not null]
+  updated_at datetime [not null]
+  country string
+  state string
+  city string
+  guest_history jsonb [not null, default: "[]"]
+
+  Indexes {
+    email
+    lastname
+    name
+  }
+}
