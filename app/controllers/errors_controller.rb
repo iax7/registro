@@ -19,8 +19,8 @@ class ErrorsController < ApplicationController
       code: "422"
     }
     respond_to do |format|
-      format.html { render template: "errors/error", layout: "layouts/application", status: :unprocessable_entity }
-      format.all  { render nothing: true, status: :unprocessable_entity }
+      format.html { render template: "errors/error", layout: "layouts/application", status: :unprocessable_content }
+      format.all  { render nothing: true, status: :unprocessable_content }
     end
   end
 

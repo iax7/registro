@@ -37,7 +37,7 @@ class GuestsController < ApplicationController
       else
         flash.alert = t "common.error_create"
         format.html { render :new }
-        format.json { render json: @guest.errors, status: :unprocessable_entity }
+        format.json { render json: @guest.errors, status: :unprocessable_content }
       end
     end
   end
@@ -52,7 +52,7 @@ class GuestsController < ApplicationController
       else
         flash.alert = t "common.error_update"
         format.html { render :edit }
-        format.json { render json: @guest.errors, status: :unprocessable_entity }
+        format.json { render json: @guest.errors, status: :unprocessable_content }
       end
     end
   end
