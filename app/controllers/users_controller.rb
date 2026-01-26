@@ -47,7 +47,7 @@ class UsersController < ApplicationController
       else
         logger.fatal "*** Error creating the User. #{@user.errors.full_messages} ***"
         format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.json { render json: @user.errors, status: :unprocessable_content }
       end
     end
   end
@@ -64,7 +64,7 @@ class UsersController < ApplicationController
       else
         logger.fatal "*** Error updating the User. #{@user.errors.full_messages} ***"
         format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.json { render json: @user.errors, status: :unprocessable_content }
       end
     end
   end
