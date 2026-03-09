@@ -368,7 +368,7 @@ GEM
     thinreports-rails (0.5.0)
       thinreports (>= 0.10)
     thor (1.5.0)
-    thruster (0.1.17-x86_64-linux)
+    thruster (0.1.19-x86_64-linux)
     tilt (2.7.0)
     timeout (0.6.0)
     tsort (0.2.0)
