@@ -53,7 +53,7 @@ group :development, :test do
   gem "dotenv-rails"
   gem "faker"
   gem "rspec-rails", "~> 8.0"
-  gem "rubocop", "~> 1.81", ">= 1.81.6"
+  gem "rubocop", "~> 1.85"
   gem "rubocop-performance", "~> 1.26"
   gem "rubocop-rails", "~> 2.33", ">= 2.33.4"
   gem "rubocop-rspec", "~> 3.7"
