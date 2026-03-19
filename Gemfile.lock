@@ -80,7 +80,7 @@ GEM
     ast (2.4.3)
     barby (0.7.0)
     base64 (0.3.0)
-    bcrypt (3.1.21)
+    bcrypt (3.1.22)
     bcrypt_pbkdf (1.1.2)
     bigdecimal (3.3.1)
     bindex (0.8.1)
@@ -410,7 +410,7 @@ PLATFORMS
 
 DEPENDENCIES
   barby (>= 0.7.0)
-  bcrypt (~> 3.1.7)
+  bcrypt (~> 3.1.22)
   bootsnap
   brakeman
   capybara
